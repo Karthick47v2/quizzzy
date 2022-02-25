@@ -1,1 +1,1 @@
-# word-distractors
+# mcq-generator
