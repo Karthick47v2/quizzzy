@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:quizzzy/custom_buttons.dart';
 
 class AuthApp extends StatefulWidget {
   const AuthApp({ Key? key }) : super(key: key);
@@ -41,16 +42,41 @@ class _AuthAppState extends State<AuthApp> {
                       bottom: 40,
                       child: Row(
                         children: [
-                          Text(
-                            "Already have an account ? Log in",
+                          const Text(
+                            "Already have an account ?",
                             style: TextStyle(fontFamily: 'Heebo', fontSize: 18, fontWeight: FontWeight.w400, color: Colors.white),
                             ),
+                            const SizedBox(width: 18),
                             TextButton(
-                              child: Text(
-                                "Log in"
+                              child: const Text(
+                                "Log in",
+                                style: TextStyle(fontFamily: 'Heebo', fontSize: 18, fontWeight: FontWeight.w500, color: Color.fromARGB(255, 114, 0, 190)),
                               ),
-                            )
-                            ],
+                              onPressed: () {},
+                            ),
+                            CustomOutlinedBtn(
+                              text: "Sign Up", 
+                              bt: 48, 
+                              h: 45, 
+                              w: 317, 
+                              func: () async {
+                                setState(() => isLoading = true);
+                                if(_key.currentState!.validate()){
+                                  try{
+                                    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                                      email: emailController.text,
+                                      password: passwordController.text
+                                      );
+                                  }
+                                  on FirebaseAuthException catch(e){
+                                    errorSnackBar(context, e.message!);
+                                  }
+                                  setState(() => isLoading = false);
+                                }
+                              }
+                              ),
+                          ],
+                      ),
                     ),
                   ],
                 ),
@@ -72,22 +98,22 @@ class _AuthAppState extends State<AuthApp> {
               //         mainAxisAlignment: MainAxisAlignment.spaceAround,
               //         children: [
               //           ElevatedButton(
-              //             child: const Text("Sign Up"),
-              //             onPressed: () async {
-              //               setState(() => isLoading = true);
-              //               if(_key.currentState!.validate()){
-              //                 try{
-              //                   await FirebaseAuth.instance.createUserWithEmailAndPassword(
-              //                     email: emailController.text,
-              //                     password: passwordController.text
-              //                     );
-              //                 }
-              //                 on FirebaseAuthException catch(e){
-              //                   errorSnackBar(context, e.message!);
-              //                 }
-              //                 setState(() => isLoading = false);
-              //               }
-              //             },
+                          // child: const Text("Sign Up"),
+                          // onPressed: () async {
+                          //   setState(() => isLoading = true);
+                          //   if(_key.currentState!.validate()){
+                          //     try{
+                          //       await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                          //         email: emailController.text,
+                          //         password: passwordController.text
+                          //         );
+                          //     }
+                          //     on FirebaseAuthException catch(e){
+                          //       errorSnackBar(context, e.message!);
+                          //     }
+                          //     setState(() => isLoading = false);
+                          //   }
+                          // },
               //             ),
               //           ElevatedButton(
               //             child: const Text("Log In"),

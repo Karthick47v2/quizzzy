@@ -5,11 +5,9 @@ class CustomOutlinedBtn extends StatelessWidget {
   final double bt;
   final double h;
   final double w;
-  final BuildContext context;
-  final Route route;
+  final VoidCallback func;
 
-  CustomOutlinedBtn({ Key? key, required this.text, required this.bt, required this.h, required this.w, 
-                      required this.context, required this.route }) : super(key: key);
+  CustomOutlinedBtn({ Key? key, required this.text, required this.bt, required this.h, required this.w, required this.func }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +17,7 @@ class CustomOutlinedBtn extends StatelessWidget {
       height: h,
       width: w,
       child: OutlinedButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            route);
-        },
+        onPressed: func,
         style: OutlinedButton.styleFrom(
           side: const BorderSide(
             color: Color.fromARGB(255, 93, 0, 155),
@@ -38,4 +32,5 @@ class CustomOutlinedBtn extends StatelessWidget {
       )
     );
   }
+  
 }

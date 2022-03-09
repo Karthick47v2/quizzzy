@@ -53,16 +53,24 @@ class HomePage extends StatelessWidget {
                   bt: 139, 
                   h: 59,
                   w: 197, 
-                  context: context, 
-                  route: MaterialPageRoute(builder: (context) => AuthApp(),),
+                  func: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AuthApp()),
+                    );
+                  },
                   ),
                 CustomOutlinedBtn(
                   text: "I'm a Student", 
                   bt: 40, 
                   h: 59, 
                   w: 197,
-                  context: context,
-                  route: MaterialPageRoute(builder: (context) => ImportFile(),),
+                  func: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ImportFile()),
+                    );
+                  },
                   ),
               ],
             )
