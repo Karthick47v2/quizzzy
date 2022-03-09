@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:quizzzy/custom_widgets.dart';
+import 'package:quizzzy/login.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({ Key? key }) : super(key: key);
+class SignUp extends StatefulWidget {
+  const SignUp({ Key? key }) : super(key: key);
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _SignInState extends State<SignIn> {
+class _SignUpState extends State<SignUp> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
@@ -52,7 +53,12 @@ class _SignInState extends State<SignIn> {
                                 "Log in",
                                 style: TextStyle(fontFamily: 'Heebo', fontSize: 18, fontWeight: FontWeight.w500, color: Color.fromARGB(255, 114, 0, 190)),
                               ),
-                              onPressed: () {},
+                              onPressed: () => {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => Login())
+                                )
+                              },
                             ),
                           ],
                       ),
@@ -79,9 +85,14 @@ class _SignInState extends State<SignIn> {
                       }
                     ),
                     Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        // const Text(
+                        //     "Sign Up",
+                        //     textAlign: TextAlign.left,
+                        //     style: TextStyle(fontFamily: 'Heebo', fontSize: 48, fontWeight: FontWeight.w800, color: Color.fromARGB(204, 114, 0, 190)),
+                        //   ),
                         CustomTextInput(text: "Email", controller: emailController, validator: validateEmail),
                         CustomTextInput(text: "Password", controller: passwordController, validator: validatePassword, isPass: true),
                       ],

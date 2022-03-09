@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:quizzzy/greeting.dart';
 import 'package:quizzzy/import.dart';
+import 'package:quizzzy/login.dart';
 import 'package:quizzzy/signup.dart';
 import 'custom_widgets.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,12 +20,30 @@ void main() async {
     statusBarColor: Colors.transparent,
     ));
 
-  // if(fbuser == null && !user){
-    runApp(HomePage());
-    // }
-  // else{
-  //   runApp(WelcomeBack());
-  //   }
+    if(!user && fbuser == null){
+      runApp(HomePage());
+      return;
+    }
+    runApp(Root(fbuser: fbuser,));
+  }
+
+  class Root extends StatelessWidget {
+    final User? fbuser;
+    const Root({ Key? key, required this.fbuser }) : super(key: key);
+  
+    @override
+    Widget build(BuildContext context) {
+      return MaterialApp(
+        home: Scaffold(
+          body: PageView(
+            children: [
+              Greetings(),
+              (fbuser == null) ? ImportFile() : Login(),
+            ],
+          )
+        )
+      );
+    }
   }
 
 class HomePage extends StatelessWidget {
@@ -55,7 +75,7 @@ class HomePage extends StatelessWidget {
                     h: 59.0,
                     w: 197.0, 
                     cont: context,
-                    route: MaterialPageRoute(builder: (context) => SignIn()),
+                    route: MaterialPageRoute(builder: (context) => SignUp()),
                     ),
                   CustomNavigatorBtn(
                     text: "I'm a Student", 
@@ -71,20 +91,6 @@ class HomePage extends StatelessWidget {
           ),
         )
       )
-    );
-  }
-}
-
-class WelcomeBack extends StatelessWidget {
-  const WelcomeBack({ Key? key }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        "Welcome Back",
-        style: TextStyle(fontFamily: 'Heebo', fontSize: 17, fontWeight: FontWeight.w400, color: Colors.white),
-        )
     );
   }
 }

@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:fdottedline/fdottedline.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:pdf_text/pdf_text.dart';
 
 
 class ImportFile extends StatefulWidget {
-  const ImportFile({ Key? key }) : super(key: key);
+  final bool newUser;
+  const ImportFile({ Key? key, this.newUser = true}) : super(key: key);
 
   @override
   State<ImportFile> createState() => _ImportFileState();
@@ -56,7 +59,7 @@ class _ImportFileState extends State<ImportFile> {
                 corner: FDottedLineCorner.all(6.0),
               ),
               onTap: () {
-                saveUserTxt();
+                getFile();
               },
             )
           )
@@ -78,12 +81,29 @@ Future<String> getFilePath() async {
   return filePath;
 }
 
-void saveUserTxt() async {
+void getFile() async {
+  //First place a dummy file so that we can identify user already used the app (Applies for students)
   bool fileExists = await checkFileExists();
 
   if(!fileExists){
     File file = File(await getFilePath());
     file.writeAsString("1");
+  }
+  //////////////////////////////////////////////
+  
+  FilePickerResult? result = await FilePicker.platform.pickFiles(
+    type: FileType.custom,
+    allowedExtensions: ['pdf'],
+  );
+  
+  if(result != null){
+    PDFDoc doc = await PDFDoc.fromPath(result.files.single.path.toString());
+    String docText = await doc.text;
+
+    debugPrint(docText);
+  }
+  else {
+    return;
   }
 }
 

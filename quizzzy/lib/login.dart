@@ -53,7 +53,12 @@ class _LoginState extends State<Login> {
                                 "Sign up",
                                 style: TextStyle(fontFamily: 'Heebo', fontSize: 18, fontWeight: FontWeight.w500, color: Color.fromARGB(255, 114, 0, 190)),
                               ),
-                              onPressed: () {},
+                              onPressed: () => {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context)=> SignUp())
+                                )
+                              },
                             ),
                           ],
                       ),
@@ -81,6 +86,11 @@ class _LoginState extends State<Login> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        // const Text(
+                        //     "Log in",
+                        //     textAlign: TextAlign.left,
+                        //     style: TextStyle(fontFamily: 'Heebo', fontSize: 48, fontWeight: FontWeight.w800, color: Color.fromARGB(204, 114, 0, 190)),
+                        //   ),
                         CustomTextInput(text: "Email", controller: emailController, validator: validateEmail),
                         CustomTextInput(text: "Password", controller: passwordController, validator: validatePassword, isPass: true),
                       ],
