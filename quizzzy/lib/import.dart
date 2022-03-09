@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 import 'package:fdottedline/fdottedline.dart';
+
 
 class ImportFile extends StatefulWidget {
   const ImportFile({ Key? key }) : super(key: key);
@@ -43,8 +46,6 @@ class _ImportFileState extends State<ImportFile> {
                   child: Image.asset(
                     'assets/images/upload.png',
                     scale: 2,
-                    // width: 200,
-                    // height: 300,
                     color: Colors.black45,
                   ),
                 ),
@@ -54,12 +55,35 @@ class _ImportFileState extends State<ImportFile> {
                 space: 3.0,
                 corner: FDottedLineCorner.all(6.0),
               ),
-              onTap: () {},
+              onTap: () {
+                saveUserTxt();
+              },
             )
           )
         ],
       ),
     );  
+  }
+}
+
+Future<bool> checkFileExists() async {
+  return (await File(await getFilePath()).exists());
+}
+
+Future<String> getFilePath() async {
+  Directory appDocDir = await getApplicationDocumentsDirectory();
+  String appDocPath = appDocDir.path;
+  String filePath = "$appDocPath/user.txt";
+
+  return filePath;
+}
+
+void saveUserTxt() async {
+  bool fileExists = await checkFileExists();
+
+  if(!fileExists){
+    File file = File(await getFilePath());
+    file.writeAsString("1");
   }
 }
 
