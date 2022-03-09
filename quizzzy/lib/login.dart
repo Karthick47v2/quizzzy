@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:quizzzy/custom_buttons.dart';
+import 'package:quizzzy/signup.dart';
+import 'custom_widgets.dart';
 
-class AuthApp extends StatefulWidget {
-  const AuthApp({ Key? key }) : super(key: key);
+class Login extends StatefulWidget {
+  const Login({ Key? key }) : super(key: key);
 
   @override
-  State<AuthApp> createState() => _AuthAppState();
+  State<Login> createState() => _LoginState();
 }
 
-class _AuthAppState extends State<AuthApp> {
+class _LoginState extends State<Login> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
@@ -21,6 +21,7 @@ class _AuthAppState extends State<AuthApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: const Color.fromARGB(255, 37, 37, 37),
         body: Builder(
           builder: (context) {
@@ -43,155 +44,53 @@ class _AuthAppState extends State<AuthApp> {
                       child: Row(
                         children: [
                           const Text(
-                            "Already have an account ?",
+                            "Don't have an account ?",
                             style: TextStyle(fontFamily: 'Heebo', fontSize: 18, fontWeight: FontWeight.w400, color: Colors.white),
                             ),
                             const SizedBox(width: 18),
                             TextButton(
                               child: const Text(
-                                "Log in",
+                                "Sign up",
                                 style: TextStyle(fontFamily: 'Heebo', fontSize: 18, fontWeight: FontWeight.w500, color: Color.fromARGB(255, 114, 0, 190)),
                               ),
                               onPressed: () {},
                             ),
-                            CustomOutlinedBtn(
-                              text: "Sign Up", 
-                              bt: 48, 
-                              h: 45, 
-                              w: 317, 
-                              func: () async {
-                                setState(() => isLoading = true);
-                                if(_key.currentState!.validate()){
-                                  try{
-                                    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                                      email: emailController.text,
-                                      password: passwordController.text
-                                      );
-                                  }
-                                  on FirebaseAuthException catch(e){
-                                    errorSnackBar(context, e.message!);
-                                  }
-                                  setState(() => isLoading = false);
-                                }
-                              }
-                              ),
                           ],
                       ),
                     ),
+                    CustomFunctionBtn(
+                      text: "Log in", 
+                      bt: 100.0, 
+                      h: 45.0, 
+                      w: 317.0, 
+                      func: () async {
+                            setState(() => isLoading = true);
+                            try{
+                              await FirebaseAuth.instance.signInWithEmailAndPassword(
+                                email: emailController.text, 
+                                password: passwordController.text
+                                );
+                            }
+                            on FirebaseAuthException catch(e){
+                              errorSnackBar(context, e.message!);
+                            }
+                            setState(() => isLoading = false);
+                          },
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CustomTextInput(text: "Email", controller: emailController, validator: validateEmail),
+                        CustomTextInput(text: "Password", controller: passwordController, validator: validatePassword, isPass: true),
+                      ],
+                    )
                   ],
                 ),
-              // child: Center(
-              //   child: Column(
-              //     children: [
-              //       TextFormField(
-              //         controller: emailController, 
-              //         validator: validateEmail,
-              //         style: const TextStyle(color: Colors.white),
-              //         ),
-              //       TextFormField(
-              //         controller: passwordController, 
-              //         obscureText: true, 
-              //         validator: validatePassword,
-              //         style: const TextStyle(color: Colors.white),
-              //         ),
-              //       Row(
-              //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //         children: [
-              //           ElevatedButton(
-                          // child: const Text("Sign Up"),
-                          // onPressed: () async {
-                          //   setState(() => isLoading = true);
-                          //   if(_key.currentState!.validate()){
-                          //     try{
-                          //       await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                          //         email: emailController.text,
-                          //         password: passwordController.text
-                          //         );
-                          //     }
-                          //     on FirebaseAuthException catch(e){
-                          //       errorSnackBar(context, e.message!);
-                          //     }
-                          //     setState(() => isLoading = false);
-                          //   }
-                          // },
-              //             ),
-              //           ElevatedButton(
-              //             child: const Text("Log In"),
-              //             onPressed: () async {
-              //               setState(() => isLoading = true);
-              //               try{
-              //                 await FirebaseAuth.instance.signInWithEmailAndPassword(
-              //                   email: emailController.text, 
-              //                   password: passwordController.text
-              //                   );
-              //               }
-              //               on FirebaseAuthException catch(e){
-              //                 errorSnackBar(context, e.message!);
-              //               }
-              //               setState(() => isLoading = false);
-              //             },
-              //             ),
-              //           ElevatedButton(
-              //             child: const Text("Log Out"),
-              //             onPressed: () async {
-              //               setState(() => isLoading = true);
-              //               await FirebaseAuth.instance.signOut();
-              //               setState(() => isLoading = false);
-              //             },
-              //             ),
-              //         ],
-              //       ),
-              //       // isLoading ? CircularProgressIndicator(
-              //       //   color: Colors.cyan.shade700,
-              //       // ) 
-              //     ],
-              //   )
-              // ),
             );
           }
         )
       )
     );
   }
-}
-
-String? validateEmail(String? email){
-  if(email == null || email.isEmpty){
-    return "Email is required.";
-  }
-
-  // alnum@alnum.alnum
-  RegExp regex = RegExp(r'\w+@\w+\.\w+');
-
-  if(!regex.hasMatch(email)){
-    return "Invalid Email format.";
-  }
-
-  return null;
-}
-
-String? validatePassword(String? pass){
-  if(pass == null || pass.isEmpty){
-    return "Password is required.";
-  }
-
-  // 8 letter min, must have upper,lower letters, symbol and number
-  RegExp regExp = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
-
-  if(!regExp.hasMatch(pass)){
-    return "Password must be at least 8 characters & contain an uppercase letter, number and symbol.";
-  }
-  return null;
-}
-
-void errorSnackBar(BuildContext context, String str){
-  final snackBar = SnackBar(
-    content: Text(str),
-    backgroundColor: Colors.red[800],
-    // shape: const StadiumBorder(),
-    behavior: SnackBarBehavior.floating,
-  );
-
-  ScaffoldMessenger.of(context).removeCurrentSnackBar();
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
