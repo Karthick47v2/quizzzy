@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:quizzzy/greeting.dart';
+import 'package:quizzzy/home_page.dart';
 import 'package:quizzzy/import.dart';
 import 'package:quizzzy/login.dart';
 import 'package:quizzzy/signup.dart';
@@ -21,33 +22,45 @@ void main() async {
     ));
 
     if(!user && fbuser == null){
-      runApp(HomePage());
+      runApp(const RootPage());
       return;
     }
     runApp(Root(fbuser: fbuser,));
   }
 
-  class Root extends StatelessWidget {
+  class Root extends StatefulWidget {
     final User? fbuser;
     const Root({ Key? key, required this.fbuser }) : super(key: key);
   
+    @override
+    State<Root> createState() => _RootState();
+  }
+  
+  class _RootState extends State<Root> {
+    bool canScroll = true;
     @override
     Widget build(BuildContext context) {
       return MaterialApp(
         home: Scaffold(
           body: PageView(
+            scrollDirection: Axis.vertical,
+            physics: canScroll ? const ScrollPhysics() : const NeverScrollableScrollPhysics(),
             children: [
-              Greetings(),
-              (fbuser == null) ? ImportFile() : Login(),
+              const Greetings(),
+              (widget.fbuser == null) ? const ImportFile() : const HomePage(),
+              // const ImportFile(),
             ],
-          )
+            onPageChanged: (n) => {
+              setState(() => canScroll = false)
+            },
+          ),
         )
       );
     }
   }
 
-class HomePage extends StatelessWidget {
-  const HomePage({ Key? key }) : super(key: key);
+class RootPage extends StatelessWidget {
+  const RootPage({ Key? key }) : super(key: key);
 
   @override 
   Widget build(BuildContext context) {
