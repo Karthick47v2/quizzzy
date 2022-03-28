@@ -27,6 +27,6 @@ def index():
 def model_inference(request: ModelInput):
     context = request.context
     answer = request.answer
-
-    question = get_question(context, answer, model ,tokenizer)
+    question = "HI"
+    # question = get_question(context, answer, model ,tokenizer)
     return ModelOutput(question)
