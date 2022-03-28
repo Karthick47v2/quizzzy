@@ -1,5 +1,5 @@
 # pulling out light-weight base image
-FROM tiangolo/uvicorn-gunicorn:python3.8-alpine       
+FROM tiangolo/uvicorn-gunicorn:python3.8-alpine3.10     
 
 # copy to container 
 COPY ./app /app
