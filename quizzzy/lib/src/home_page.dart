@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:quizzzy/import.dart';
-import 'package:quizzzy/review_quiz.dart';
-import 'package:quizzzy/saved_questions.dart';
-import 'custom_widgets.dart';
+import 'package:quizzzy/src/import.dart';
+import 'package:quizzzy/src/teacher/review_quiz.dart';
+import 'package:quizzzy/src/teacher/saved_questions.dart';
+import '../libs/custom_widgets.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({ Key? key }) : super(key: key);

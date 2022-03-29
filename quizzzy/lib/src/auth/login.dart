@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:quizzzy/signup.dart';
-import 'custom_widgets.dart';
+import 'package:quizzzy/src/auth/signup.dart';
+import '../../libs/custom_widgets.dart';
 
 class Login extends StatefulWidget {
   const Login({ Key? key }) : super(key: key);

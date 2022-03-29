@@ -1,12 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:quizzzy/greeting.dart';
-import 'package:quizzzy/home_page.dart';
-import 'package:quizzzy/import.dart';
-import 'package:quizzzy/login.dart';
-import 'package:quizzzy/signup.dart';
-import 'custom_widgets.dart';
+import 'package:quizzzy/src/greeting.dart';
+import 'package:quizzzy/src/home_page.dart';
+import 'package:quizzzy/src/import.dart';
+import 'package:quizzzy/src/auth/login.dart';
+import 'package:quizzzy/src/auth/signup.dart';
+import '../libs/custom_widgets.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
