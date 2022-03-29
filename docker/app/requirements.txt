@@ -7,7 +7,11 @@ transformers==4.5.0
 # used version in dev
 onnx==1.11.0
 onnxruntime==1.7.0
-fastt5==0.1.2
+fastt5
 psutil==5.9.0
 fastapi==0.75.0
 pydantic==1.8.2
+sentence_transformers
+sense2vec
+keybert
+keyphrase-vectorizers

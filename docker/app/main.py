@@ -51,40 +51,16 @@ from pydantic import BaseModel
 
 
 
-## FastAPI setup
-app = FastAPI()
-
-# body classes for req n' res
-class ModelInput(BaseModel):
-    context: str
-class ModelOutput(BaseModel):
-    questions: List[str]
-    crct_ans: str
-    all_answers: List[List[str]]
-
-
-
-###################################################### DOWNLOAD ALLLL
-
-model_path = './mcq-model/'
-pretrained_model_name = 'tttttttttttttttttttt'
-
-
-
-################################################ LOAD ALLLLLLLLLLLLLL
-
-
-
 ## INITIALIZE ALL REQUIRED MODELS
 # load vectors
-s2v = Sense2Vec().from_disk("/content/s2v_old")
+s2v = Sense2Vec().from_disk("./pre-downloaded/s2v-old")
 
 # initialize keyword extration model (KeyBERT) and keypharse vectorizer for meaningful keywords
 kw_model = KeyBERT()
 vectorizer = KeyphraseCountVectorizer()
 
 # initialize summarize model
-model_path = '/content/gdrive/MyDrive/mcq-gen/t5-summarize/t5-base'
+model_path = './pre-downloaded/t5-summarize/'
 model_name = "t5-base"
 encoder_path = os.path.join(model_path, f"{model_name}-encoder-quantized.onnx")
 decoder_path = os.path.join(model_path, f"{model_name}-decoder-quantized.onnx")
@@ -95,8 +71,8 @@ sum_model = OnnxT5(model_path, model_sessions)
 sum_tokenizer = AutoTokenizer.from_pretrained(model_path)
 
 # initialize question generation model
-model_path = '/content/gdrive/MyDrive/mcq-gen/t5-question'
-model_name = 't5_squad_v1'
+model_path = './pre-downloaded/t5-question'
+model_name = 't5_question'
 encoder_path = os.path.join(model_path, f"{model_name}-encoder-quantized.onnx")
 decoder_path = os.path.join(model_path, f"{model_name}-decoder-quantized.onnx")
 init_decoder_path = os.path.join(model_path, f"{model_name}-init-decoder-quantized.onnx")
@@ -320,6 +296,19 @@ def generate_que_n_ans(context):
                 random.shuffle(results)
                 all_answers.append(results)
     return questions, crct_ans, all_answers
+
+
+
+## FastAPI setup
+app = FastAPI()
+
+# body classes for req n' res
+class ModelInput(BaseModel):
+    context: str
+class ModelOutput(BaseModel):
+    questions: List[str]
+    crct_ans: str
+    all_answers: List[List[str]]
 
 
 
