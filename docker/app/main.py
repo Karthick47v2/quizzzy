@@ -1,4 +1,4 @@
-## IMPORT LIBS
+	## IMPORT LIBS
 # natural language toolkit for helping utilities
 import nltk
 nltk.download('punkt')
@@ -295,6 +295,7 @@ def generate_que_n_ans(context):
                 crct_ans.append(x)
                 random.shuffle(results)
                 all_answers.append(results)
+    all_answers = sum(all_answers, [])
     return questions, crct_ans, all_answers
 
 
@@ -305,10 +306,11 @@ app = FastAPI()
 # body classes for req n' res
 class ModelInput(BaseModel):
     context: str
+
 class ModelOutput(BaseModel):
     questions: List[str]
-    crct_ans: str
-    all_answers: List[List[str]]
+    crct_ans: List[str]
+    all_answers: List[str]
 
 
 
@@ -320,7 +322,6 @@ def index():
 
 # req -> context and ans-s,
 # res -> questions    
-#@app.post("/get-questions", response_model=ModelOutput)
 @app.post('/get-questions')
 def model_inference(request: ModelInput):
     context = request.context
