@@ -295,6 +295,7 @@ def generate_que_n_ans(context):
                 crct_ans.append(x)
                 random.shuffle(results)
                 all_answers.append(results)
+    # squeezing the 2d list to 1d for API response ## 2d nested list give error --
     all_answers = sum(all_answers, [])
     return questions, crct_ans, all_answers
 
@@ -314,12 +315,7 @@ class ModelOutput(BaseModel):
 
 
 
-## APIs
-# debug
-@app.get('/')
-def index():
-    return {'message': 'hello'}
-
+## API
 # req -> context and ans-s,
 # res -> questions    
 @app.post('/get-questions')
