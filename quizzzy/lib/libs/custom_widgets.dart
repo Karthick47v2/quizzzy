@@ -113,3 +113,68 @@ class _CustomTextInputState extends State<CustomTextInput> {
     );
   }
 }
+
+
+class LoadingBox extends StatelessWidget {
+  final String title;
+  final String info;
+  const LoadingBox({ Key? key, required this.title, required this.info }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Container(
+        color: const Color.fromARGB(255, 80, 80, 80),
+        height: 300,
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 50,
+            ),
+            const SizedBox(
+              height: 120,
+              width: 120,
+              child: CircularProgressIndicator(
+                color: Color.fromARGB(255, 93, 0, 155),
+                backgroundColor: Colors.grey,
+              ),
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            Column(
+              children: [
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontFamily: 'Heebo', fontSize: 23, fontWeight: FontWeight.w400, color: Colors.white),
+                ),
+                Text(
+                  info,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontFamily: 'Heebo', fontSize: 17, fontWeight: FontWeight.w400, color: Colors.white),
+                ),
+              ],
+            )
+          ]
+        )
+      ),
+    );
+  }
+}
+
+class NavigationBox extends StatelessWidget {
+  final BuildContext cont;
+  final String text;
+  const NavigationBox({ Key? key, required this.cont, required this.text }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      
+    );
+  }
+}

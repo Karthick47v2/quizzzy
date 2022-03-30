@@ -8,6 +8,8 @@ import 'package:pdf_text/pdf_text.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:quizzzy/libs/custom_widgets.dart';
+
 
 class ImportFile extends StatefulWidget {
   final bool newUser;
@@ -62,7 +64,14 @@ class _ImportFileState extends State<ImportFile> {
                 corner: FDottedLineCorner.all(6.0),
               ),
               onTap: () {
-                getFile();
+                getFile(context);
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context){
+                  return const LoadingBox(
+                    title: "Generating questions...", 
+                    info: "This make take few minutes");
+                });
               },
             )
           )
@@ -79,10 +88,10 @@ class QnA{
   QnA({required this.question, required this.crctAns, required this.allAns});
 }
 
-Future getQuestions(String context) async {
+Future getQuestions(String cont, BuildContext context) async {
   var url = Uri.parse("https://mcq-gen-nzbm4e7jxa-ue.a.run.app/get-questions");
   Map body = {
-    'context' : context
+    'context' : cont
   };
 
   var res = await http.post(url, headers: {"Content-Type": "application/json"}, body: json.encode(body));
@@ -109,6 +118,16 @@ Future getQuestions(String context) async {
       print(qnaList[i].crctAns);
       print(qnaList[i].allAns);
     }
+    Navigator.pop(context);
+    showDialog(
+      context: context,
+      builder: (BuildContext context){
+        return NavigationBox(
+          cont: context, 
+          text: "Questions are ready...!",
+          );
+      }
+    );
   }
   else{
     print("Np");
@@ -128,7 +147,7 @@ Future<String> getFilePath() async {
   return filePath;
 }
 
-void getFile() async {
+void getFile(BuildContext context) async {
   //First place a dummy file so that we can identify user already used the app (Applies for students)
   bool fileExists = await checkFileExists();
 
@@ -149,7 +168,7 @@ void getFile() async {
 
     // debugPrint(docText);
     print("sending to Cloud");
-    getQuestions(docText);
+    getQuestions(docText, context);
   }
   else {
     return;
