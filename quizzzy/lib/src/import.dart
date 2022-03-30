@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:fdottedline/fdottedline.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:pdf_text/pdf_text.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 
 class ImportFile extends StatefulWidget {
@@ -69,6 +72,50 @@ class _ImportFileState extends State<ImportFile> {
   }
 }
 
+class QnA{
+  final String question;
+  final String crctAns;
+  final List<String> allAns;
+  QnA({required this.question, required this.crctAns, required this.allAns});
+}
+
+Future getQuestions(String context) async {
+  var url = Uri.parse("https://mcq-gen-nzbm4e7jxa-ue.a.run.app/get-questions");
+  Map body = {
+    'context' : context
+  };
+
+  var res = await http.post(url, headers: {"Content-Type": "application/json"}, body: json.encode(body));
+  
+  if(res.statusCode == 200){
+    var decodedData = json.decode(res.body);
+    int noOfQues = decodedData['questions'].length;
+    List<QnA> qnaList = [];
+
+    for(int i = 0; i < noOfQues; i++){
+      List<String> ans = List.generate(4, (index) => 'null');
+      for(int j = 0; j < 4; j++){
+        ans[j] = decodedData['all_answers'][i * 4 + j];
+      }
+      QnA qna = QnA(
+        question: decodedData['questions'][i], 
+        crctAns: decodedData['crct_ans'][i],
+        allAns: ans
+        );
+        qnaList.add(qna);
+    }
+    for(int i = 0; i < qnaList.length; i++){
+      print(qnaList[i].question);
+      print(qnaList[i].crctAns);
+      print(qnaList[i].allAns);
+    }
+  }
+  else{
+    print("Np");
+    //////////////////////////////////////
+  }
+}
+
 Future<bool> checkFileExists() async {
   return (await File(await getFilePath()).exists());
 }
@@ -100,7 +147,9 @@ void getFile() async {
     PDFDoc doc = await PDFDoc.fromPath(result.files.single.path.toString());
     String docText = await doc.text;
 
-    debugPrint(docText);
+    // debugPrint(docText);
+    print("sending to Cloud");
+    getQuestions(docText);
   }
   else {
     return;
