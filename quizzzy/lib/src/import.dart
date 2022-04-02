@@ -39,7 +39,7 @@ class _ImportFileState extends State<ImportFile> {
               ),
               child: const Center(
                 child: Text(
-                  "Upload materials (PDF / doc) to generate questions. Please make sure there are only texts in uploaded content to get improved results.",
+                  "Upload materials (PDF) to generate questions. Please make sure there are only texts in uploaded content to get improved results.",
                   style: TextStyle(fontFamily: 'Heebo', fontSize: 17, fontWeight: FontWeight.w400, color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
@@ -70,7 +70,7 @@ class _ImportFileState extends State<ImportFile> {
                   builder: (BuildContext context){
                   return const LoadingBox(
                     title: "Generating questions...", 
-                    info: "This make take few minutes");
+                    info: "This may take few minutes");
                 });
               },
             )

@@ -64,7 +64,7 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     CustomFunctionBtn(
-                      text: "Log in", 
+                      text: "Log In", 
                       bt: 100.0, 
                       h: 45.0, 
                       w: 317.0, 
