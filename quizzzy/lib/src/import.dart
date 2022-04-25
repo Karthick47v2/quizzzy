@@ -10,10 +10,9 @@ import 'dart:convert';
 
 import 'package:quizzzy/libs/custom_widgets.dart';
 
-
 class ImportFile extends StatefulWidget {
   final bool newUser;
-  const ImportFile({ Key? key, this.newUser = true}) : super(key: key);
+  const ImportFile({Key? key, this.newUser = true}) : super(key: key);
 
   @override
   State<ImportFile> createState() => _ImportFileState();
@@ -40,48 +39,51 @@ class _ImportFileState extends State<ImportFile> {
               child: const Center(
                 child: Text(
                   "Upload materials (PDF) to generate questions. Please make sure there are only texts in uploaded content to get improved results.",
-                  style: TextStyle(fontFamily: 'Heebo', fontSize: 17, fontWeight: FontWeight.w400, color: Colors.white),
+                  style: TextStyle(
+                      fontFamily: 'Heebo',
+                      fontSize: 17,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
               ),
             ),
           ),
           Center(
-            child: InkWell(
-              child: FDottedLine(
-                child: Container(
-                  margin: const EdgeInsets.all(5),
-                  child: Image.asset(
-                    'assets/images/upload.png',
-                    scale: 2,
-                    color: Colors.black45,
-                  ),
+              child: InkWell(
+            child: FDottedLine(
+              child: Container(
+                margin: const EdgeInsets.all(5),
+                child: Image.asset(
+                  'assets/images/upload.png',
+                  scale: 2,
+                  color: Colors.black45,
                 ),
-                color: Colors.grey.shade700,
-                strokeWidth: 2.0,
-                dottedLength: 8.0,
-                space: 3.0,
-                corner: FDottedLineCorner.all(6.0),
               ),
-              onTap: () {
-                getFile(context);
-                showDialog(
+              color: Colors.grey.shade700,
+              strokeWidth: 2.0,
+              dottedLength: 8.0,
+              space: 3.0,
+              corner: FDottedLineCorner.all(6.0),
+            ),
+            onTap: () {
+              getFile(context);
+              showDialog(
                   context: context,
-                  builder: (BuildContext context){
-                  return const LoadingBox(
-                    title: "Generating questions...", 
-                    info: "This may take few minutes");
-                });
-              },
-            )
-          )
+                  builder: (BuildContext context) {
+                    return const LoadingBox(
+                        title: "Generating questions...",
+                        info: "This may take few minutes");
+                  });
+            },
+          ))
         ],
       ),
-    );  
+    );
   }
 }
 
-class QnA{
+class QnA {
   final String question;
   final String crctAns;
   final List<String> allAns;
@@ -90,53 +92,45 @@ class QnA{
 
 Future getQuestions(String cont, BuildContext context) async {
   var url = Uri.parse("https://mcq-gen-nzbm4e7jxa-ue.a.run.app/get-questions");
-  Map body = {
-    'context' : cont
-  };
+  Map body = {'context': cont};
 
-  var res = await http.post(url, headers: {"Content-Type": "application/json"}, body: json.encode(body));
-  
-  if(res.statusCode == 200){
+  var res = await http.post(url,
+      headers: {"Content-Type": "application/json"}, body: json.encode(body));
+
+  if (res.statusCode == 200) {
     var decodedData = json.decode(res.body);
     int noOfQues = decodedData['questions'].length;
     List<QnA> qnaList = [];
 
-    for(int i = 0; i < noOfQues; i++){
+    for (int i = 0; i < noOfQues; i++) {
       List<String> ans = List.generate(4, (index) => 'null');
-      for(int j = 0; j < 4; j++){
+      for (int j = 0; j < 4; j++) {
         ans[j] = decodedData['all_answers'][i * 4 + j];
       }
       QnA qna = QnA(
-        question: decodedData['questions'][i], 
-        crctAns: decodedData['crct_ans'][i],
-        allAns: ans
-        );
-        qnaList.add(qna);
+          question: decodedData['questions'][i],
+          crctAns: decodedData['crct_ans'][i],
+          allAns: ans);
+      qnaList.add(qna);
     }
-    for(int i = 0; i < qnaList.length; i++){
+    for (int i = 0; i < qnaList.length; i++) {
       print(qnaList[i].question);
       print(qnaList[i].crctAns);
       print(qnaList[i].allAns);
     }
     Navigator.pop(context);
     showDialog(
-      context: context,
-      builder: (BuildContext context){
-        return NavigationBox(
-          cont: context, 
-          text: "Questions are ready...!",
+        context: context,
+        builder: (BuildContext context) {
+          return NavigationBox(
+            cont: context,
+            text: "Questions are ready...!",
           );
-      }
-    );
-  }
-  else{
+        });
+  } else {
     print("Np");
     //////////////////////////////////////
   }
-}
-
-Future<bool> checkFileExists() async {
-  return (await File(await getFilePath()).exists());
 }
 
 Future<String> getFilePath() async {
@@ -148,30 +142,19 @@ Future<String> getFilePath() async {
 }
 
 void getFile(BuildContext context) async {
-  //First place a dummy file so that we can identify user already used the app (Applies for students)
-  bool fileExists = await checkFileExists();
-
-  if(!fileExists){
-    File file = File(await getFilePath());
-    file.writeAsString("1");
-  }
-  //////////////////////////////////////////////
-  
   FilePickerResult? result = await FilePicker.platform.pickFiles(
     type: FileType.custom,
     allowedExtensions: ['pdf'],
   );
-  
-  if(result != null){
+
+  if (result != null) {
     PDFDoc doc = await PDFDoc.fromPath(result.files.single.path.toString());
     String docText = await doc.text;
 
     // debugPrint(docText);
     print("sending to Cloud");
     getQuestions(docText, context);
-  }
-  else {
+  } else {
     return;
   }
 }
-

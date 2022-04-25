@@ -1,109 +1,59 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:quizzzy/src/greeting.dart';
-import 'package:quizzzy/src/home_page.dart';
-import 'package:quizzzy/src/import.dart';
-import 'package:quizzzy/src/auth/login.dart';
-import 'package:quizzzy/src/auth/signup.dart';
-import '../libs/custom_widgets.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:quizzzy/src/greeting.dart';
+import 'package:quizzzy/src/home_page.dart';
+import 'package:quizzzy/src/auth/signup.dart';
+import 'package:quizzzy/src/auth/verify.dart';
 
-void main() async {
+Future<void> main() async {
+  // initialize
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  
-  User? fbuser = FirebaseAuth.instance.currentUser;
-  bool user = await checkFileExists();
+
+  // check if user is logged in (firebase)
+  User? user = FirebaseAuth.instance.currentUser;
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
-    ));
+  ));
+  runApp(Root(
+    user: user,
+  ));
+}
 
-    if(!user && fbuser == null){
-      runApp(const RootPage());
-      return;
-    }
-    runApp(Root(fbuser: fbuser,));
-  }
+class Root extends StatefulWidget {
+  final User? user;
+  const Root({Key? key, required this.user}) : super(key: key);
 
-  class Root extends StatefulWidget {
-    final User? fbuser;
-    const Root({ Key? key, required this.fbuser }) : super(key: key);
-  
-    @override
-    State<Root> createState() => _RootState();
-  }
-  
-  class _RootState extends State<Root> {
-    bool canScroll = true;
-    @override
-    Widget build(BuildContext context) {
-      return MaterialApp(
-        home: Scaffold(
-          body: PageView(
-            scrollDirection: Axis.vertical,
-            physics: canScroll ? const ScrollPhysics() : const NeverScrollableScrollPhysics(),
-            children: [
-              const Greetings(),
-              (widget.fbuser == null) ? const ImportFile() : const HomePage(),
-              // const ImportFile(),
-            ],
-            onPageChanged: (n) => {
-              setState(() => canScroll = false)
-            },
-          ),
-        )
-      );
-    }
-  }
+  @override
+  State<Root> createState() => _RootState();
+}
 
-class RootPage extends StatelessWidget {
-  const RootPage({ Key? key }) : super(key: key);
+class _RootState extends State<Root> {
+  bool canScroll = true;
 
-  @override 
+  @override
   Widget build(BuildContext context) {
+    // if user email is verified show homepage or else show login page
     return MaterialApp(
-      home: Scaffold(
-        backgroundColor: const Color.fromARGB(255, 37, 37, 37),
-        body: Builder(
-          builder: (context) => Stack(
-            alignment: Alignment.center,
-            children: [
-              Center(
-                child: Image.asset(
-                  'assets/images/Quizzzy.png',
-                  width: 229,
-                  height: 278,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  CustomNavigatorBtn(
-                    text: "I'm a Teacher", 
-                    bt: 139.0, 
-                    h: 59.0,
-                    w: 197.0, 
-                    cont: context,
-                    route: MaterialPageRoute(builder: (context) => SignUp()),
-                    ),
-                  CustomNavigatorBtn(
-                    text: "I'm a Student", 
-                    bt: 40.0, 
-                    h: 59.0, 
-                    w: 197.0,
-                    cont: context,
-                    route: MaterialPageRoute(builder: (context) => ImportFile()),
-                    ),
-                ],
-              )
-            ],
-          ),
-        )
-      )
-    );
+        home: Scaffold(
+      body: PageView(
+        scrollDirection: Axis.vertical,
+        physics: canScroll
+            ? const ScrollPhysics()
+            : const NeverScrollableScrollPhysics(),
+        children: [
+          const Greetings(),
+          (widget.user == null)
+              ? const SignUp()
+              : (widget.user!.emailVerified)
+                  ? const HomePage()
+                  : const VerifyEmail(),
+        ],
+        onPageChanged: (n) => {setState(() => canScroll = false)},
+      ),
+    ));
   }
 }
