@@ -167,7 +167,7 @@ def filter_keywords(original, summarized, kw_pop=5):
 
 # HELPER FUNCTIONS FOR FALSE ANSWERS
 # generate false answers from correct answer
-def false_answers(query, word_similarity_threshold=0.7):
+def false_answers(query):
     # get the best sense for given word (like NOUN, PRONOUN, VERB...)
     query_al = s2v.get_best_sense(query.lower().replace(' ', '_'))
 
@@ -212,7 +212,7 @@ def filter_output(orig, dummies):
     filtered_dist = []
     for d in dist:
         # 0 -> word, 1 -> confidence / probability
-        filtered_dist.append(d[0])
+        filtered_dist.append(d[0].capitalize())
 
     return filtered_dist
 
