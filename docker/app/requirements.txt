@@ -1,17 +1,20 @@
 # using light-weight torch install (Google Cloud Run doesn't support GPU so torch CPU is enough)
 https://download.pytorch.org/whl/cpu/torch-1.9.0%2Bcpu-cp38-cp38-linux_x86_64.whl
 
-# this version is required to run FastT5 lib without any error
-transformers==4.5.0
-
-# used version in dev
+fastapi==0.75.0
+fastt5
+firebase-admin
+keybert
+keyphrase-vectorizers
 onnx==1.11.0
 onnxruntime==1.7.0
-fastt5
 psutil==5.9.0
-fastapi==0.75.0
 pydantic==1.8.2
 sentence_transformers
 sense2vec
-keybert
-keyphrase-vectorizers
+transformers==4.5.0             # this version is required to run FastT5 lib without any error
+
+
+
+
+
