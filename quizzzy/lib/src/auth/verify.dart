@@ -26,7 +26,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
   @override
   void dispose() {
-    timer!.cancel();
+    timer?.cancel();
     super.dispose();
   }
 
@@ -52,7 +52,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
               bt: 100.0,
               h: 50.0,
               w: 317.0,
-              func: () => user!.sendEmailVerification(),
+              func: () => user?.sendEmailVerification(),
               clr: Colors.green[400],
             ),
           ],
@@ -60,10 +60,10 @@ class _VerifyEmailState extends State<VerifyEmail> {
   }
 
   Future<void> checkEmailVerification() async {
-    await user!.reload();
+    await user?.reload();
 
     if (user!.emailVerified) {
-      timer!.cancel();
+      timer?.cancel();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => const HomePage()));
     }

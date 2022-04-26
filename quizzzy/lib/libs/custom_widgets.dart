@@ -60,14 +60,14 @@ class CustomNavigatorBtn extends StatelessWidget {
 // ignore: must_be_immutable
 class CustomTextInput extends StatefulWidget {
   final String text;
-  final TextEditingController controller;
-  final String? Function(String?)? validator;
+  TextEditingController controller;
+  String? Function(String?)? validator;
   bool isPass;
   CustomTextInput(
       {Key? key,
       required this.text,
       required this.controller,
-      required this.validator,
+      this.validator,
       this.isPass = false})
       : super(key: key);
 
