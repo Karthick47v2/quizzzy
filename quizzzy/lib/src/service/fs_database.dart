@@ -4,15 +4,55 @@ import 'package:firebase_auth/firebase_auth.dart';
 User? user = FirebaseAuth.instance.currentUser;
 CollectionReference users = FirebaseFirestore.instance.collection("users");
 
-// get user type from firestore (teacher / student)
-Future<bool> getUserType() async {
-  try {
-    DocumentSnapshot docSnap = await users.doc(user?.email).get();
+// class FirebaseUser {
+//   late String _name;
+//   late String _userType;
+//   late bool _isGenerated;
 
-    if (docSnap.exists) {
-      Map<String, dynamic> data = docSnap.data() as Map<String, dynamic>;
-      return data['isTeacher'];
+//   void setUser(String name, String type, bool isGen) {
+//     _name = name;
+//     _userType = type;
+//     _isGenerated = isGen;
+//   }
+
+//   String get getName {
+//     return _name;
+//   }
+
+//   String get getUserType {
+//     return _userType;
+//   }
+
+//   bool get getIsGenerated {
+//     return _isGenerated;
+//   }
+// }
+
+// FirebaseUser fbUser = FirebaseUser();
+
+// get user type from firestore (teacher / student)
+Future<String?> getUserType() async {
+  DocumentSnapshot docSnap = await users.doc(user?.uid).get();
+
+  if (docSnap.exists) {
+    Map<String, dynamic> data = docSnap.data() as Map<String, dynamic>;
+    if (data['userType'] != null) {
+      // fbUser.setUser(data['name'], data['userType'], data['isGenerated']);
     }
-  } catch (e) {}
-  return false;
+    return data['userType'];
+  }
+  return null;
+}
+
+Future<String?> getGeneratorStatus() async {
+  // DocumentSnapshot docSnap = await users.doc(user?.uid).get();
+  DocumentSnapshot docSnap = await users.doc("testID").get();
+
+  if (docSnap.exists) {
+    Map<String, dynamic> data = docSnap.data() as Map<String, dynamic>;
+    return data['isGenerated'] == true
+        ? "Generated"
+        : (data['isWaiting'] ? "Waiting" : "None");
+  }
+  return null;
 }

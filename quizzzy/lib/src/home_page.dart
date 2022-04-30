@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quizzzy/src/import.dart';
 import 'package:quizzzy/src/service/fs_database.dart';
 import 'package:quizzzy/src/teacher/review_quiz.dart';
 import 'package:quizzzy/src/teacher/saved_questions.dart';
 import 'package:quizzzy/src/student/saved_quiz.dart';
+import 'package:quizzzy/src/generated.dart';
 import '../libs/custom_widgets.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,7 +17,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late Future<bool> userFuture;
+  late Future<String?> userFuture;
+  bool firstTime = false; ////////////////////////////////////////////// true
+  final nameController = TextEditingController();
 
   @override
   void initState() {
@@ -26,88 +31,181 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
+            resizeToAvoidBottomInset: false,
             backgroundColor: const Color.fromARGB(255, 37, 37, 37),
             body: FutureBuilder(
               future: userFuture,
               builder: (context, snapshot) {
                 Widget ret = Container();
                 if (snapshot.connectionState == ConnectionState.done) {
-                  ret = (Builder(
-                    builder: (context) => Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Center(
-                          child: Image.asset(
-                            'assets/images/Quizzzy.png',
-                            width: 229,
-                            height: 278,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            CustomNavigatorBtn(
-                              text: "Import PDF",
-                              bt: 340.0,
-                              h: 59.0,
-                              w: 197.0,
-                              cont: context,
-                              route: MaterialPageRoute(
-                                  builder: (context) => const ImportFile()),
-                            ),
-                            snapshot.data == true
-                                ? CustomNavigatorBtn(
-                                    text: "Saved questions",
-                                    bt: 240.0,
-                                    h: 59.0,
-                                    w: 220.0,
-                                    cont: context,
-                                    route: MaterialPageRoute(
-                                        builder: (context) =>
-                                            const SavedQuestions()),
-                                  )
-                                : CustomNavigatorBtn(
-                                    text: "Saved quiz",
-                                    bt: 240.0,
-                                    h: 59.0,
-                                    w: 220.0,
-                                    cont: context,
-                                    route: MaterialPageRoute(
-                                        builder: (context) =>
-                                            const SavedQuiz()),
+                  if (snapshot.data == null && firstTime) {
+                    ret = Builder(
+                        builder: (context) => Column(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: Image.asset(
+                                      'assets/images/Quizzzy.png',
+                                    ),
                                   ),
-                            CustomNavigatorBtn(
-                              text: "Review quizzes",
-                              bt: 140.0,
-                              h: 59.0,
-                              w: 220.0,
-                              cont: context,
-                              route: MaterialPageRoute(
-                                  builder: (context) => const ReviewQuiz()),
+                                ),
+                                CustomTextInput(
+                                    text: "Name", controller: nameController),
+                                Container(
+                                  width: double.maxFinite - 20,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 30, vertical: 0),
+                                  alignment: Alignment.bottomCenter,
+                                  child: Column(children: [
+                                    SizedBox(
+                                      width: double.maxFinite - 20,
+                                      child: CustomNavigatorBtn(
+                                        text: "I'm a Teacher",
+                                        func: () => {
+                                          sendUserType(context,
+                                              nameController.text, true),
+                                          setState(() {
+                                            // user will stuck at user type assign if network is slow, so
+                                            // bypassing fireabse response (only needed for first time use)
+                                            firstTime = false;
+                                          })
+                                        },
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: double.maxFinite - 20,
+                                      child: CustomNavigatorBtn(
+                                          text: "I'm a Student",
+                                          func: () => {
+                                                sendUserType(context,
+                                                    nameController.text, false),
+                                                setState(() {
+                                                  firstTime = false;
+                                                }),
+                                              }),
+                                    ),
+                                  ]),
+                                )
+                              ],
+                            ));
+                  } else {
+                    ret = (Builder(
+                      builder: (context) => Column(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: Image.asset(
+                                'assets/images/Quizzzy.png',
+                              ),
                             ),
-                            CustomNavigatorBtn(
-                              text: "Log out",
-                              bt: 40.0,
-                              h: 59.0,
-                              w: 160.0,
-                              cont: context,
-                              route: MaterialPageRoute(
-                                  builder: (context) => const ReviewQuiz()),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ));
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 0),
+                            child: Column(children: [
+                              SizedBox(
+                                width: double.maxFinite - 20,
+                                child: CustomNavigatorBtn(
+                                  text: "Import PDF",
+                                  cont: context,
+                                  route: MaterialPageRoute(
+                                      builder: (context) => const ImportFile()),
+                                ),
+                              ),
+                              SizedBox(
+                                width: double.maxFinite - 20,
+                                child: CustomNavigatorBtn(
+                                    text: "Generated",
+                                    func: () => {checkQuesGenerated(context)}),
+                              ),
+                              snapshot.data == "Student"
+                                  ? SizedBox(
+                                      width: double.maxFinite - 20,
+                                      child: CustomNavigatorBtn(
+                                        text: "Saved questionnaire",
+                                        cont: context,
+                                        route: MaterialPageRoute(
+                                            builder: (context) =>
+                                                const SavedQuestions()),
+                                      ),
+                                    )
+                                  : SizedBox(
+                                      width: double.maxFinite - 20,
+                                      child: CustomNavigatorBtn(
+                                        text: "Saved quiz",
+                                        cont: context,
+                                        route: MaterialPageRoute(
+                                            builder: (context) =>
+                                                const SavedQuiz()),
+                                      ),
+                                    ),
+                              SizedBox(
+                                width: double.maxFinite - 20,
+                                child: CustomNavigatorBtn(
+                                  text: "Review quizzes",
+                                  cont: context,
+                                  route: MaterialPageRoute(
+                                      builder: (context) => const ReviewQuiz()),
+                                ),
+                              ),
+                              SizedBox(
+                                width: double.maxFinite - 20,
+                                child: CustomNavigatorBtn(
+                                  text: "Log out",
+                                  cont: context,
+                                  route: MaterialPageRoute(
+                                      builder: (context) => const ReviewQuiz()),
+                                ),
+                              )
+                            ]),
+                          )
+                        ],
+                      ),
+                    ));
+                  }
                 } else {
-                  ret = const CircularProgressIndicator(
-                    color: Color.fromARGB(255, 93, 0, 155),
-                    backgroundColor: Colors.grey,
-                  );
+                  ret = const Loading();
                 }
                 return ret;
               },
             )));
   }
 }
+
+Future<void> checkQuesGenerated(BuildContext context) async {
+  String? str = await getGeneratorStatus();
+  if (str == "Generated") {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const Generated()));
+  } else {
+    snackBar(
+        context,
+        str == "Waiting"
+            ? "Please wait for questions to get generated"
+            : "Please upload a document to generate questions",
+        (Colors.amber.shade400));
+  }
+}
+
+Future<void> sendUserType(
+  BuildContext context,
+  String str,
+  bool isTeacher,
+) async {
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  User? user = FirebaseAuth.instance.currentUser;
+
+  await user!.reload();
+  await user.updateDisplayName(str);
+  await user.reload();
+  user = FirebaseAuth.instance.currentUser;
+
+  await users.doc(user?.uid).set({
+    'name': user?.displayName,
+    'userType': isTeacher ? 'Teacher' : 'Student'
+  }, SetOptions(merge: true)).catchError(
+      (err) => snackBar(context, err.toString(), (Colors.red.shade800)));
+}
+//////////////////////////////// await user?.delete()

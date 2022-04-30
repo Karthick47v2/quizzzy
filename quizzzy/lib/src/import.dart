@@ -1,6 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:fdottedline/fdottedline.dart';
 import 'package:file_picker/file_picker.dart';
@@ -9,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:quizzzy/libs/custom_widgets.dart';
+import 'package:quizzzy/src/service/fs_database.dart';
 
 class ImportFile extends StatefulWidget {
   final bool newUser;
@@ -22,14 +22,14 @@ class _ImportFileState extends State<ImportFile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color.fromARGB(255, 37, 37, 37),
-      body: Stack(
-        alignment: Alignment.center,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Positioned(
-            top: 100,
-            height: 128,
-            width: 310,
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 100),
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: const BoxDecoration(
@@ -68,13 +68,10 @@ class _ImportFileState extends State<ImportFile> {
             ),
             onTap: () {
               getFile(context);
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const LoadingBox(
-                        title: "Generating questions...",
-                        info: "This may take few minutes");
-                  });
+              snackBar(
+                  context,
+                  "Generating question may take a while. It will be available under 'Generated' once process is finished.",
+                  Colors.lightGreenAccent.shade400);
             },
           ))
         ],
@@ -90,70 +87,78 @@ class QnA {
   QnA({required this.question, required this.crctAns, required this.allAns});
 }
 
-Future getQuestions(String cont, BuildContext context) async {
-  var url = Uri.parse("https://mcq-gen-nzbm4e7jxa-ue.a.run.app/get-questions");
-  Map body = {'context': cont};
+Future getQuestions(String cont, BuildContext context, String qName) async {
+  var url = Uri.parse("https://mcq-gen-nzbm4e7jxa-el.a.run.app/get-questions");
+  //////////////////////////////////////??DEBUG ????????????////////////////////////////////////////////////////////////
+  ///
+  Map body = {'context': cont, 'uid': "testID", 'name': qName};
+
+  ///
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Map body = {'context': cont, 'uid': user?.uid, 'name': qName};
 
   var res = await http.post(url,
       headers: {"Content-Type": "application/json"}, body: json.encode(body));
 
   if (res.statusCode == 200) {
-    var decodedData = json.decode(res.body);
-    int noOfQues = decodedData['questions'].length;
-    List<QnA> qnaList = [];
+    // await users.doc(user?.uid).set({/////////////////////////////////////////////////////////////
+    await users.doc("testID").set({
+      'isWaiting': true,
+    }, SetOptions(merge: true)).catchError(
+        (err) => snackBar(context, err.toString(), (Colors.red.shade800)));
+    // int noOfQues = decodedData['questions'].length;
+    // List<QnA> qnaList = [];
 
-    for (int i = 0; i < noOfQues; i++) {
-      List<String> ans = List.generate(4, (index) => 'null');
-      for (int j = 0; j < 4; j++) {
-        ans[j] = decodedData['all_answers'][i * 4 + j];
-      }
-      QnA qna = QnA(
-          question: decodedData['questions'][i],
-          crctAns: decodedData['crct_ans'][i],
-          allAns: ans);
-      qnaList.add(qna);
-    }
-    for (int i = 0; i < qnaList.length; i++) {
-      print(qnaList[i].question);
-      print(qnaList[i].crctAns);
-      print(qnaList[i].allAns);
-    }
-    Navigator.pop(context);
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return NavigationBox(
-            cont: context,
-            text: "Questions are ready...!",
-          );
-        });
+    // for (int i = 0; i < noOfQues; i++) {
+    //   List<String> ans = List.generate(4, (index) => 'null');
+    //   for (int j = 0; j < 4; j++) {
+    //     ans[j] = decodedData['all_answers'][i * 4 + j];
+    //   }
+    //   QnA qna = QnA(
+    //       question: decodedData['questions'][i],
+    //       crctAns: decodedData['crct_ans'][i],
+    //       allAns: ans);
+    //   qnaList.add(qna);
+    // }
+    // for (int i = 0; i < qnaList.length; i++) {
+    //   print(qnaList[i].question);
+    //   print(qnaList[i].crctAns);
+    //   print(qnaList[i].allAns);
+    // }
+    // Navigator.pop(context);
+    // showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) {
+    //       return NavigationBox(
+    //         cont: context,
+    //         text: "Questions are ready...!",
+    //       );
+    //     });
   } else {
-    print("Np");
-    //////////////////////////////////////
+    snackBar(context, res.body.toString(), (Colors.red.shade800));
   }
 }
 
-Future<String> getFilePath() async {
-  Directory appDocDir = await getApplicationDocumentsDirectory();
-  String appDocPath = appDocDir.path;
-  String filePath = "$appDocPath/user.txt";
-
-  return filePath;
-}
-
 void getFile(BuildContext context) async {
+  String? str = await getGeneratorStatus();
+
+  if (await getGeneratorStatus() != "Generated") {
+    snackBar(context, "Please wait for previous document to get processed.",
+        (Colors.amber.shade400));
+    return;
+  }
+
   FilePickerResult? result = await FilePicker.platform.pickFiles(
     type: FileType.custom,
     allowedExtensions: ['pdf'],
   );
 
   if (result != null) {
-    PDFDoc doc = await PDFDoc.fromPath(result.files.single.path.toString());
+    String filePath = result.files.single.path.toString();
+    PDFDoc doc = await PDFDoc.fromPath(filePath);
+    List<String> filename = filePath.split('/');
     String docText = await doc.text;
-
-    // debugPrint(docText);
-    print("sending to Cloud");
-    getQuestions(docText, context);
+    getQuestions(docText, context, filename[filename.length - 1].split('.')[0]);
   } else {
     return;
   }

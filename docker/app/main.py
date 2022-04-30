@@ -2,7 +2,6 @@
 import re
 import os
 import random
-from colorama import Back
 import numpy as np
 import nltk
 import firebase_admin
@@ -311,7 +310,7 @@ def generate_que_n_ans(context):
 # generate and send question to firebase
 def send_to_fb(request):
     # set db as not generated
-    docRef = db.collection('users').doc(request.uid)
+    docRef = db.collection('users').document(request.uid)
     docRef.update({'isGenerated': False})
 
     # gen questions
@@ -327,11 +326,11 @@ def send_to_fb(request):
             'all_ans': all_ans[i * 4: 4 + i * 4]
         }
 
-        docRef.collection(request.name).doc(i).set(dict)
+        docRef.collection(request.name).document(str(i)).set(dict)
 
 
 # FastAPI setup
-app = FastAPI()
+app=FastAPI()
 
 
 # body classes for req n' res
@@ -341,17 +340,10 @@ class ModelInput(BaseModel):
     name: str
 
 
-# class ModelOutput(BaseModel):
-#     questions: List[str]
-#     crct_ans: List[str]
-#     all_answers: List[str]
-
-
 # API
 # req -> context and ans-s,
 # res -> questions
-@app.post('/get-questions')
+@ app.post('/get-questions')
 async def model_inference(request: ModelInput, bg_task: BackgroundTasks):
     bg_task.add_task(send_to_fb, request)
-    # return ModelOutput(questions=questions, crct_ans=crct_ans, all_answers=all_ans)
     return {'context': 'received'}

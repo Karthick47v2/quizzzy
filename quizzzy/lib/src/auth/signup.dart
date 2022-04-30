@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:quizzzy/src/auth/verify.dart';
 import '../../libs/custom_widgets.dart';
 import 'package:quizzzy/src/auth/login.dart';
 
@@ -16,9 +15,6 @@ class _SignUpState extends State<SignUp> {
   final passwordController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
-  bool isLoading =
-      false; //////////////////////////////////////////////////////////
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -28,17 +24,84 @@ class _SignUpState extends State<SignUp> {
             body: Builder(builder: (context) {
               return Form(
                 key: _key,
-                child: Stack(
-                  alignment: Alignment.center,
+                child: Column(
                   children: [
-                    Positioned(
-                      top: 50,
-                      child: Image.asset('assets/images/Quizzzy.png',
-                          width: 229, height: 278, fit: BoxFit.cover),
+                    Expanded(
+                      child: Container(
+                          alignment: Alignment.center,
+                          child: Image.asset(
+                            'assets/images/Quizzzy.png',
+                          )),
                     ),
-                    Positioned(
-                      bottom: 40,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          // ignore: prefer_const_literals_to_create_immutables
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 0),
+                              child: const Text(
+                                "Sign Up",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontFamily: 'Heebo',
+                                    fontSize: 48,
+                                    fontWeight: FontWeight.w800,
+                                    color: Color.fromARGB(204, 114, 0, 190)),
+                              ),
+                            ),
+                          ],
+                        ),
+                        CustomTextInput(
+                            text: "Email",
+                            controller: emailController,
+                            validator: validateEmail),
+                        CustomTextInput(
+                            text: "Password",
+                            controller: passwordController,
+                            validator: validatePassword,
+                            isPass: true),
+                      ],
+                    ),
+                    Container(
+                      height: 50,
+                      width: double.maxFinite - 20,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 0),
+                      child: CustomNavigatorBtn(
+                          text: "Sign Up",
+                          func: () async {
+                            if (_key.currentState!.validate()) {
+                              try {
+                                await FirebaseAuth.instance
+                                    .createUserWithEmailAndPassword(
+                                        email: emailController.text,
+                                        password: passwordController.text)
+                                    .then((_) => FirebaseAuth
+                                        .instance.currentUser!
+                                        .sendEmailVerification())
+                                    .then((_) => snackBar(
+                                        context,
+                                        "A verification email has been sent to your mail",
+                                        (Colors.amber.shade400)));
+                                await FirebaseAuth.instance.signOut();
+                              } on FirebaseAuthException catch (e) {
+                                snackBar(
+                                    context, e.message!, (Colors.red.shade800));
+                              }
+                            }
+                          }),
+                    ),
+                    Container(
+                      height: 50,
+                      width: double.maxFinite,
+                      alignment: Alignment.center,
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
                             "Already have an account ?",
@@ -68,73 +131,8 @@ class _SignUpState extends State<SignUp> {
                         ],
                       ),
                     ),
-                    CustomNavigatorBtn(
-                        text: "Sign Up",
-                        bt: 100.0,
-                        h: 45.0,
-                        w: 317.0,
-                        func: () async {
-                          setState(() => isLoading = true);
-                          if (_key.currentState!.validate()) {
-                            try {
-                              await FirebaseAuth.instance
-                                  .createUserWithEmailAndPassword(
-                                      email: emailController.text,
-                                      password: passwordController.text)
-                                  .then((_) => FirebaseAuth
-                                      .instance.currentUser!
-                                      .sendEmailVerification())
-                                  .then((_) => snackBar(
-                                      context,
-                                      "A verification email has been sent to your mail",
-                                      (Colors.amber.shade400)));
-                              await FirebaseAuth.instance.signOut();
-                            } on FirebaseAuthException catch (e) {
-                              snackBar(
-                                  context, e.message!, (Colors.red.shade800));
-                            }
-                            setState(() => isLoading = false);
-                          }
-                        }),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        // const Text(
-                        //     "Sign Up",
-                        //     textAlign: TextAlign.left,
-                        //     style: TextStyle(fontFamily: 'Heebo', fontSize: 48, fontWeight: FontWeight.w800, color: Color.fromARGB(204, 114, 0, 190)),
-                        //   ),
-                        CustomTextInput(
-                            text: "Email",
-                            controller: emailController,
-                            validator: validateEmail),
-                        CustomTextInput(
-                            text: "Password",
-                            controller: passwordController,
-                            validator: validatePassword,
-                            isPass: true),
-                      ],
-                    )
                   ],
                 ),
-                //             ),
-                //           ElevatedButton(
-                //             child: const Text("Log Out"),
-                //             onPressed: () async {
-                //               setState(() => isLoading = true);
-                //               await FirebaseAuth.instance.signOut();
-                //               setState(() => isLoading = false);
-                //             },
-                //             ),
-                //         ],
-                //       ),
-                //       // isLoading ? CircularProgressIndicator(
-                //       //   color: Colors.cyan.shade700,
-                //       // )
-                //     ],
-                //   )
-                // ),
               );
             })));
   }
@@ -168,16 +166,4 @@ String? validatePassword(String? pass) {
     return "Password must be at least 8 characters & contain an uppercase letter, number and symbol.";
   }
   return null;
-}
-
-void snackBar(BuildContext context, String str, Color clr) {
-  final snackBar = SnackBar(
-    content: Text(str),
-    backgroundColor: clr,
-    // shape: const StadiumBorder(),
-    behavior: SnackBarBehavior.floating,
-  );
-
-  ScaffoldMessenger.of(context).removeCurrentSnackBar();
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }

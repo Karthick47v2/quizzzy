@@ -49,9 +49,6 @@ class _VerifyEmailState extends State<VerifyEmail> {
             ),
             CustomNavigatorBtn(
               text: "Resend Email",
-              bt: 100.0,
-              h: 50.0,
-              w: 317.0,
               func: () => user?.sendEmailVerification(),
               clr: Colors.green[400],
             ),

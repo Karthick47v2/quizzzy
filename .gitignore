@@ -13,6 +13,9 @@ firebase-debug.*.log*
 # api keys
 secret/
 
+# large files
+pre-downloaded
+
 # onnx
 *.onnx
 

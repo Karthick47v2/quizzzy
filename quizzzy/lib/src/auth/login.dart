@@ -17,8 +17,6 @@ class _LoginState extends State<Login> {
   final passwordController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
-  bool isLoading = false;
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -28,17 +26,93 @@ class _LoginState extends State<Login> {
             body: Builder(builder: (context) {
               return Form(
                 key: _key,
-                child: Stack(
-                  alignment: Alignment.center,
+                child: Column(
                   children: [
-                    Positioned(
-                      top: 50,
-                      child: Image.asset('assets/images/Quizzzy.png',
-                          width: 229, height: 278, fit: BoxFit.cover),
+                    Expanded(
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Image.asset('assets/images/Quizzzy.png'),
+                      ),
                     ),
-                    Positioned(
-                      bottom: 40,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          // ignore: prefer_const_literals_to_create_immutables
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 0),
+                              child: const Text(
+                                "Log In",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontFamily: 'Heebo',
+                                    fontSize: 48,
+                                    fontWeight: FontWeight.w800,
+                                    color: Color.fromARGB(204, 114, 0, 190)),
+                              ),
+                            ),
+                          ],
+                        ),
+                        CustomTextInput(
+                            text: "Email",
+                            controller: emailController,
+                            validator: validateEmail),
+                        CustomTextInput(
+                            text: "Password",
+                            controller: passwordController,
+                            validator: validatePassword,
+                            isPass: true),
+                      ],
+                    ),
+                    Container(
+                      height: 50,
+                      width: double.maxFinite - 20,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 0),
+                      child: CustomNavigatorBtn(
+                        text: "Log In",
+                        func: () async {
+                          try {
+                            await FirebaseAuth.instance
+                                .signInWithEmailAndPassword(
+                                    email: emailController.text,
+                                    password: passwordController.text)
+                                .then((_) => {
+                                      if (FirebaseAuth
+                                          .instance.currentUser!.emailVerified)
+                                        {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const HomePage()))
+                                        }
+                                      else
+                                        {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const VerifyEmail()))
+                                        }
+                                    });
+                          } on FirebaseAuthException catch (e) {
+                            snackBar(
+                                context, e.message!, (Colors.red.shade800));
+                          }
+                        },
+                      ),
+                    ),
+                    Container(
+                      height: 50,
+                      width: double.maxFinite,
+                      alignment: Alignment.center,
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
                             "Don't have an account ?",
@@ -62,69 +136,12 @@ class _LoginState extends State<Login> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => SignUp()))
+                                      builder: (context) => const SignUp()))
                             },
                           ),
                         ],
                       ),
                     ),
-                    CustomNavigatorBtn(
-                      text: "Log In",
-                      bt: 100.0,
-                      h: 45.0,
-                      w: 317.0,
-                      func: () async {
-                        setState(() => isLoading = true);
-                        try {
-                          await FirebaseAuth.instance
-                              .signInWithEmailAndPassword(
-                                  email: emailController.text,
-                                  password: passwordController.text)
-                              .then((_) => {
-                                    if (FirebaseAuth
-                                        .instance.currentUser!.emailVerified)
-                                      {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const HomePage()))
-                                      }
-                                    else
-                                      {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const VerifyEmail()))
-                                      }
-                                  });
-                        } on FirebaseAuthException catch (e) {
-                          snackBar(context, e.message!, (Colors.red.shade800));
-                        }
-                        setState(() => isLoading = false);
-                      },
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        // const Text(
-                        //     "Log in",
-                        //     textAlign: TextAlign.left,
-                        //     style: TextStyle(fontFamily: 'Heebo', fontSize: 48, fontWeight: FontWeight.w800, color: Color.fromARGB(204, 114, 0, 190)),
-                        //   ),
-                        CustomTextInput(
-                            text: "Email",
-                            controller: emailController,
-                            validator: validateEmail),
-                        CustomTextInput(
-                            text: "Password",
-                            controller: passwordController,
-                            validator: validatePassword,
-                            isPass: true),
-                      ],
-                    )
                   ],
                 ),
               );

@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:quizzzy/src/auth/login.dart';
 import 'package:quizzzy/src/greeting.dart';
 import 'package:quizzzy/src/home_page.dart';
 import 'package:quizzzy/src/auth/signup.dart';
 import 'package:quizzzy/src/auth/verify.dart';
+import 'package:quizzzy/src/import.dart';
+import 'package:quizzzy/src/tst.dart';
 
 Future<void> main() async {
   // initialize
@@ -46,11 +49,12 @@ class _RootState extends State<Root> {
             : const NeverScrollableScrollPhysics(),
         children: [
           const Greetings(),
-          (widget.user == null)
-              ? const SignUp()
-              : (widget.user!.emailVerified)
-                  ? const HomePage()
-                  : const VerifyEmail(),
+          const HomePage()
+          // (widget.user == null)
+          //     ? const SignUp()
+          //     : (widget.user!.emailVerified)
+          //         ? const HomePage()
+          // : const VerifyEmail(),
         ],
         onPageChanged: (n) => {setState(() => canScroll = false)},
       ),
