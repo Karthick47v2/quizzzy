@@ -19,132 +19,137 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
-            resizeToAvoidBottomInset: false,
-            backgroundColor: const Color.fromARGB(255, 37, 37, 37),
-            body: Builder(builder: (context) {
-              return Form(
-                key: _key,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: Image.asset('assets/images/Quizzzy.png'),
-                      ),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          // ignore: prefer_const_literals_to_create_immutables
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 0),
-                              child: const Text(
-                                "Log In",
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    fontFamily: 'Heebo',
-                                    fontSize: 48,
-                                    fontWeight: FontWeight.w800,
-                                    color: Color.fromARGB(204, 114, 0, 190)),
-                              ),
-                            ),
-                          ],
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: MaterialApp(
+          home: Scaffold(
+              resizeToAvoidBottomInset: false,
+              backgroundColor: const Color.fromARGB(255, 37, 37, 37),
+              body: Builder(builder: (context) {
+                return Form(
+                  key: _key,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: Image.asset('assets/images/Quizzzy.png'),
                         ),
-                        CustomTextInput(
-                            text: "Email",
-                            controller: emailController,
-                            validator: validateEmail),
-                        CustomTextInput(
-                            text: "Password",
-                            controller: passwordController,
-                            validator: validatePassword,
-                            isPass: true),
-                      ],
-                    ),
-                    Container(
-                      height: 50,
-                      width: double.maxFinite - 20,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 0),
-                      child: CustomNavigatorBtn(
-                        text: "Log In",
-                        func: () async {
-                          try {
-                            await FirebaseAuth.instance
-                                .signInWithEmailAndPassword(
-                                    email: emailController.text,
-                                    password: passwordController.text)
-                                .then((_) => {
-                                      if (FirebaseAuth
-                                          .instance.currentUser!.emailVerified)
-                                        {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const HomePage()))
-                                        }
-                                      else
-                                        {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const VerifyEmail()))
-                                        }
-                                    });
-                          } on FirebaseAuthException catch (e) {
-                            snackBar(
-                                context, e.message!, (Colors.red.shade800));
-                          }
-                        },
                       ),
-                    ),
-                    Container(
-                      height: 50,
-                      width: double.maxFinite,
-                      alignment: Alignment.center,
-                      child: Row(
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const Text(
-                            "Don't have an account ?",
-                            style: TextStyle(
-                                fontFamily: 'Heebo',
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.white),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            // ignore: prefer_const_literals_to_create_immutables
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 0),
+                                child: const Text(
+                                  "Log In",
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                      fontFamily: 'Heebo',
+                                      fontSize: 48,
+                                      fontWeight: FontWeight.w800,
+                                      color: Color.fromARGB(204, 114, 0, 190)),
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 18),
-                          TextButton(
-                            child: const Text(
-                              "Sign up",
+                          CustomTextInput(
+                              text: "Email",
+                              controller: emailController,
+                              validator: validateEmail),
+                          CustomTextInput(
+                              text: "Password",
+                              controller: passwordController,
+                              validator: validatePassword,
+                              isPass: true),
+                        ],
+                      ),
+                      Container(
+                        height: 50,
+                        width: double.maxFinite - 20,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 0),
+                        child: CustomNavigatorBtn(
+                          text: "Log In",
+                          func: () async {
+                            try {
+                              await FirebaseAuth.instance
+                                  .signInWithEmailAndPassword(
+                                      email: emailController.text,
+                                      password: passwordController.text)
+                                  .then((_) => {
+                                        if (FirebaseAuth.instance.currentUser!
+                                            .emailVerified)
+                                          {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const HomePage()))
+                                          }
+                                        else
+                                          {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const VerifyEmail()))
+                                          }
+                                      });
+                            } on FirebaseAuthException catch (e) {
+                              snackBar(
+                                  context, e.message!, (Colors.red.shade800));
+                            }
+                          },
+                        ),
+                      ),
+                      Container(
+                        height: 50,
+                        width: double.maxFinite,
+                        alignment: Alignment.center,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Don't have an account ?",
                               style: TextStyle(
                                   fontFamily: 'Heebo',
                                   fontSize: 18,
-                                  fontWeight: FontWeight.w500,
-                                  color: Color.fromARGB(255, 114, 0, 190)),
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.white),
                             ),
-                            onPressed: () => {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const SignUp()))
-                            },
-                          ),
-                        ],
+                            const SizedBox(width: 18),
+                            TextButton(
+                              child: const Text(
+                                "Sign up",
+                                style: TextStyle(
+                                    fontFamily: 'Heebo',
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color.fromARGB(255, 114, 0, 190)),
+                              ),
+                              onPressed: () => {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const SignUp()))
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            })));
+                    ],
+                  ),
+                );
+              }))),
+    );
   }
 }

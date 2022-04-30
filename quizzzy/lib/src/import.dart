@@ -21,60 +21,62 @@ class ImportFile extends StatefulWidget {
 class _ImportFileState extends State<ImportFile> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: const Color.fromARGB(255, 37, 37, 37),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 100),
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(94, 153, 0, 255),
-                borderRadius: BorderRadius.all(Radius.circular(24)),
-              ),
-              child: const Center(
-                child: Text(
-                  "Upload materials (PDF) to generate questions. Please make sure there are only texts in uploaded content to get improved results.",
-                  style: TextStyle(
-                      fontFamily: 'Heebo',
-                      fontSize: 17,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ),
-          Center(
-              child: InkWell(
-            child: FDottedLine(
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: const Color.fromARGB(255, 37, 37, 37),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 100),
               child: Container(
-                margin: const EdgeInsets.all(5),
-                child: Image.asset(
-                  'assets/images/upload.png',
-                  scale: 2,
-                  color: Colors.black45,
+                padding: const EdgeInsets.all(8),
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(94, 153, 0, 255),
+                  borderRadius: BorderRadius.all(Radius.circular(24)),
+                ),
+                child: const Center(
+                  child: Text(
+                    "Upload materials (PDF) to generate questions. Please make sure there are only texts in uploaded content to get improved results.",
+                    style: TextStyle(
+                        fontFamily: 'Heebo',
+                        fontSize: 17,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
-              color: Colors.grey.shade700,
-              strokeWidth: 2.0,
-              dottedLength: 8.0,
-              space: 3.0,
-              corner: FDottedLineCorner.all(6.0),
             ),
-            onTap: () {
-              getFile(context);
-              snackBar(
-                  context,
-                  "Generating question may take a while. It will be available under 'Generated' once process is finished.",
-                  Colors.lightGreenAccent.shade400);
-            },
-          ))
-        ],
+            Center(
+                child: InkWell(
+              child: FDottedLine(
+                child: Container(
+                  margin: const EdgeInsets.all(5),
+                  child: Image.asset(
+                    'assets/images/upload.png',
+                    scale: 2,
+                    color: Colors.black45,
+                  ),
+                ),
+                color: Colors.grey.shade700,
+                strokeWidth: 2.0,
+                dottedLength: 8.0,
+                space: 3.0,
+                corner: FDottedLineCorner.all(6.0),
+              ),
+              onTap: () {
+                getFile(context);
+              },
+            ))
+          ],
+        ),
       ),
     );
   }
@@ -137,6 +139,10 @@ Future getQuestions(String cont, BuildContext context, String qName) async {
   } else {
     snackBar(context, res.body.toString(), (Colors.red.shade800));
   }
+  snackBar(
+      context,
+      "Generating question may take a while. It will be available under 'Generated' once process is finished.",
+      Colors.lightGreenAccent.shade400);
 }
 
 void getFile(BuildContext context) async {

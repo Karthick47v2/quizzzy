@@ -19,27 +19,32 @@ class _GeneratedState extends State<Generated> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: const Color.fromARGB(255, 37, 37, 37),
-        body: FutureBuilder(
-            future: getGeneratorStatus(),
-            builder: (context, snapshot) {
-              Widget ret = Container();
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.data == "Generated") {
-                  ret = Text("Generated");
-                } else if (snapshot.data == "Waiting") {
-                  ret = Text("Waiting");
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: MaterialApp(
+        home: Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: const Color.fromARGB(255, 37, 37, 37),
+          body: FutureBuilder(
+              future: getGeneratorStatus(),
+              builder: (context, snapshot) {
+                Widget ret = Container();
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.data == "Generated") {
+                    ret = Text("Generated");
+                  } else if (snapshot.data == "Waiting") {
+                    ret = Text("Waiting");
+                  } else {
+                    ret = Text("None");
+                  }
                 } else {
-                  ret = Text("None");
+                  ret = const Loading();
                 }
-              } else {
-                ret = const Loading();
-              }
-              return ret;
-            }),
+                return ret;
+              }),
+        ),
       ),
     );
   }

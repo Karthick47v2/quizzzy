@@ -10,6 +10,10 @@ class ReviewQuiz extends StatefulWidget {
 class _ReviewQuizState extends State<ReviewQuiz> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return WillPopScope(
+        onWillPop: () async {
+          return false;
+        },
+        child: Container());
   }
 }

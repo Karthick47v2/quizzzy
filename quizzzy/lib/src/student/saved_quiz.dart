@@ -10,6 +10,10 @@ class SavedQuiz extends StatefulWidget {
 class _SavedQuizState extends State<SavedQuiz> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return WillPopScope(
+        onWillPop: () async {
+          return false;
+        },
+        child: Container());
   }
 }

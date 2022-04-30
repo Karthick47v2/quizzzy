@@ -32,28 +32,33 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: const Color.fromARGB(255, 37, 37, 37),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              "You need to verify your account before going further. A verification email has been already sent to your email.",
-              style: TextStyle(
-                fontFamily: 'Heebo',
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-                color: Color.fromARGB(255, 255, 255, 255),
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+          backgroundColor: const Color.fromARGB(255, 37, 37, 37),
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "You need to verify your account before going further. A verification email has been already sent to your email.",
+                style: TextStyle(
+                  fontFamily: 'Heebo',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
+                  color: Color.fromARGB(255, 255, 255, 255),
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
-            CustomNavigatorBtn(
-              text: "Resend Email",
-              func: () => user?.sendEmailVerification(),
-              clr: Colors.green[400],
-            ),
-          ],
-        ));
+              CustomNavigatorBtn(
+                text: "Resend Email",
+                func: () => user?.sendEmailVerification(),
+                clr: Colors.green[400],
+              ),
+            ],
+          )),
+    );
   }
 
   Future<void> checkEmailVerification() async {

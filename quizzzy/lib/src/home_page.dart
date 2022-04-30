@@ -29,148 +29,159 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
-            resizeToAvoidBottomInset: false,
-            backgroundColor: const Color.fromARGB(255, 37, 37, 37),
-            body: FutureBuilder(
-              future: userFuture,
-              builder: (context, snapshot) {
-                Widget ret = Container();
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.data == null && firstTime) {
-                    ret = Builder(
-                        builder: (context) => Column(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    child: Image.asset(
-                                      'assets/images/Quizzzy.png',
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: MaterialApp(
+          home: Scaffold(
+              resizeToAvoidBottomInset: false,
+              backgroundColor: const Color.fromARGB(255, 37, 37, 37),
+              body: FutureBuilder(
+                future: userFuture,
+                builder: (context, snapshot) {
+                  Widget ret = Container();
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.data == null && firstTime) {
+                      ret = Builder(
+                          builder: (context) => Column(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      child: Image.asset(
+                                        'assets/images/Quizzzy.png',
+                                      ),
                                     ),
                                   ),
-                                ),
-                                CustomTextInput(
-                                    text: "Name", controller: nameController),
-                                Container(
-                                  width: double.maxFinite - 20,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 30, vertical: 0),
-                                  alignment: Alignment.bottomCenter,
-                                  child: Column(children: [
-                                    SizedBox(
-                                      width: double.maxFinite - 20,
-                                      child: CustomNavigatorBtn(
-                                        text: "I'm a Teacher",
-                                        func: () => {
-                                          sendUserType(context,
-                                              nameController.text, true),
-                                          setState(() {
-                                            // user will stuck at user type assign if network is slow, so
-                                            // bypassing fireabse response (only needed for first time use)
-                                            firstTime = false;
-                                          })
-                                        },
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: double.maxFinite - 20,
-                                      child: CustomNavigatorBtn(
-                                          text: "I'm a Student",
+                                  CustomTextInput(
+                                      text: "Name", controller: nameController),
+                                  Container(
+                                    width: double.maxFinite - 20,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 30, vertical: 0),
+                                    alignment: Alignment.bottomCenter,
+                                    child: Column(children: [
+                                      SizedBox(
+                                        width: double.maxFinite - 20,
+                                        child: CustomNavigatorBtn(
+                                          text: "I'm a Teacher",
                                           func: () => {
-                                                sendUserType(context,
-                                                    nameController.text, false),
-                                                setState(() {
-                                                  firstTime = false;
+                                            sendUserType(context,
+                                                nameController.text, true),
+                                            setState(() {
+                                              // user will stuck at user type assign if network is slow, so
+                                              // bypassing fireabse response (only needed for first time use)
+                                              firstTime = false;
+                                            })
+                                          },
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: double.maxFinite - 20,
+                                        child: CustomNavigatorBtn(
+                                            text: "I'm a Student",
+                                            func: () => {
+                                                  sendUserType(
+                                                      context,
+                                                      nameController.text,
+                                                      false),
+                                                  setState(() {
+                                                    firstTime = false;
+                                                  }),
                                                 }),
-                                              }),
-                                    ),
-                                  ]),
-                                )
-                              ],
-                            ));
-                  } else {
-                    ret = (Builder(
-                      builder: (context) => Column(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              alignment: Alignment.center,
-                              child: Image.asset(
-                                'assets/images/Quizzzy.png',
+                                      ),
+                                    ]),
+                                  )
+                                ],
+                              ));
+                    } else {
+                      ret = (Builder(
+                        builder: (context) => Column(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: Image.asset(
+                                  'assets/images/Quizzzy.png',
+                                ),
                               ),
                             ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 0),
-                            child: Column(children: [
-                              SizedBox(
-                                width: double.maxFinite - 20,
-                                child: CustomNavigatorBtn(
-                                  text: "Import PDF",
-                                  cont: context,
-                                  route: MaterialPageRoute(
-                                      builder: (context) => const ImportFile()),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 30, vertical: 0),
+                              child: Column(children: [
+                                SizedBox(
+                                  width: double.maxFinite - 20,
+                                  child: CustomNavigatorBtn(
+                                    text: "Import PDF",
+                                    cont: context,
+                                    route: MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ImportFile()),
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: double.maxFinite - 20,
-                                child: CustomNavigatorBtn(
-                                    text: "Generated",
-                                    func: () => {checkQuesGenerated(context)}),
-                              ),
-                              snapshot.data == "Student"
-                                  ? SizedBox(
-                                      width: double.maxFinite - 20,
-                                      child: CustomNavigatorBtn(
-                                        text: "Saved questionnaire",
-                                        cont: context,
-                                        route: MaterialPageRoute(
-                                            builder: (context) =>
-                                                const SavedQuestions()),
+                                SizedBox(
+                                  width: double.maxFinite - 20,
+                                  child: CustomNavigatorBtn(
+                                      text: "Generated",
+                                      func: () =>
+                                          {checkQuesGenerated(context)}),
+                                ),
+                                snapshot.data == "Student"
+                                    ? SizedBox(
+                                        width: double.maxFinite - 20,
+                                        child: CustomNavigatorBtn(
+                                          text: "Saved questionnaire",
+                                          cont: context,
+                                          route: MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const SavedQuestions()),
+                                        ),
+                                      )
+                                    : SizedBox(
+                                        width: double.maxFinite - 20,
+                                        child: CustomNavigatorBtn(
+                                          text: "Saved quiz",
+                                          cont: context,
+                                          route: MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const SavedQuiz()),
+                                        ),
                                       ),
-                                    )
-                                  : SizedBox(
-                                      width: double.maxFinite - 20,
-                                      child: CustomNavigatorBtn(
-                                        text: "Saved quiz",
-                                        cont: context,
-                                        route: MaterialPageRoute(
-                                            builder: (context) =>
-                                                const SavedQuiz()),
-                                      ),
-                                    ),
-                              SizedBox(
-                                width: double.maxFinite - 20,
-                                child: CustomNavigatorBtn(
-                                  text: "Review quizzes",
-                                  cont: context,
-                                  route: MaterialPageRoute(
-                                      builder: (context) => const ReviewQuiz()),
+                                SizedBox(
+                                  width: double.maxFinite - 20,
+                                  child: CustomNavigatorBtn(
+                                    text: "Review quizzes",
+                                    cont: context,
+                                    route: MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ReviewQuiz()),
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: double.maxFinite - 20,
-                                child: CustomNavigatorBtn(
-                                  text: "Log out",
-                                  cont: context,
-                                  route: MaterialPageRoute(
-                                      builder: (context) => const ReviewQuiz()),
-                                ),
-                              )
-                            ]),
-                          )
-                        ],
-                      ),
-                    ));
+                                SizedBox(
+                                  width: double.maxFinite - 20,
+                                  child: CustomNavigatorBtn(
+                                    text: "Log out",
+                                    cont: context,
+                                    route: MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ReviewQuiz()),
+                                  ),
+                                )
+                              ]),
+                            )
+                          ],
+                        ),
+                      ));
+                    }
+                  } else {
+                    ret = const Loading();
                   }
-                } else {
-                  ret = const Loading();
-                }
-                return ret;
-              },
-            )));
+                  return ret;
+                },
+              ))),
+    );
   }
 }
 
