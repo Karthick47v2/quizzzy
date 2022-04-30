@@ -94,12 +94,17 @@ class _CustomTextInputState extends State<CustomTextInput> {
   }
 }
 
-class LoadingBox extends StatelessWidget {
-  final String title;
-  final String info;
-  const LoadingBox({Key? key, required this.title, required this.info})
+class PopupModal extends StatefulWidget {
+  final double size;
+  final List<Widget> wids;
+  const PopupModal({Key? key, required this.size, required this.wids})
       : super(key: key);
 
+  @override
+  State<PopupModal> createState() => _PopupModalState();
+}
+
+class _PopupModalState extends State<PopupModal> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -107,46 +112,14 @@ class LoadingBox extends StatelessWidget {
         borderRadius: BorderRadius.circular(4),
       ),
       child: Container(
-          color: const Color.fromARGB(255, 80, 80, 80),
-          height: 300,
-          child: Column(children: [
-            const SizedBox(
-              height: 20,
-            ),
-            const SizedBox(
-              height: 120,
-              width: 120,
-              child: CircularProgressIndicator(
-                color: Color.fromARGB(255, 93, 0, 155),
-                backgroundColor: Colors.grey,
-              ),
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            Column(
-              children: [
-                Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      fontFamily: 'Heebo',
-                      fontSize: 23,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white),
-                ),
-                Text(
-                  info,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      fontFamily: 'Heebo',
-                      fontSize: 17,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white),
-                ),
-              ],
-            )
-          ])),
+        color: const Color.fromARGB(255, 13, 13, 15),
+        height: widget.size,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: widget.wids,
+        ),
+      ),
     );
   }
 }
@@ -157,25 +130,11 @@ class Loading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: Expanded(
-        child: CircularProgressIndicator(
-          color: Color.fromARGB(255, 93, 0, 155),
-          backgroundColor: Colors.grey,
-        ),
+      child: CircularProgressIndicator(
+        color: Color.fromARGB(255, 93, 0, 155),
+        backgroundColor: Colors.grey,
       ),
     );
-  }
-}
-
-class NavigationBox extends StatelessWidget {
-  final BuildContext cont;
-  final String text;
-  const NavigationBox({Key? key, required this.cont, required this.text})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }
 
