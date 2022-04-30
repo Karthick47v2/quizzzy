@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
@@ -19,6 +21,7 @@ class ImportFile extends StatefulWidget {
 }
 
 class _ImportFileState extends State<ImportFile> {
+  final fileNameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -72,7 +75,23 @@ class _ImportFileState extends State<ImportFile> {
                 corner: FDottedLineCorner.all(6.0),
               ),
               onTap: () {
-                getFile(context);
+                showDialog(
+                    context: context,
+                    builder: (BuildContext cntxt) {
+                      return PopupModal(size: 200.0, wids: [
+                        CustomTextInput(
+                            text: "Questionnaire name",
+                            controller: fileNameController,
+                            validator: validateFileName),
+                        CustomNavigatorBtn(
+                          text: "Confirm",
+                          func: () => {
+                            getFile(context, fileNameController.text),
+                            Navigator.of(cntxt).pop()
+                          },
+                        )
+                      ]);
+                    });
               },
             ))
           ],
@@ -142,17 +161,19 @@ Future getQuestions(String cont, BuildContext context, String qName) async {
   snackBar(
       context,
       "Generating question may take a while. It will be available under 'Generated' once process is finished.",
-      Colors.lightGreenAccent.shade400);
+      Colors.green.shade700);
 }
 
-void getFile(BuildContext context) async {
+void getFile(BuildContext context, String fileName) async {
   String? str = await getGeneratorStatus();
 
-  if (await getGeneratorStatus() != "Generated") {
-    snackBar(context, "Please wait for previous document to get processed.",
-        (Colors.amber.shade400));
-    return;
-  }
+  // if (await getGeneratorStatus() != "Generated") {
+  //   snackBar(context, "Please wait for previous document to get processed.",
+  //       (Colors.amber.shade400));
+  //   return;
+  // }
+
+  print(fileName);
 
   FilePickerResult? result = await FilePicker.platform.pickFiles(
     type: FileType.custom,
@@ -160,12 +181,18 @@ void getFile(BuildContext context) async {
   );
 
   if (result != null) {
-    String filePath = result.files.single.path.toString();
-    PDFDoc doc = await PDFDoc.fromPath(filePath);
-    List<String> filename = filePath.split('/');
+    PDFDoc doc = await PDFDoc.fromPath(result.files.single.path.toString());
     String docText = await doc.text;
-    getQuestions(docText, context, filename[filename.length - 1].split('.')[0]);
+    getQuestions(docText, context, fileName);
   } else {
     return;
   }
+}
+
+String? validateFileName(String? filename) {
+  if (filename == null || filename.isEmpty) {
+    return "Filename is required.";
+  }
+
+  return null;
 }
