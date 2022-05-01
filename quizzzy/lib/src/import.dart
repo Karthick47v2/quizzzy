@@ -80,13 +80,20 @@ class _ImportFileState extends State<ImportFile> {
                     builder: (BuildContext cntxt) {
                       return PopupModal(size: 200.0, wids: [
                         CustomTextInput(
-                            text: "Questionnaire name",
-                            controller: fileNameController,
-                            validator: validateFileName),
+                          text: "Questionnaire name",
+                          controller: fileNameController,
+                        ),
                         CustomNavigatorBtn(
                           text: "Confirm",
                           func: () => {
-                            getFile(context, fileNameController.text),
+                            getFile(
+                                context,
+                                (fileNameController.text == "")
+                                    ? "noname"
+                                    : fileNameController.text),
+                            setState(() {
+                              fileNameController.text = "";
+                            }),
                             Navigator.of(cntxt).pop()
                           },
                         )
@@ -173,8 +180,6 @@ void getFile(BuildContext context, String fileName) async {
   //   return;
   // }
 
-  print(fileName);
-
   FilePickerResult? result = await FilePicker.platform.pickFiles(
     type: FileType.custom,
     allowedExtensions: ['pdf'],
@@ -187,12 +192,4 @@ void getFile(BuildContext context, String fileName) async {
   } else {
     return;
   }
-}
-
-String? validateFileName(String? filename) {
-  if (filename == null || filename.isEmpty) {
-    return "Filename is required.";
-  }
-
-  return null;
 }
