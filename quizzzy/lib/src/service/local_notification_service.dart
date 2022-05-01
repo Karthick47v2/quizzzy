@@ -3,14 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class LocalNotificationService {
-  static final FlutterLocalNotificationsPlugin notificationPlugin =
+  static final FlutterLocalNotificationsPlugin _notificationPlugin =
       FlutterLocalNotificationsPlugin();
   static void initialize(BuildContext context) {
     const InitializationSettings initializationSettings =
         InitializationSettings(
             android: AndroidInitializationSettings("@mipmap/ic_launcher"));
 
-    notificationPlugin.initialize(initializationSettings);
+    _notificationPlugin.initialize(initializationSettings);
   }
 
   static void display(RemoteMessage msg) async {
@@ -21,7 +21,7 @@ class LocalNotificationService {
           android: AndroidNotificationDetails("mcq-gen", "mcq-gen-app",
               importance: Importance.max, priority: Priority.high));
 
-      await notificationPlugin.show(id, msg.notification!.title,
+      await _notificationPlugin.show(id, msg.notification!.title,
           msg.notification!.body, notificationDetails,
           payload: msg.notification!.body);
     } on Exception catch (e) {

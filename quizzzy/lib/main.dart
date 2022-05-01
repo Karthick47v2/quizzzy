@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:quizzzy/src/auth/signup.dart';
+import 'package:quizzzy/src/auth/verify.dart';
 import 'package:quizzzy/src/greeting.dart';
 import 'package:quizzzy/src/home_page.dart';
-import 'package:quizzzy/src/import.dart';
-import 'package:quizzzy/src/service/local_notification_service.dart';
+import 'package:quizzzy/src/service/local_database.dart';
 
 Future<void> main() async {
   // initialize all widgets
@@ -22,6 +23,8 @@ Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
   ));
+
+  await UserSharedPrefernces.init();
   runApp(Root(
     user: user,
   ));
@@ -33,7 +36,7 @@ Future<void> bgNotificationHandler(RemoteMessage msg) async {
   print(msg.notification!.title);
 }
 
-class Root extends StatefulWidget { 
+class Root extends StatefulWidget {
   final User? user;
   const Root({Key? key, required this.user}) : super(key: key);
 
@@ -43,38 +46,6 @@ class Root extends StatefulWidget {
 
 class _RootState extends State<Root> {
   bool canScroll = true;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  //   // initialze local notification handler (when in foreground)
-  //   LocalNotificationService.initialize(context);
-
-  //   // always go to home when notification is pressed (bg / terminated state only)
-  //   FirebaseMessaging.instance.getInitialMessage().then((msg) {
-  //     if (msg != null) {
-  //       Navigator.push(
-  //           context, MaterialPageRoute(builder: (context) => const HomePage()));
-  //     }
-  //   });
-
-  //   // foreground msg handler
-  //   FirebaseMessaging.onMessage.listen((msg) {
-  //     if (msg.notification != null) {
-  //       print(msg.notification!.body);
-  //       print(msg.notification!.title);
-  //     }
-
-  //     LocalNotificationService.display(msg);
-  //   });
-
-  //   // onTap
-  //   FirebaseMessaging.onMessageOpenedApp.listen((msg) {
-  //     Navigator.push(
-  //         context, MaterialPageRoute(builder: (context) => const HomePage()));
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -88,12 +59,11 @@ class _RootState extends State<Root> {
             : const NeverScrollableScrollPhysics(),
         children: [
           const Greetings(),
-          const ImportFile()
-          // (widget.user == null)
-          //     ? const SignUp()
-          //     : (widget.user!.emailVerified)
-          //         ? const HomePage()
-          // : const VerifyEmail(),
+          (widget.user == null)
+              ? const SignUp()
+              : (widget.user!.emailVerified)
+                  ? const HomePage()
+                  : const VerifyEmail(),
         ],
         onPageChanged: (n) => {setState(() => canScroll = false)},
       ),

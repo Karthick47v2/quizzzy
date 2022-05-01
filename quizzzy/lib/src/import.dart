@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
@@ -117,20 +115,13 @@ class QnA {
 
 Future getQuestions(String cont, BuildContext context, String qName) async {
   var url = Uri.parse("https://mcq-gen-nzbm4e7jxa-el.a.run.app/get-questions");
-  //////////////////////////////////////??DEBUG ????????????////////////////////////////////////////////////////////////
-  ///
-  Map body = {'context': cont, 'uid': "testID", 'name': qName};
-
-  ///
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // Map body = {'context': cont, 'uid': user?.uid, 'name': qName};
+  Map body = {'context': cont, 'uid': user?.uid, 'name': qName};
 
   var res = await http.post(url,
       headers: {"Content-Type": "application/json"}, body: json.encode(body));
 
   if (res.statusCode == 200) {
-    // await users.doc(user?.uid).set({/////////////////////////////////////////////////////////////
-    await users.doc("testID").set({
+    await users.doc(user?.uid).set({
       'isWaiting': true,
     }, SetOptions(merge: true)).catchError(
         (err) => snackBar(context, err.toString(), (Colors.red.shade800)));
@@ -174,11 +165,11 @@ Future getQuestions(String cont, BuildContext context, String qName) async {
 void getFile(BuildContext context, String fileName) async {
   String? str = await getGeneratorStatus();
 
-  // if (await getGeneratorStatus() != "Generated") {
-  //   snackBar(context, "Please wait for previous document to get processed.",
-  //       (Colors.amber.shade400));
-  //   return;
-  // }
+  if (await getGeneratorStatus() != "Generated") {
+    snackBar(context, "Please wait for previous document to get processed.",
+        (Colors.amber.shade400));
+    return;
+  }
 
   FilePickerResult? result = await FilePicker.platform.pickFiles(
     type: FileType.custom,
