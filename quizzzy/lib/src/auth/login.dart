@@ -56,7 +56,7 @@ class _LoginState extends State<Login> {
                                       fontFamily: 'Heebo',
                                       fontSize: 48,
                                       fontWeight: FontWeight.w800,
-                                      color: Color.fromARGB(204, 114, 0, 190)),
+                                      color: Color.fromARGB(204, 79, 0, 170)),
                                 ),
                               ),
                             ],
