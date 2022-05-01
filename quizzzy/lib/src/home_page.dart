@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:quizzzy/src/import.dart';
 import 'package:quizzzy/src/service/fs_database.dart';
+import 'package:quizzzy/src/service/local_database.dart';
 import 'package:quizzzy/src/teacher/review_quiz.dart';
 import 'package:quizzzy/src/teacher/saved_questions.dart';
 import 'package:quizzzy/src/student/saved_quiz.dart';
@@ -18,13 +20,24 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late Future<String?> userFuture;
-  bool firstTime = false; ////////////////////////////////////////////// true
+  bool firstTime = true;
   final nameController = TextEditingController();
+
+  Future<void> pushToken() async {
+    String? token = await FirebaseMessaging.instance.getToken();
+    String? oldToken = await UserSharedPrefernces.getToken();
+    if (oldToken != token) {
+      await UserSharedPrefernces.setToken(token!);
+      await saveTokenToDatabase(token);
+    }
+    FirebaseMessaging.instance.onTokenRefresh.listen(saveTokenToDatabase);
+  }
 
   @override
   void initState() {
-    userFuture = getUserType();
     super.initState();
+    userFuture = getUserType();
+    pushToken();
   }
 
   @override
