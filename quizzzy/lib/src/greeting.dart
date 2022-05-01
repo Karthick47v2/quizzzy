@@ -1,7 +1,47 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:quizzzy/src/service/local_notification_service.dart';
+import 'home_page.dart';
 
-class Greetings extends StatelessWidget {
+class Greetings extends StatefulWidget {
   const Greetings({Key? key}) : super(key: key);
+
+  @override
+  State<Greetings> createState() => _GreetingsState();
+}
+
+class _GreetingsState extends State<Greetings> {
+  @override
+  void initState() {
+    super.initState();
+
+    // initialze local notification handler (when in foreground)
+    LocalNotificationService.initialize(context);
+
+    // always go to home when notification is pressed (bg / terminated state only)
+    FirebaseMessaging.instance.getInitialMessage().then((msg) {
+      if (msg != null) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => const HomePage()));
+      }
+    });
+
+    // foreground msg handler
+    FirebaseMessaging.onMessage.listen((msg) {
+      if (msg.notification != null) {
+        print(msg.notification!.body);
+        print(msg.notification!.title);
+      }
+
+      LocalNotificationService.display(msg);
+    });
+
+    // onTap
+    FirebaseMessaging.onMessageOpenedApp.listen((msg) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const HomePage()));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
