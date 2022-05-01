@@ -16,3 +16,8 @@ exports.dltUser = functions.auth.user().onDelete((user) => {
   const doc = admin.firestore().collection("users").doc(user.uid);
   return doc.delete();
 });
+
+// firestore trigger (send notification when question get generated)
+exports.notifyUser = functions.firestore.document('users/{userID}/{qCol}/0').onCreate((snap, context) => {
+  console.log(context.params.qCol);
+});
