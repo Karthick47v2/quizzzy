@@ -37,11 +37,16 @@ Future<DocumentSnapshot?> getUserDoc(String colID) async =>
     users.doc(user?.uid).collection(colID).doc('0').get();
 
 Future<List<dynamic>> getQuestionnaireNameList(String docPath) async {
-// Future<int> getQuestionnaireNameList(String docPath) async {
   HttpsCallable callable =
       FirebaseFunctions.instance.httpsCallable('sendSubCollectionIDs');
   final res = await callable.call(<String, dynamic>{
     'docPath': docPath,
   });
   return res.data['ids'];
+}
+
+Future<List<Map<String, dynamic>>> getQuestionnaire(String colID) async {
+  var snapShot = await users.doc(user?.uid).collection(colID).get();
+  final allData = snapShot.docs.map((doc) => doc.data()).toList();
+  return allData;
 }
