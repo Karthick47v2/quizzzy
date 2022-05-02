@@ -163,8 +163,6 @@ Future getQuestions(String cont, BuildContext context, String qName) async {
 }
 
 void getFile(BuildContext context, String fileName) async {
-  String? str = await getGeneratorStatus();
-
   if (await getGeneratorStatus() != "Generated") {
     snackBar(context, "Please wait for previous document to get processed.",
         (Colors.amber.shade400));
@@ -175,6 +173,19 @@ void getFile(BuildContext context, String fileName) async {
     type: FileType.custom,
     allowedExtensions: ['pdf'],
   );
+
+  // check if name is already taken
+  bool docExists = true;
+  int i = 0;
+  String tempName = fileName;
+  while (docExists) {
+    if ((await getUserDoc(tempName))!.exists) {
+      tempName = fileName + "(" + (++i).toString() + ")";
+    } else {
+      docExists = false;
+      fileName = tempName;
+    }
+  }
 
   if (result != null) {
     PDFDoc doc = await PDFDoc.fromPath(result.files.single.path.toString());

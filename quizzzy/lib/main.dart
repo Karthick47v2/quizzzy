@@ -1,3 +1,5 @@
+//TODO: FIND MULTIPLE INSTANCES OF FIREBASE
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,8 +34,7 @@ Future<void> main() async {
 
 // bg notification handler
 Future<void> bgNotificationHandler(RemoteMessage msg) async {
-  print(msg.data.toString());
-  print(msg.notification!.title);
+  //TODO: LATER
 }
 
 class Root extends StatefulWidget {

@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     userFuture = getUserType();
-    pushToken();
+    // pushToken();
   }
 
   @override

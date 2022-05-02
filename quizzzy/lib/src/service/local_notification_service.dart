@@ -24,8 +24,6 @@ class LocalNotificationService {
       await _notificationPlugin.show(id, msg.notification!.title,
           msg.notification!.body, notificationDetails,
           payload: msg.notification!.body);
-    } on Exception catch (e) {
-      print(e);
-    }
+    } on Exception catch (e) {}
   }
 }

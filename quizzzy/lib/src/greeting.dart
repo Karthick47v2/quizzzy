@@ -29,8 +29,7 @@ class _GreetingsState extends State<Greetings> {
     // foreground msg handler
     FirebaseMessaging.onMessage.listen((msg) {
       if (msg.notification != null) {
-        print(msg.notification!.body);
-        print(msg.notification!.title);
+        //TODO: LATER
       }
 
       LocalNotificationService.display(msg);
