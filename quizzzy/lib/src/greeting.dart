@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:quizzzy/libs/custom_widgets.dart';
 import 'package:quizzzy/src/service/local_notification_service.dart';
 import 'home_page.dart';
 
@@ -44,53 +45,46 @@ class _GreetingsState extends State<Greetings> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
-      child: MaterialApp(
-          home: Scaffold(
-              backgroundColor: const Color.fromARGB(255, 37, 37, 37),
-              body: Builder(
-                builder: (context) => Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Positioned(
-                      top: 40,
-                      child: Image.asset(
-                        'assets/images/Quizzzy.png',
-                        width: 338,
-                        height: 407,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    const Positioned(
-                      bottom: 80,
-                      child: Text(
-                        "WELCOME",
-                        style: TextStyle(
-                            fontFamily: 'Heebo',
-                            fontSize: 17,
-                            fontWeight: FontWeight.w600,
-                            color: Color.fromARGB(255, 93, 0, 155)),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    const Positioned(
-                      bottom: 40,
-                      child: Text(
-                        "Scroll up to continue",
-                        style: TextStyle(
-                            fontFamily: 'Heebo',
-                            fontSize: 17,
-                            fontWeight: FontWeight.w400,
-                            color: Color.fromARGB(255, 209, 209, 209)),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ],
-                ),
-              ))),
-    );
+    return QuizzzyTemplate(
+        body: Builder(
+      builder: (context) => Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned(
+            top: 40,
+            child: Image.asset(
+              'assets/images/Quizzzy.png',
+              width: 338,
+              height: 407,
+              fit: BoxFit.cover,
+            ),
+          ),
+          const Positioned(
+            bottom: 80,
+            child: Text(
+              "WELCOME",
+              style: TextStyle(
+                  fontFamily: 'Heebo',
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                  color: Color.fromARGB(255, 93, 0, 155)),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const Positioned(
+            bottom: 40,
+            child: Text(
+              "Scroll up to continue",
+              style: TextStyle(
+                  fontFamily: 'Heebo',
+                  fontSize: 17,
+                  fontWeight: FontWeight.w400,
+                  color: Color.fromARGB(255, 209, 209, 209)),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
+    ));
   }
 }
