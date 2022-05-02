@@ -33,3 +33,10 @@ exports.notifyUser = functions.firestore.document('users/{userID}/{qCol}/0').onC
     token: token,
   });
 });
+
+// callable func (send subscol list to device)
+exports.sendSubCollectionIDs = functions.https.onCall(async(snap) => {
+  const subCols = await admin.firestore().doc(snap.docPath).listCollections();
+  const subColIds = subCols.map(col => col.id);
+  return { ids: subColIds };
+})
