@@ -43,12 +43,16 @@ dependencies:
   cloud_functions: ^3.2.13
   firebase_analytics_web: ^0.4.0+11
   shared_preferences: ^2.0.13
+  hive: ^2.1.0
+  hive_flutter: ^1.1.0
 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
 
 dev_dependencies:
+  hive_generator: ^1.1.2
+  build_runner: ^2.1.10
   flutter_test:
     sdk: flutter
 
