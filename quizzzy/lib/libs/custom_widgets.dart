@@ -187,10 +187,12 @@ class QuizzzyCard extends StatelessWidget {
 
 class QuizzzyAns extends StatefulWidget {
   final String ans;
+  final bool isPicked;
   final VoidCallback func;
   const QuizzzyAns({
     Key? key,
     required this.ans,
+    required this.isPicked,
     required this.func,
   }) : super(key: key);
 
@@ -206,9 +208,11 @@ class _QuizzzyAnsState extends State<QuizzzyAns> {
       child: InkWell(
         child: Container(
           padding: const EdgeInsets.all(8),
-          decoration: const BoxDecoration(
-            color: Color.fromARGB(94, 153, 0, 255),
-            borderRadius: BorderRadius.all(Radius.circular(24)),
+          decoration: BoxDecoration(
+            color: widget.isPicked
+                ? const Color.fromARGB(255, 93, 0, 155)
+                : const Color.fromARGB(94, 104, 104, 104),
+            borderRadius: const BorderRadius.all(Radius.circular(24)),
           ),
           child: Center(
             child: Text(

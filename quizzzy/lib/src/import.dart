@@ -11,8 +11,7 @@ import 'package:quizzzy/libs/custom_widgets.dart';
 import 'package:quizzzy/src/service/fs_database.dart';
 
 class ImportFile extends StatefulWidget {
-  final bool newUser;
-  const ImportFile({Key? key, this.newUser = true}) : super(key: key);
+  const ImportFile({Key? key}) : super(key: key);
 
   @override
   State<ImportFile> createState() => _ImportFileState();
@@ -98,13 +97,6 @@ class _ImportFileState extends State<ImportFile> {
   }
 }
 
-class QnA {
-  final String question;
-  final String crctAns;
-  final List<String> allAns;
-  QnA({required this.question, required this.crctAns, required this.allAns});
-}
-
 Future getQuestions(String cont, BuildContext context, String qName) async {
   var url = Uri.parse("https://mcq-gen-nzbm4e7jxa-el.a.run.app/get-questions");
   Map body = {'context': cont, 'uid': user?.uid, 'name': qName};
@@ -117,34 +109,6 @@ Future getQuestions(String cont, BuildContext context, String qName) async {
       'isWaiting': true,
     }, SetOptions(merge: true)).catchError(
         (err) => snackBar(context, err.toString(), (Colors.red.shade800)));
-    // int noOfQues = decodedData['questions'].length;
-    // List<QnA> qnaList = [];
-
-    // for (int i = 0; i < noOfQues; i++) {
-    //   List<String> ans = List.generate(4, (index) => 'null');
-    //   for (int j = 0; j < 4; j++) {
-    //     ans[j] = decodedData['all_answers'][i * 4 + j];
-    //   }
-    //   QnA qna = QnA(
-    //       question: decodedData['questions'][i],
-    //       crctAns: decodedData['crct_ans'][i],
-    //       allAns: ans);
-    //   qnaList.add(qna);
-    // }
-    // for (int i = 0; i < qnaList.length; i++) {
-    //   print(qnaList[i].question);
-    //   print(qnaList[i].crctAns);
-    //   print(qnaList[i].allAns);
-    // }
-    // Navigator.pop(context);
-    // showDialog(
-    //     context: context,
-    //     builder: (BuildContext context) {
-    //       return NavigationBox(
-    //         cont: context,
-    //         text: "Questions are ready...!",
-    //       );
-    //     });
   } else {
     snackBar(context, res.body.toString(), (Colors.red.shade800));
   }
@@ -154,7 +118,7 @@ Future getQuestions(String cont, BuildContext context, String qName) async {
       Colors.green.shade700);
 }
 
-void getFile(BuildContext context, String fileName) async {
+getFile(BuildContext context, String fileName) async {
   if (await getGeneratorStatus() != "Generated") {
     snackBar(context, "Please wait for previous document to get processed.",
         (Colors.amber.shade400));

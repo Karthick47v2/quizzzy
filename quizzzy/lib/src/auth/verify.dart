@@ -16,7 +16,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
   Timer? timer;
 
   @override
-  void initState() {
+  initState() {
     user = FirebaseAuth.instance.currentUser;
     timer = Timer.periodic(const Duration(seconds: 3), (time) {
       checkEmailVerification();
@@ -25,7 +25,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
   }
 
   @override
-  void dispose() {
+  dispose() {
     timer?.cancel();
     super.dispose();
   }

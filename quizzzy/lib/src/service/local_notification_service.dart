@@ -5,7 +5,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 class LocalNotificationService {
   static final FlutterLocalNotificationsPlugin _notificationPlugin =
       FlutterLocalNotificationsPlugin();
-  static void initialize(BuildContext context) {
+  static initialize(BuildContext context) {
     const InitializationSettings initializationSettings =
         InitializationSettings(
             android: AndroidInitializationSettings("@mipmap/ic_launcher"));
@@ -13,7 +13,7 @@ class LocalNotificationService {
     _notificationPlugin.initialize(initializationSettings);
   }
 
-  static void display(RemoteMessage msg) async {
+  static display(RemoteMessage msg) async {
     try {
       final id = DateTime.now().millisecondsSinceEpoch ~/ 1000;
 

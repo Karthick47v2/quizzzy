@@ -13,7 +13,7 @@ class Greetings extends StatefulWidget {
 
 class _GreetingsState extends State<Greetings> {
   @override
-  void initState() {
+  initState() {
     super.initState();
 
     // initialze local notification handler (when in foreground)

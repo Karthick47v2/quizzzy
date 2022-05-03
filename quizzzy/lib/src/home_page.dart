@@ -34,10 +34,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  void initState() {
+  initState() {
     super.initState();
+    pushToken();
     userFuture = getUserType();
-    // pushToken();
   }
 
   @override
@@ -181,43 +181,44 @@ class _HomePageState extends State<HomePage> {
       },
     ));
   }
-}
 
-Future<void> checkQuesGenerated(BuildContext context) async {
-  List<Object?> data = await getQuestionnaireNameList('users/${user!.uid}');
-  String? str = await getGeneratorStatus();
-  if (str == "Generated" || data.isNotEmpty) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => Generated(data: data, status: str!)));
-  } else {
-    snackBar(
-        context,
-        str == "Waiting"
-            ? "Please wait for questions to get generated"
-            : "Please upload a document to generate questions",
-        (Colors.amber.shade400));
+  Future<void> checkQuesGenerated(BuildContext context) async {
+    List<Object?> data = await getQuestionnaireNameList('users/${user!.uid}');
+    String? str = await getGeneratorStatus();
+    if (str == "Generated" || data.isNotEmpty) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Generated(data: data, status: str!)));
+    } else {
+      snackBar(
+          context,
+          str == "Waiting"
+              ? "Please wait for questions to get generated"
+              : "Please upload a document to generate questions",
+          (Colors.amber.shade400));
+    }
+  }
+
+  Future sendUserType(
+    BuildContext context,
+    String str,
+    bool isTeacher,
+  ) async {
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    User? user = FirebaseAuth.instance.currentUser;
+
+    await user!.reload();
+    await user.updateDisplayName(str);
+    await user.reload();
+    user = FirebaseAuth.instance.currentUser;
+
+    await users.doc(user?.uid).set({
+      'name': user?.displayName,
+      'userType': isTeacher ? 'Teacher' : 'Student'
+    }, SetOptions(merge: true)).catchError(
+        (err) => snackBar(context, err.toString(), (Colors.red.shade800)));
   }
 }
 
-Future<void> sendUserType(
-  BuildContext context,
-  String str,
-  bool isTeacher,
-) async {
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
-  User? user = FirebaseAuth.instance.currentUser;
-
-  await user!.reload();
-  await user.updateDisplayName(str);
-  await user.reload();
-  user = FirebaseAuth.instance.currentUser;
-
-  await users.doc(user?.uid).set({
-    'name': user?.displayName,
-    'userType': isTeacher ? 'Teacher' : 'Student'
-  }, SetOptions(merge: true)).catchError(
-      (err) => snackBar(context, err.toString(), (Colors.red.shade800)));
-}
 //////////////////////////////// await user?.delete()
