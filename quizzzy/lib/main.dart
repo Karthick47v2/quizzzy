@@ -5,35 +5,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:quizzzy/src/auth/signup.dart';
 import 'package:quizzzy/src/auth/verify.dart';
 import 'package:quizzzy/src/greeting.dart';
 import 'package:quizzzy/src/home_page.dart';
+import 'package:quizzzy/src/service/db_model/question_set.dart';
 import 'package:quizzzy/src/service/local_database.dart';
 
-Future<void> main() async {
-  // initialize all widgets
+Future main() async {
+  // initialize required things
   WidgetsFlutterBinding.ensureInitialized();
-  // initialize firebase
   await Firebase.initializeApp();
-  // initialize fcm bg msh handler (when in bg / terminiated)
+  await Hive.initFlutter();
+  Hive.registerAdapter(QuestionSetAdapter());
+  await UserSharedPrefernces.init();
   FirebaseMessaging.onBackgroundMessage(bgNotificationHandler);
-
-  // check if user is logged in (firebase)
   User? user = FirebaseAuth.instance.currentUser;
+
+  // store box to mem
+  await Hive.openBox('user');
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
   ));
-
-  await UserSharedPrefernces.init();
   runApp(Root(
     user: user,
   ));
 }
 
 // bg notification handler
-Future<void> bgNotificationHandler(RemoteMessage msg) async {
+Future bgNotificationHandler(RemoteMessage msg) async {
   //TODO: LATER
 }
 

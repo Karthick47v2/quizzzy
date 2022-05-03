@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:quizzzy/libs/custom_widgets.dart';
+import 'package:quizzzy/src/service/db_model/question_set.dart';
 
 class Questionnaire extends StatefulWidget {
-  final List<Map<String, dynamic>> questionnaire;
+  final List<QuestionSet> questionnaire;
   const Questionnaire({Key? key, required this.questionnaire})
       : super(key: key);
 
@@ -11,8 +13,48 @@ class Questionnaire extends StatefulWidget {
 }
 
 class _QuestionnaireState extends State<Questionnaire> {
-  int currentQ = 0;
-  int score = 0;
+  int currentQ = 0, score = 0, time = 0;
+  late List<bool> qState = List.filled(4, false);
+
+  late Timer timer;
+
+  startTimer() {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (time <= 0) {
+        setState(() {
+          timer.cancel();
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext cntxt) {
+                return PopupModal(size: 200.0, wids: [
+                  QuizzzyNavigatorBtn(
+                    text: "Confirm",
+                    func: () => {},
+                  )
+                ]);
+              });
+        });
+      } else {
+        setState(() {
+          time--;
+        });
+      }
+    });
+  }
+
+  @override
+  initState() {
+    time = widget.questionnaire.length * 60;
+    super.initState();
+    startTimer();
+  }
+
+  @override
+  dispose() {
+    timer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +67,41 @@ class _QuestionnaireState extends State<Questionnaire> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                padding: const EdgeInsets.fromLTRB(10, 100, 10, 50),
+                padding: const EdgeInsets.fromLTRB(120, 70, 120, 10),
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: time > 30
+                        ? const Color.fromARGB(94, 0, 255, 34)
+                        : const Color.fromARGB(94, 255, 0, 0),
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "${(time ~/ 60)}".padLeft(2, '0') +
+                          " : " +
+                          "${time % 60}".padLeft(2, '0'),
+                      style: const TextStyle(
+                          fontFamily: 'Heebo',
+                          fontSize: 19,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(10, 30, 10, 50),
                 child: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: const BoxDecoration(
-                    color: Color.fromARGB(94, 153, 0, 255),
+                    color: Color.fromARGB(94, 155, 155, 155),
                     borderRadius: BorderRadius.all(Radius.circular(24)),
                   ),
                   child: Center(
                     child: Text(
-                      widget.questionnaire[currentQ]['question'],
+                      widget.questionnaire[currentQ].question,
                       style: const TextStyle(
                           fontFamily: 'Heebo',
                           fontSize: 22,
@@ -45,55 +112,19 @@ class _QuestionnaireState extends State<Questionnaire> {
                   ),
                 ),
               ),
-              // since query is in complex form, converting it to list is complex.. so decomposing Widgets
-              // TODO: Find out a way reduce code
-              QuizzzyAns(
-                ans: widget.questionnaire[currentQ]['all_ans'][0],
-                func: () {
-                  setState(() {
-                    if (checkAns(
-                        widget.questionnaire[currentQ]['all_ans'][0])) {
-                      score++;
-                    }
-                  });
-                  ;
-                },
-              ),
-              QuizzzyAns(
-                ans: widget.questionnaire[currentQ]['all_ans'][1],
-                func: () {
-                  setState(() {
-                    if (checkAns(
-                        widget.questionnaire[currentQ]['all_ans'][1])) {
-                      score++;
-                    }
-                  });
-                  ;
-                },
-              ),
-              QuizzzyAns(
-                ans: widget.questionnaire[currentQ]['all_ans'][2],
-                func: () {
-                  setState(() {
-                    if (checkAns(
-                        widget.questionnaire[currentQ]['all_ans'][2])) {
-                      score++;
-                    }
-                  });
-                  ;
-                },
-              ),
-              QuizzzyAns(
-                ans: widget.questionnaire[currentQ]['all_ans'][3],
-                func: () {
-                  setState(() {
-                    if (checkAns(
-                        widget.questionnaire[currentQ]['all_ans'][3])) {
-                      score++;
-                    }
-                  });
-                },
-              ),
+              for (var i in widget.questionnaire[currentQ].allAns)
+                QuizzzyAns(
+                  ans: i,
+                  isPicked:
+                      qState[widget.questionnaire[currentQ].allAns.indexOf(i)],
+                  func: () {
+                    setState(() {
+                      refreshAns();
+                      qState[widget.questionnaire[currentQ].allAns.indexOf(i)] =
+                          true;
+                    });
+                  },
+                ),
             ],
           ),
         ),
@@ -114,25 +145,39 @@ class _QuestionnaireState extends State<Questionnaire> {
               ),
               QuizzzyNavigatorBtn(
                 text: "Next",
-                func: () {
-                  setState(() {
-                    if (currentQ < widget.questionnaire.length - 1) {
-                      currentQ++;
-                    } else {
-                      print(score);
-                    }
-                  });
-                },
+                func: () => updateQuestion(),
               ),
             ],
           ),
-        )
+        ),
       ],
     ));
   }
 
-  bool checkAns(String ans) {
-    return ans.toLowerCase() ==
-        widget.questionnaire[currentQ]['crct_ans'].toString().toLowerCase();
+  updateQuestion() {
+    // atleast 1 ans should be selected inorder to go to next question
+    if (qState.any((e) => e)) {
+      setState(() {
+        if (currentQ < widget.questionnaire.length - 1) {
+          if (checkAns()) {
+            score++;
+          }
+          refreshAns();
+          currentQ++;
+        } else {
+          print(score);
+        }
+      });
+    }
+  }
+
+  bool checkAns() {
+    return widget.questionnaire[currentQ].allAns[qState.indexOf(true)]
+            .toLowerCase() ==
+        widget.questionnaire[currentQ].crctAns.toLowerCase();
+  }
+
+  refreshAns() {
+    qState.setAll(0, [false, false, false, false]);
   }
 }

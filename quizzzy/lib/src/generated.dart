@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:quizzzy/libs/custom_widgets.dart';
 import 'package:quizzzy/src/questionnaire.dart';
+import 'package:quizzzy/src/service/db_model/question_set.dart';
 import 'package:quizzzy/src/service/fs_database.dart';
 
 class Generated extends StatefulWidget {
@@ -14,16 +16,19 @@ class Generated extends StatefulWidget {
 }
 
 class _GeneratedState extends State<Generated> {
+  late final questionSetBox;
+  setBox() async {
+    questionSetBox = await Hive.openBox((user?.displayName)!);
+  }
+
   @override
-  void initState() {
+  initState() {
     super.initState();
+    setBox();
     if (widget.status == "Waiting") {
       snackBar(context, "Your last request is being processed.",
           (Colors.amber.shade400));
     }
-    // users.doc(user!.uid).update({'isWaiting': false, 'isGenerated': false});
-    ///////////////// DO IT ON SERVER
-    //
   }
 
   @override
@@ -35,7 +40,18 @@ class _GeneratedState extends State<Generated> {
         return QuizzzyCard(
             title: widget.data[idx].toString(),
             func: () async {
-              var qLoad = await getQuestionnaire(widget.data[idx].toString());
+              // get from local if there is, or else fetch from net and store for future use
+              var questionnaire = Hive.box((user?.displayName)!)
+                  .get(widget.data[idx].toString())
+                  .cast<QuestionSet>();
+              if (questionnaire == null) {
+                questionnaire =
+                    (await getQuestionnaire(widget.data[idx].toString()))
+                        .map((e) => (QuestionSet.fromJson(e)))
+                        .toList();
+                Hive.box((user?.displayName)!)
+                    .put(widget.data[idx].toString(), questionnaire);
+              }
               showDialog(
                   context: context,
                   builder: (BuildContext cntxt) {
@@ -50,7 +66,7 @@ class _GeneratedState extends State<Generated> {
                         ),
                       ),
                       Text(
-                        "Time: ${qLoad.length} mins",
+                        "Time: ${questionnaire.length} mins",
                         style: const TextStyle(
                           fontFamily: 'Heebo',
                           fontSize: 20,
@@ -62,12 +78,12 @@ class _GeneratedState extends State<Generated> {
                         text: "Start",
                         cont: context,
                         func: () {
-                          // Navigator.of(cntxt).pop();
+                          Navigator.of(cntxt).pop();
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: ((context) =>
-                                      Questionnaire(questionnaire: qLoad))));
+                                  builder: ((context) => Questionnaire(
+                                      questionnaire: questionnaire))));
                         },
                       ),
                     ]);
