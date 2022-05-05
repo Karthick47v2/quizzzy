@@ -8,7 +8,8 @@ import 'package:quizzzy/src/service/local_database.dart';
 import 'package:quizzzy/src/teacher/review_quiz.dart';
 import 'package:quizzzy/src/teacher/saved_questions.dart';
 import 'package:quizzzy/src/student/saved_quiz.dart';
-import 'package:quizzzy/src/generated.dart';
+import 'package:quizzzy/src/question_bank.dart';
+import 'package:quizzzy/src/userType.dart';
 import '../libs/custom_widgets.dart';
 
 class HomePage extends StatefulWidget {
@@ -49,56 +50,57 @@ class _HomePageState extends State<HomePage> {
         Widget ret = Container();
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data == null && firstTime) {
-            ret = Builder(
-                builder: (context) => Column(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: Image.asset(
-                              'assets/images/Quizzzy.png',
-                            ),
-                          ),
-                        ),
-                        QuizzzyTextInput(
-                            text: "Name", controller: nameController),
-                        Container(
-                          width: double.maxFinite - 20,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 0),
-                          alignment: Alignment.bottomCenter,
-                          child: Column(children: [
-                            SizedBox(
-                              width: double.maxFinite - 20,
-                              child: QuizzzyNavigatorBtn(
-                                text: "I'm a Teacher",
-                                func: () => {
-                                  sendUserType(
-                                      context, nameController.text, true),
-                                  setState(() {
-                                    // user will stuck at user type assign if network is slow, so
-                                    // bypassing fireabse response (only needed for first time use)
-                                    firstTime = false;
-                                  })
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                              width: double.maxFinite - 20,
-                              child: QuizzzyNavigatorBtn(
-                                  text: "I'm a Student",
-                                  func: () => {
-                                        sendUserType(context,
-                                            nameController.text, false),
-                                        setState(() {
-                                          firstTime = false;
-                                        }),
-                                      }),
-                            ),
-                          ]),
-                        )
-                      ],
-                    ));
+            ret = UserType(firstTime: firstTime);
+            // ret = Builder(
+            //     builder: (context) => Column(
+            //           children: [
+            //             Expanded(
+            //               child: Container(
+            //                 alignment: Alignment.center,
+            //                 child: Image.asset(
+            //                   'assets/images/Quizzzy.png',
+            //                 ),
+            //               ),
+            //             ),
+            //             QuizzzyTextInput(
+            //                 text: "Name", controller: nameController),
+            //             Container(
+            //               width: double.maxFinite - 20,
+            //               padding: const EdgeInsets.symmetric(
+            //                   horizontal: 30, vertical: 0),
+            //               alignment: Alignment.bottomCenter,
+            //               child: Column(children: [
+            //                 SizedBox(
+            //                   width: double.maxFinite - 20,
+            //                   child: QuizzzyNavigatorBtn(
+            //                     text: "I'm a Teacher",
+            //                     onTap: () => {
+            //                       sendUserType(
+            //                           context, nameController.text, true),
+            //                       setState(() {
+            //                         // user will stuck at user type assign if network is slow, so
+            //                         // bypassing fireabse response (only needed for first time use)
+            //                         firstTime = false;
+            //                       })
+            //                     },
+            //                   ),
+            //                 ),
+            //                 SizedBox(
+            //                   width: double.maxFinite - 20,
+            //                   child: QuizzzyNavigatorBtn(
+            //                       text: "I'm a Student",
+            //                       onTap: () => {
+            //                             sendUserType(context,
+            //                                 nameController.text, false),
+            //                             setState(() {
+            //                               firstTime = false;
+            //                             }),
+            //                           }),
+            //                 ),
+            //               ]),
+            //             )
+            //           ],
+            //         ));
           } else {
             ret = (Builder(
               builder: (context) => Column(
@@ -127,8 +129,8 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(
                         width: double.maxFinite - 20,
                         child: QuizzzyNavigatorBtn(
-                            text: "Generated",
-                            func: () => {checkQuesGenerated(context)}),
+                            text: "Question Bank",
+                            onTap: () => {checkQuesGenerated(context)}),
                       ),
                       snapshot.data == "Student"
                           ? SizedBox(
@@ -189,7 +191,7 @@ class _HomePageState extends State<HomePage> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => Generated(data: data, status: str!)));
+              builder: (context) => QuestionBank(data: data, status: str!)));
     } else {
       snackBar(
           context,
@@ -205,7 +207,7 @@ class _HomePageState extends State<HomePage> {
     String str,
     bool isTeacher,
   ) async {
-    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    // explicitly initialize inorder to reload
     User? user = FirebaseAuth.instance.currentUser;
 
     await user!.reload();
@@ -213,11 +215,9 @@ class _HomePageState extends State<HomePage> {
     await user.reload();
     user = FirebaseAuth.instance.currentUser;
 
-    await users.doc(user?.uid).set({
-      'name': user?.displayName,
-      'userType': isTeacher ? 'Teacher' : 'Student'
-    }, SetOptions(merge: true)).catchError(
-        (err) => snackBar(context, err.toString(), (Colors.red.shade800)));
+    if (!await saveUser((user?.uid)!, isTeacher ? 'Teacher' : 'Student')) {
+      snackBar(context, "Internal server error", (Colors.red.shade800));
+    }
   }
 }
 
