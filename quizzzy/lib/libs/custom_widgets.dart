@@ -24,7 +24,7 @@ class QuizzzyNavigatorBtn extends StatelessWidget {
   final String text;
   final BuildContext? cont;
   final Route? route;
-  final VoidCallback? func;
+  final VoidCallback? onTap;
   final Color? clr;
   final Color? txtClr;
 
@@ -33,7 +33,7 @@ class QuizzzyNavigatorBtn extends StatelessWidget {
       required this.text,
       this.cont,
       this.route,
-      this.func,
+      this.onTap,
       this.clr,
       this.txtClr})
       : super(key: key);
@@ -42,7 +42,7 @@ class QuizzzyNavigatorBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return OutlinedButton(
         onPressed:
-            (func != null) ? func : (() => Navigator.push(cont!, route!)),
+            (onTap != null) ? onTap : (() => Navigator.push(cont!, route!)),
         style: OutlinedButton.styleFrom(
           side: BorderSide(
             color:
@@ -159,8 +159,13 @@ void snackBar(BuildContext context, String str, Color clr) {
 
 class QuizzzyCard extends StatelessWidget {
   final String title;
-  final VoidCallback func;
-  const QuizzzyCard({Key? key, required this.title, required this.func})
+  final VoidCallback onTap;
+  final VoidCallback onLongPress;
+  const QuizzzyCard(
+      {Key? key,
+      required this.title,
+      required this.onTap,
+      required this.onLongPress})
       : super(key: key);
 
   @override
@@ -179,7 +184,8 @@ class QuizzzyCard extends StatelessWidget {
                 color: Color.fromARGB(255, 255, 255, 255),
               ),
             )),
-        onTap: func,
+        onTap: onTap,
+        onLongPress: onLongPress,
       ),
     );
   }
@@ -188,12 +194,12 @@ class QuizzzyCard extends StatelessWidget {
 class QuizzzyAns extends StatefulWidget {
   final String ans;
   final bool isPicked;
-  final VoidCallback func;
+  final VoidCallback onTap;
   const QuizzzyAns({
     Key? key,
     required this.ans,
     required this.isPicked,
-    required this.func,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -227,7 +233,7 @@ class _QuizzzyAnsState extends State<QuizzzyAns> {
           ),
         ),
         borderRadius: const BorderRadius.all(Radius.circular(24)),
-        onTap: widget.func,
+        onTap: widget.onTap,
       ),
     );
   }

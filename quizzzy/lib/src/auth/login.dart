@@ -70,7 +70,7 @@ class _LoginState extends State<Login> {
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 0),
               child: QuizzzyNavigatorBtn(
                 text: "Log In",
-                func: () async {
+                onTap: () async {
                   try {
                     await FirebaseAuth.instance
                         .signInWithEmailAndPassword(

@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:quizzzy/libs/custom_widgets.dart';
+import 'package:quizzzy/src/score.dart';
 import 'package:quizzzy/src/service/db_model/question_set.dart';
+import 'package:quizzzy/src/service/fs_database.dart';
 
 class Questionnaire extends StatefulWidget {
   final List<QuestionSet> questionnaire;
@@ -18,6 +20,14 @@ class _QuestionnaireState extends State<Questionnaire> {
 
   late Timer timer;
 
+  @override
+  initState() {
+    widget.questionnaire.shuffle();
+    time = widget.questionnaire.length * 60;
+    super.initState();
+    startTimer();
+  }
+
   startTimer() {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (time <= 0) {
@@ -27,10 +37,27 @@ class _QuestionnaireState extends State<Questionnaire> {
               context: context,
               barrierDismissible: false,
               builder: (BuildContext cntxt) {
-                return PopupModal(size: 200.0, wids: [
+                return PopupModal(size: 100.0, wids: [
+                  const Text(
+                    "Time's up",
+                    style: TextStyle(
+                        fontFamily: 'Heebo',
+                        fontSize: 22,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
                   QuizzzyNavigatorBtn(
-                    text: "Confirm",
-                    func: () => {},
+                    text: "Finish",
+                    onTap: () {
+                      Navigator.of(cntxt).pop();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: ((context) => Score(
+                                  score: score,
+                                  questionnaire: widget.questionnaire))));
+                    },
                   )
                 ]);
               });
@@ -41,13 +68,6 @@ class _QuestionnaireState extends State<Questionnaire> {
         });
       }
     });
-  }
-
-  @override
-  initState() {
-    time = widget.questionnaire.length * 60;
-    super.initState();
-    startTimer();
   }
 
   @override
@@ -66,31 +86,54 @@ class _QuestionnaireState extends State<Questionnaire> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                padding: const EdgeInsets.fromLTRB(120, 70, 120, 10),
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: time > 30
-                        ? const Color.fromARGB(94, 0, 255, 34)
-                        : const Color.fromARGB(94, 255, 0, 0),
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "${(time ~/ 60)}".padLeft(2, '0') +
-                          " : " +
-                          "${time % 60}".padLeft(2, '0'),
-                      style: const TextStyle(
-                          fontFamily: 'Heebo',
-                          fontSize: 19,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white),
-                      textAlign: TextAlign.center,
+              userType == "Student"
+                  ? Container(
+                      padding: const EdgeInsets.fromLTRB(120, 70, 120, 10),
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: time > 30
+                              ? const Color.fromARGB(94, 0, 255, 34)
+                              : const Color.fromARGB(94, 255, 0, 0),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "${(time ~/ 60)}".padLeft(2, '0') +
+                                " : " +
+                                "${time % 60}".padLeft(2, '0'),
+                            style: const TextStyle(
+                                fontFamily: 'Heebo',
+                                fontSize: 19,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      padding: const EdgeInsets.fromLTRB(120, 70, 120, 10),
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: const BoxDecoration(
+                          color: Color.fromARGB(255, 93, 0, 155),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            "Keep / Drop",
+                            style: TextStyle(
+                                fontFamily: 'Heebo',
+                                fontSize: 19,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
               Container(
                 padding: const EdgeInsets.fromLTRB(10, 30, 10, 50),
                 child: Container(
@@ -117,7 +160,7 @@ class _QuestionnaireState extends State<Questionnaire> {
                   ans: i,
                   isPicked:
                       qState[widget.questionnaire[currentQ].allAns.indexOf(i)],
-                  func: () {
+                  onTap: () {
                     setState(() {
                       refreshAns();
                       qState[widget.questionnaire[currentQ].allAns.indexOf(i)] =
@@ -143,10 +186,23 @@ class _QuestionnaireState extends State<Questionnaire> {
                     fontWeight: FontWeight.w400,
                     color: Colors.white),
               ),
-              QuizzzyNavigatorBtn(
-                text: "Next",
-                func: () => updateQuestion(),
-              ),
+              userType == "Student"
+                  ? QuizzzyNavigatorBtn(
+                      text: "Next",
+                      onTap: () => updateQuestion(),
+                    )
+                  : Row(
+                      children: [
+                        QuizzzyNavigatorBtn(
+                          text: "Keep",
+                          onTap: () => updateQuestion(),
+                        ),
+                        QuizzzyNavigatorBtn(
+                          text: "Discard",
+                          onTap: () => updateQuestion(),
+                        )
+                      ],
+                    ),
             ],
           ),
         ),

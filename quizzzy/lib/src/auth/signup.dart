@@ -69,7 +69,7 @@ class _SignUpState extends State<SignUp> {
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 0),
               child: QuizzzyNavigatorBtn(
                   text: "Sign Up",
-                  func: () async {
+                  onTap: () async {
                     if (_key.currentState!.validate()) {
                       try {
                         await FirebaseAuth.instance

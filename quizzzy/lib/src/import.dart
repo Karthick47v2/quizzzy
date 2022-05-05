@@ -76,7 +76,7 @@ class _ImportFileState extends State<ImportFile> {
                     ),
                     QuizzzyNavigatorBtn(
                       text: "Confirm",
-                      func: () => {
+                      onTap: () => {
                         getFile(
                             context,
                             (fileNameController.text == "")
@@ -95,59 +95,61 @@ class _ImportFileState extends State<ImportFile> {
       ],
     ));
   }
-}
 
-Future getQuestions(String cont, BuildContext context, String qName) async {
-  var url = Uri.parse("https://mcq-gen-nzbm4e7jxa-el.a.run.app/get-questions");
-  Map body = {'context': cont, 'uid': user?.uid, 'name': qName};
+  Future getQuestions(String cont, BuildContext context, String qName) async {
+    //TODO: ADD SECURITY
+    var url =
+        Uri.parse("https://mcq-gen-nzbm4e7jxa-el.a.run.app/get-questions");
+    Map body = {'context': cont, 'uid': user?.uid, 'name': qName};
 
-  var res = await http.post(url,
-      headers: {"Content-Type": "application/json"}, body: json.encode(body));
+    var res = await http.post(url,
+        headers: {"Content-Type": "application/json"}, body: json.encode(body));
 
-  if (res.statusCode == 200) {
-    await users.doc(user?.uid).set({
-      'isWaiting': true,
-    }, SetOptions(merge: true)).catchError(
-        (err) => snackBar(context, err.toString(), (Colors.red.shade800)));
-  } else {
-    snackBar(context, res.body.toString(), (Colors.red.shade800));
-  }
-  snackBar(
-      context,
-      "Generating question may take a while. It will be available under 'Generated' once process is finished.",
-      Colors.green.shade700);
-}
-
-getFile(BuildContext context, String fileName) async {
-  if (await getGeneratorStatus() != "Generated") {
-    snackBar(context, "Please wait for previous document to get processed.",
-        (Colors.amber.shade400));
-    return;
-  }
-
-  FilePickerResult? result = await FilePicker.platform.pickFiles(
-    type: FileType.custom,
-    allowedExtensions: ['pdf'],
-  );
-
-  // check if name is already taken
-  bool docExists = true;
-  int i = 0;
-  String tempName = fileName;
-  while (docExists) {
-    if ((await getUserDoc(tempName))!.exists) {
-      tempName = fileName + "(" + (++i).toString() + ")";
+    if (res.statusCode == 200) {
+      await users.doc(user?.uid).set({
+        'isWaiting': true,
+      }, SetOptions(merge: true)).catchError(
+          (err) => snackBar(context, err.toString(), (Colors.red.shade800)));
     } else {
-      docExists = false;
-      fileName = tempName;
+      snackBar(context, res.body.toString(), (Colors.red.shade800));
     }
+    snackBar(
+        context,
+        "Generating question may take a while. It will be available under 'Question Bank' once process is finished.",
+        Colors.green.shade700);
   }
 
-  if (result != null) {
-    PDFDoc doc = await PDFDoc.fromPath(result.files.single.path.toString());
-    String docText = await doc.text;
-    getQuestions(docText, context, fileName);
-  } else {
-    return;
+  getFile(BuildContext context, String fileName) async {
+    if (await getGeneratorStatus() != "Generated") {
+      snackBar(context, "Please wait for previous document to get processed.",
+          (Colors.amber.shade400));
+      return;
+    }
+
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+
+    // check if name is already taken
+    bool docExists = true;
+    int i = 0;
+    String tempName = fileName;
+    while (docExists) {
+      if ((await getUserDoc(tempName))!.exists) {
+        tempName = fileName + "(" + (++i).toString() + ")";
+      } else {
+        docExists = false;
+        fileName = tempName;
+      }
+    }
+
+    if (result != null) {
+      PDFDoc doc = await PDFDoc.fromPath(result.files.single.path.toString());
+      String docText = await doc.text;
+      getQuestions(docText, context, fileName);
+    } else {
+      return;
+    }
   }
 }

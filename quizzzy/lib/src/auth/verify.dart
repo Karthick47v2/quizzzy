@@ -17,7 +17,6 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
   @override
   initState() {
-    user = FirebaseAuth.instance.currentUser;
     timer = Timer.periodic(const Duration(seconds: 3), (time) {
       checkEmailVerification();
     });
@@ -48,7 +47,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
         ),
         QuizzzyNavigatorBtn(
           text: "Resend Email",
-          func: () => user?.sendEmailVerification(),
+          onTap: () => user?.sendEmailVerification(),
           clr: Colors.green[400],
         ),
       ],
