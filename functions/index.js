@@ -1,42 +1,95 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const { messaging } = require("firebase-admin");
 
 admin.initializeApp();
+const db = admin.firestore();
 
-// auth trigger (create user db)
+const unauthenticatedErrorMsg =
+  "This function must be called by an aunthenticated user";
+
+// auth trigger => create user db
 exports.newUser = functions.auth.user().onCreate((user) => {
-  return admin.firestore().collection("users").doc(user.uid).set({
+  return db.collection("users").doc(user.uid).set({
     userType: null,
     isGenerated: false,
     isWaiting: false,
   });
 });
 
-// auth trigger (delete user db)
+// auth trigger => delete user db
 exports.dltUser = functions.auth.user().onDelete((user) => {
-  const doc = admin.firestore().collection("users").doc(user.uid);
+  const doc = db.collection("users").doc(user.uid);
   return doc.delete();
 });
 
-// firestore trigger (send notification when question get generated)
-exports.notifyUser = functions.firestore.document('users/{userID}/{qCol}/0').onCreate(async (snap, context) => {
-  // get fcm token
-  const user = await admin.firestore().collection("users").doc(context.params.userID).get();
-  const token = user.data()['token'];
+// firestore trigger => send notification when question get generated
+exports.notifyUser = functions.firestore
+  .document("users/{userID}/{qCol}/0")
+  .onCreate(async (data, context) => {
+    // get fcm token
+    const user = await db.collection("users").doc(context.params.userID).get();
+    const token = user.data()["token"];
 
-  await admin.messaging().send({
-    notification: {
-      title: "Questionnaire has been generated.",
-      body: `Check out, "${context.params.qCol}" is added`
-    },
-    token: token,
+    await admin.messaging().send({
+      notification: {
+        title: "Questionnaire has been generated.",
+        body: `Check out, '${context.params.qCol}' is added`,
+      },
+      token: token,
+    });
   });
+
+exports.storeUserInfo = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError(
+      "unauthenticated",
+      unauthenticatedErrorMsg
+    );
+  }
+
+  const docRef = db.doc(data.docPath);
+  let res = { status: 200 };
+
+  await docRef
+    .set(
+      {
+        name: data.name,
+        userType: data.type,
+      },
+      { merge: true }
+    )
+    .catch((err) => (res["status"] = 401));
+
+  return res;
 });
 
-// callable func (send subscol list to device)
-exports.sendSubCollectionIDs = functions.https.onCall(async(snap) => {
-  const subCols = await admin.firestore().doc(snap.docPath).listCollections();
-  const subColIds = subCols.map(col => col.id);
-  return { ids: subColIds };
-})
+// callable func => send subscol list to device
+exports.sendSubCollectionIDs = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError(
+      "unauthenticated",
+      unauthenticatedErrorMsg
+    );
+  }
+  let subColIds;
+  let res = { status: 200 };
+  const subCols = await db
+    .doc(data.docPath)
+    .listCollections()
+    .then((subColIds = subCols.map((col) => col.id)), (res["ids"] = subColIds))
+    .catch((res["status"] = 401));
+  return res;
+});
+
+// callable func => delete subcollection
+exports.dltSubCollection = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError(
+      "unauthenticated",
+      unauthenticatedErrorMsg
+    );
+  }
+
+  doc.recursiveDelete(doc.collection(data.colPath));
+  return { status: 200 };
+});
