@@ -3,6 +3,7 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 User? user = FirebaseAuth.instance.currentUser;
+late String userType;
 CollectionReference users = FirebaseFirestore.instance.collection("users");
 
 // get user type from firestore (teacher / student)
@@ -11,6 +12,7 @@ Future<String?> getUserType() async {
 
   if (docSnap.exists) {
     Map<String, dynamic> data = docSnap.data() as Map<String, dynamic>;
+    userType = data['userType'];
     return data['userType'];
   }
   return null;
@@ -49,4 +51,24 @@ Future<List<Map<String, dynamic>>> getQuestionnaire(String colID) async {
   var snapShot = await users.doc(user?.uid).collection(colID).get();
   final allData = snapShot.docs.map((doc) => doc.data()).toList();
   return allData;
+}
+
+Future<bool> saveUser(String docPath, String type) async {
+  HttpsCallable callable =
+      FirebaseFunctions.instance.httpsCallable('storeUserInfo');
+  final res = await callable.call(<String, dynamic>{
+    'docPath': docPath,
+    'name': user?.displayName,
+    'type': type,
+  });
+  return res.data['status'] == 200;
+}
+
+Future<bool> deleteQuestionnaire(String colPath) async {
+  HttpsCallable callable =
+      FirebaseFunctions.instance.httpsCallable('dltSubCollection');
+  final res = await callable.call(<String, dynamic>{
+    'colPath': colPath,
+  });
+  return res.data['status'] == 200;
 }
