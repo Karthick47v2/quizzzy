@@ -10,6 +10,9 @@ firebase-debug.*.log*
 # Firebase cache
 .firebase/
 
+#pycache
+__pycache__
+
 # api keys
 secret/
 
