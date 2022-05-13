@@ -5,4 +5,4 @@ script:
   - pytest
 
 install:
-  - pip install -r requirements.txt
+  - pip install -r docker/app/requirements.txt
