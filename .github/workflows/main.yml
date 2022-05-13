@@ -1,6 +1,8 @@
-name: Pylint
+name: Python test
 
-on: [push]
+on:
+  push:
+    branches: [main]
 
 jobs:
   python-lint:
@@ -24,3 +26,6 @@ jobs:
       - name: Analysing the code with pylint
         run: |
           pylint $(git ls-files '*.py')
+      - name: Test with pytest
+        run: |
+          python -m pytest
