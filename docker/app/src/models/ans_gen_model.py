@@ -1,4 +1,8 @@
-from ..preprocess import change_format
+"""extract keywords from context and find similar words
+    with diversity for those keywords.
+"""
+
+from src.preprocess import change_format
 import numpy as np
 
 from sklearn.metrics.pairwise import cosine_similarity
@@ -9,7 +13,8 @@ from keybert import KeyBERT
 
 
 class AnsGenModel:
-
+    """class holding all operations related to mcq answer
+    generation"""
     _SENTENCE_TRANSFORMER_MODEL = 'all-MiniLM-L12-v2'
 
     def __init__(self):
@@ -35,7 +40,8 @@ class AnsGenModel:
         self._s2v = Sense2Vec().from_disk("./pre-downloaded/s2v-old")
 
     def _init_keyBERT(self):
-        """initialize keyword extration model (KeyBERT) and keypharse vectorizer for meaningful keywords.
+        """initialize keyword extration model (KeyBERT) and keypharse 
+           vectorizer for meaningful keywords.
 
            https://github.com/MaartenGr/KeyBERT
            https://github.com/TimSchopf/KeyphraseVectorizers

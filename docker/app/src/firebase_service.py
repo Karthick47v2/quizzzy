@@ -1,9 +1,15 @@
+"""Firebase firestore services
+"""
+
 import firebase_admin
 from firebase_admin import firestore
 from firebase_admin import credentials
 
 
 class FirebaseService:
+    """class holding all needed firestore operations
+    """
+
     def __init__(self):
         """initialize firebase firestore client.
         """
@@ -18,8 +24,8 @@ class FirebaseService:
             request (ModelInput): request format from flutter.
             status (bool): state whether question generated.
         """
-        docRef = self._db.collection('users').document(request.uid)
-        docRef.update({'isGenerated': status})
+        doc_ref = self._db.collection('users').document(request.uid)
+        doc_ref.update({'isGenerated': status})
 
     def send_results_to_fs(self, request, questions, crct_ans, all_ans):
         """send generated question to appropiate fs doc.
@@ -30,11 +36,11 @@ class FirebaseService:
             crct_ans (list[str]): list of correct answers.
             all_ans (list[list[str]]): list of list of all answers.
         """
-        docRef = self._db.collection('users').document(request.uid)
-        for i in range(len(questions)):
-            dict = {
-                'question': questions[i],
-                'crct_ans': crct_ans[i],
-                'all_ans': all_ans[i * 4: 4 + i * 4]
+        doc_ref = self._db.collection('users').document(request.uid)
+        for idx, question in enumerate(questions):
+            q_dict = {
+                'question': question,
+                'crct_ans': crct_ans[idx],
+                'all_ans': all_ans[idx * 4: 4 + idx * 4]
             }
-            docRef.collection(request.name).document(str(i)).set(dict)
+            doc_ref.collection(request.name).document(str(idx)).set(q_dict)
