@@ -31,6 +31,10 @@ def split_text(text, char_range=300):
         list[str]: list of splitted corpus.
     """
     bulk_text = preprocess_bulk_text(text)
+
+    if len(bulk_text) <= char_range:
+        return [bulk_text]
+
     splitted_texts = []
     # split whole input into $(char_range) block of meaningful text. (only split after a full stop)
     while len(bulk_text) > char_range:
@@ -55,8 +59,6 @@ def preprocess_splitted_text(text, sum_model):
     encode = sum_model.tokenize(text)
     return encode["input_ids"], encode["attention_mask"]
 
-    # preprocess the summary for question generation
-
 
 def preprocess_summary(context, answer, que_model):
     """preprocess summary to required input format for question generator model.
@@ -77,7 +79,8 @@ def change_format(distractors):
     """ change s2v format to fair readable form. Remove '|,_' and toggle case.
 
     Args:
-        distractors (list[str]): list of most similar words that needs to be proprocessed.
+        distractors (list[tuple(str,int)]): list of most similar words and their 
+        similiarity.
 
     Returns:
         list[str]: human-readable format of distractors.
