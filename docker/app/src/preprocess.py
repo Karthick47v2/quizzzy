@@ -15,7 +15,7 @@ def preprocess_bulk_text(text):
     """
     text = text.strip()
     text = re.sub('[\u2010-\u2013]', '-', text)
-    text = re.sub('[^a-zA-Z0-9\.,-?%&*()]', ' ', text)
+    text = re.sub(r'[^a-zA-Z0-9\.,-?%&*()]', ' ', text)
     text = re.sub(' {2,}', ' ', text)
     return text
 

@@ -5,7 +5,8 @@ import pytest
 
 
 class TestPreprocessBulkText:
-
+    """class holding test cases for preprocess_bulk_text function"""
+    # pylint: disable=no-self-use
     @pytest.mark.parametrize('text, result', [
         ("""
         Natural language processing (NLP) is the ability of a computer 
@@ -14,7 +15,8 @@ class TestPreprocessBulkText:
         
         
         to as natural language.
-         """, "Natural language processing (NLP) is the ability of a computer program to understand human language as it is spoken and written -- referred to as natural language."), (
+         """, "Natural language processing (NLP) is the ability of a computer program to understand" +
+         " human language as it is spoken and written -- referred to as natural language."), (
             "ValueError\
         :\
         attempted \
@@ -35,8 +37,9 @@ class TestPreprocessBulkText:
         assert preprocess.preprocess_bulk_text(
             text) == result, "Check whitespaces"
 
-    @pytest.mark.parametrize('text, result', [("""⁍ ‣ValueError!!!@: attempted relative import beyond~top-level package_""",
-                                               " ValueError : attempted relative import beyond top-level package ")])
+    @pytest.mark.parametrize('text, result', [("⁍ ‣ValueError!!!@: attempted relative import" +
+                                               " beyond~top-level package_", " ValueError : " +
+                                               "attempted relative import beyond top-level package ")])
     def test_punctuation_marks(self, text, result):
         """test whether unnecessary punctuation marks are avoided
 
