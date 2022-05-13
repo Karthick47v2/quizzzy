@@ -5,8 +5,9 @@ import spacy
 from src.models import ans_gen_model
 
 
-@pytest.mark.skip(reason="This will run when all dependecies are available, skipping this\
-                      coz i haven't added large files to git..it needs sense2vec")
+@pytest.skip(reason="This will run when all dependecies are available, skipping this\
+             coz i haven't added large files to git..it needs sense2vec",
+             allow_module_level=True)
 class TestAnsGenModel:
     """class holding test cases for AnsGenModel class"""
     # pylint: disable=no-self-use
