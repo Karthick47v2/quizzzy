@@ -34,9 +34,9 @@ class TestPreprocessBulkText:
             text) == result, "Unwanted punctuation marks"
 
 
-class TestSplitText:
-    def test_split_correctly_at_range():
-        pass
+# class TestSplitText:
+#     def test_split_correctly_at_range(self):
+#         pass
 
-    def test_split_tolerance():
-        pass
+#     def test_split_tolerance(self):
+#         pass
