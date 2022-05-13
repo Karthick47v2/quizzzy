@@ -171,7 +171,7 @@ class AnsGenModel:
             assert query_al in self._s2v
             # get most similar 20 words (if any)
             temp = self._s2v.most_similar(query_al, n=20)
-            formatted_string = change_format(query_al, temp)
+            formatted_string = change_format(temp)
             formatted_string.insert(0, query)
             # if answers are numbers then we don't need to filter
             if query_al.split('|')[1] == 'CARDINAL':

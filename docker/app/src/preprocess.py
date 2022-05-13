@@ -4,7 +4,7 @@ import re
 
 
 def preprocess_bulk_text(text):
-    """remove all signs other than -,-,a-z,A-Z,0-9, and some symbols..... 
+    """remove all signs other than -,-,a-z,A-Z,0-9, and some symbols.....
        and remove all extra blank spaces.
 
     Args:

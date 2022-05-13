@@ -114,7 +114,7 @@ class QuestionGenModel:
         Returns:
             dict: dictionary returned by encode_plus containing tokens and attention mask.
         """
-        text = "context: {} answer: {}".format(context, answer)
+        text = f"context: {context} answer: {answer}"
         encode = self._q_tokenizer.encode_plus(text,
                                                return_tensors='pt',
                                                max_length=382,
@@ -122,7 +122,7 @@ class QuestionGenModel:
                                                truncation=True)
         return encode["input_ids"], encode["attention_mask"]
 
-    def gen_question(self, context, answer, num_beams=5, no_repeat_ngram=2, max_length=72):
+    def gen_question(self, context, answer, num_beams=5, no_repeat_ngram=2):
         """generate questions from context-answer pair.
 
         Args:
@@ -145,7 +145,7 @@ class QuestionGenModel:
                                                   attention_mask=attention_mask,
                                                   num_beams=num_beams,
                                                   no_repeat_ngram_size=no_repeat_ngram,
-                                                  max_length=max_length,
+                                                  max_length=72,  # avg trained question length
                                                   early_stopping=True)
 
         # decode summarized token and post process it before print
