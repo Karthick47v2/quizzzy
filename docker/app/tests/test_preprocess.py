@@ -1,7 +1,7 @@
 """unit tests for preprocess.py"""
 
-from src import preprocess
 import pytest
+from src import preprocess
 
 
 class TestPreprocessBulkText:
