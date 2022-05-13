@@ -7,6 +7,8 @@ from src.models import ans_gen_model
 
 class TestAnsGenModel:
     """class holding test cases for AnsGenModel class"""
+    # pylint: disable=no-self-use
+
     _ans_model = ans_gen_model.AnsGenModel()
     _nlp = spacy.load('en_core_web_sm')
 

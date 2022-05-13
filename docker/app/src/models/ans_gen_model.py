@@ -115,14 +115,14 @@ class AnsGenModel:
 
         return filtered_dist
 
-    def _mmr(self, doc_embedding, word_embedding, words, top_n=4, diversity=0.9):
+    # pylint: disable=no-self-use
+    def _mmr(self, doc_embedding, word_embedding, words, diversity=0.9):
         """word diversity using MMR - Maximal Marginal Relevence.
 
         Args:
             doc_embedding (list[str]): sentence embedding of correct answer.
             word_embedding (list[str]): sentence embedding of false answer.
             words (list[str]): flase answers.
-            top_n (int, optional): only return top n results with max diversity. Defaults to 4.
             diversity (float, optional): diversity coefficient. Defaults to 0.9.
 
         Returns:
@@ -135,7 +135,7 @@ class AnsGenModel:
         kw_idx = [np.argmax(word_doc_similarity)]
         dist_idx = [i for i in range(len(words)) if i != kw_idx[0]]
 
-        for i in range(top_n - 1):
+        for i in range(3):
             dist_similarities = word_doc_similarity[dist_idx, :]
             target_similarities = np.max(
                 word_similarity[dist_idx][:, kw_idx], axis=1)
