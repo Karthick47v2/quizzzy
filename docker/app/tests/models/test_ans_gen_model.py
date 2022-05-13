@@ -5,17 +5,25 @@ import spacy
 from src.models import ans_gen_model
 
 
+@pytest.fixture(scope='class')
+def model():
+    return ans_gen_model.AnsGenModel()
+
+
+@pytest.fixture(scope='function')
+def nlp():
+    return spacy.load('en_core_web_sm')
+
+
 @pytest.skip(reason="This will run when all dependecies are available, skipping this\
              coz i haven't added large files to git..it needs sense2vec",
              allow_module_level=True)
+@pytest.mark.usefixtures('model', 'nlp')
 class TestAnsGenModel:
     """class holding test cases for AnsGenModel class"""
     # pylint: disable=no-self-use
 
-    _ans_model = ans_gen_model.AnsGenModel()
-    _nlp = spacy.load('en_core_web_sm')
-
-    def test_filter_keywords(self):
+    def test_filter_keywords(self, model):
         """check if generated keyword is on both context and summarized text. Because due to word
            sense disambugiation words in summarize text may not be correct for question generation
         """
@@ -35,7 +43,7 @@ class TestAnsGenModel:
 
         corpus = corpus.lower()
         summarized = summarized.lower()
-        result = TestAnsGenModel._ans_model.filter_keywords(corpus, summarized)
+        result = model.filter_keywords(corpus, summarized)
 
         assert all(kwx in corpus for kwx in result) and all(
             kwx in summarized for kwx in result), "Keyword(s) missing in corpus/summary"
@@ -43,12 +51,12 @@ class TestAnsGenModel:
     @pytest.mark.parametrize('query', [
         ('Ice cream'), ('Natural language processing'), ('RAM')
     ])
-    def test_false_answers(self, query):
+    def test_false_answers(self, query, model, nlp):
         """check if generated answers are diverse and still on same context"""
-        results = TestAnsGenModel._ans_model.false_answers(query)
+        results = model.false_answers(query)
 
         for result in results:
             if result != query:
-                val = (TestAnsGenModel._nlp(
-                    query).similarity(TestAnsGenModel._nlp(result)))
+                val = (nlp(
+                    query).similarity(nlp(result)))
                 assert 0.2 < val < 0.8, "Similairty error"
