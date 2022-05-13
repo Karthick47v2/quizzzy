@@ -1,8 +1,12 @@
 language: python
 python:
   - "3.8"
-script:
-  - pytest
-
 install:
   - pip install -r docker/app/requirements.txt
+  - pip install pytest-cov codecov
+script:
+  - pytest --cov=src tests
+ after_sucess:
+  - codecov
+
+
