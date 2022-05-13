@@ -37,6 +37,8 @@ class TestAnsGenModel:
         assert all(kwx in corpus for kwx in result) and all(
             kwx in summarized for kwx in result), "Keyword(s) missing in corpus/summary"
 
+    @pytest.mark.skip(reason="This will run when all dependecies are available, skipping this\
+                      coz i haven't added large files to git..it needs sense2vec")
     @pytest.mark.parametrize('query', [
         ('Ice cream'), ('Natural language processing'), ('RAM')
     ])
