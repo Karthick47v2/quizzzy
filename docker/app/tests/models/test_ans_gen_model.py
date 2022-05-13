@@ -48,4 +48,4 @@ class TestAnsGenModel:
             if result != query:
                 val = (TestAnsGenModel._nlp(
                     query).similarity(TestAnsGenModel._nlp(result)))
-                assert (val > 0.2 and val < 0.8), "Similairty error"
+                assert 0.2 < val < 0.8, "Similairty error"
