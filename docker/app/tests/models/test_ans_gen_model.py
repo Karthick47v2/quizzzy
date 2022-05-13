@@ -4,14 +4,16 @@ import pytest
 import spacy
 from src.models import ans_gen_model
 
-
+# pylint: disable=redefined-outer-name
 @pytest.fixture(scope='class')
 def model():
+    """fixture for loading class obj"""
     return ans_gen_model.AnsGenModel()
 
 
 @pytest.fixture(scope='function')
 def nlp():
+    """fixture for loading spacy"""
     return spacy.load('en_core_web_sm')
 
 
