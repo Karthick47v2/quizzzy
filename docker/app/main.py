@@ -1,9 +1,15 @@
+"""process flutter app request and send generated
+   questions along with it's answer to user's
+   firestore document
+"""
+
 from src.models.question_gen_model import SummarizeModel, QuestionGenModel
 from src.firebase_service import FirebaseService
 from src.models.ans_gen_model import AnsGenModel
 from src.preprocess import split_text
 
 import random
+# pylint: disable=no-name-in-module
 from pydantic import BaseModel
 from fastapi import FastAPI, BackgroundTasks
 
@@ -24,7 +30,8 @@ def generate_que_n_ans(context):
         context (str): input corpus needed to generate question.
 
     Returns:
-        tuple[list[str], list[str], list[list[str]]]: tuple of lists of all generated questions n' answers.
+        tuple[list[str], list[str], list[list[str]]]: tuple of lists of all 
+        generated questions n' answers.
     """
     splitted_text = split_text(context)
 
@@ -35,18 +42,17 @@ def generate_que_n_ans(context):
     all_answers = []
 
     # summarize and find keywords for each splitted text
-    for i in range(len(splitted_text)):
-        summary.append(sum_model.summarize(splitted_text[i]))
-        filtered_kw.append(ans_model.filter_keywords(
-            splitted_text[i], summary[i]))
+    for idx, txt in enumerate(splitted_text):
+        summary.append(sum_model.summarize(txt))
+        filtered_kw.append(ans_model.filter_keywords(txt, summary[idx]))
 
     # generate questions and false answers for each keywords
-    for i in range(len(filtered_kw)):
-        for x in filtered_kw[i]:
-            results = ans_model.false_answers(x)
-            if results != None:
-                questions.append(que_model.gen_question(summary[i], x))
-                crct_ans.append(x)
+    for idx, kws in enumerate(filtered_kw):
+        for kw in kws:
+            results = ans_model.false_answers(kw)
+            if results is not None:
+                questions.append(que_model.gen_question(summary[idx], kw))
+                crct_ans.append(kw)
                 random.shuffle(results)
                 all_answers.append(results)
     # squeezing the 2d list to 1d for API response ## 2d nested list give error --
@@ -71,7 +77,10 @@ app = FastAPI()
 
 
 # body classes for req n' res
+# pylint: disable=too-few-public-methods
 class ModelInput(BaseModel):
+    """general request model structure for flutter incoming req
+    """
     context: str
     uid: str
     name: str
