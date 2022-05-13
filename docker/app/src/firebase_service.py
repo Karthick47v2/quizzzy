@@ -1,5 +1,4 @@
-"""Firebase firestore services
-"""
+"""Firebase firestore services"""
 
 import firebase_admin
 from firebase_admin import firestore

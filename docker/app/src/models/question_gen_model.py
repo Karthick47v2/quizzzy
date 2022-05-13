@@ -1,13 +1,20 @@
-from ..preprocess import preprocess_summary, preprocess_splitted_text
-from ..postprocess import *
+"""question generation from given context and keyword"""
 
-from fastT5 import get_onnx_runtime_sessions, OnnxT5
-from transformers import AutoTokenizer
 import os
 
 
-class SummarizeModel:
+from fastT5 import get_onnx_runtime_sessions, OnnxT5
+from transformers import AutoTokenizer
 
+
+from src.preprocess import preprocess_summary, preprocess_splitted_text
+from src.postprocess import *
+
+
+class SummarizeModel:
+    """class holding summarization model
+    and it's operations
+    """
     _SUMMARIZE_MODEL_NAME = 't5-base'
 
     def __init__(self):
@@ -47,7 +54,8 @@ class SummarizeModel:
 
         Args:
             text (str): corpus to be summarized.
-            num_beams (int, optional): max 3 prob will get considered for each step. Defaults to 3.
+            num_beams (int, optional): max 3 prob will get considered for 
+            each step. Defaults to 3.
             no_repeat_ngram_size (int, optional): no of repeat ngrams. Defaults to 2.
             max_length (int, optional): max output token length. Defaults to 512.
 
@@ -72,6 +80,9 @@ class SummarizeModel:
 
 
 class QuestionGenModel:
+    """class holding question generation model
+    and its operations
+    """
     _QUESTION_MODEL_NAME = 't5_question'
 
     def _init_question_model(self):
@@ -117,9 +128,11 @@ class QuestionGenModel:
         Args:
             context (str): context to generate question from.
             ans (str): answer to the question which is going to be generated.
-            num_beams (int, optional): max 5 prob will get considered for each step. Defaults to 5.
+            num_beams (int, optional): max 5 prob will get considered
+            for each step. Defaults to 5.
             no_repeat_ngram_size (int, optional): no of repeat ngrams. Defaults to 2.
-            max_length (int, optional): max output token length. Set to 72 as default because its ok for single question.
+            max_length (int, optional): max output token length. Set to 72 as default
+            because its ok for single question.
 
         Returns:
             str : clean-human readable text.

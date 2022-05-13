@@ -97,7 +97,7 @@ async def model_inference(request: ModelInput, bg_task: BackgroundTasks):
 
     Args:
         request (ModelInput): request model
-        bg_task (BackgroundTasks): run process_request() on other thread 
+        bg_task (BackgroundTasks): run process_request() on other thread
         and respond to request
 
     Returns:

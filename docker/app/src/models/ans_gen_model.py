@@ -40,7 +40,7 @@ class AnsGenModel:
         self._s2v = Sense2Vec().from_disk("./pre-downloaded/s2v-old")
 
     def _init_keyBERT(self):
-        """initialize keyword extration model (KeyBERT) and keypharse 
+        """initialize keyword extration model (KeyBERT) and keypharse
            vectorizer for meaningful keywords.
 
            https://github.com/MaartenGr/KeyBERT
@@ -114,6 +114,7 @@ class AnsGenModel:
 
         return filtered_dist
 
+    # pylint: disable=no-self-argument
     def _mmr(doc_embedding, word_embedding, words, top_n=4, diversity=0.9):
         """word diversity using MMR - Maximal Marginal Relevence.
 
@@ -148,7 +149,8 @@ class AnsGenModel:
             kw_idx.append(mmr_idx)
             dist_idx.remove(mmr_idx)
 
-        return [(words[idx], round(float(word_doc_similarity.reshape(1, -1)[0][idx]), 4)) for idx in kw_idx]
+        return [(words[idx], round(float(word_doc_similarity.reshape(1, -1)[0][idx]), 4))
+                for idx in kw_idx]
 
     def false_answers(self, query):
         """generate false anwers from correct answer.
@@ -161,8 +163,9 @@ class AnsGenModel:
         """
         # get the best sense for given word (like NOUN, PRONOUN, VERB...)
         query_al = self._s2v.get_best_sense(query.lower().replace(' ', '_'))
-
-        # sometimes word won't be in sense2vec in that case we can't produce any output -- ##### TODO DO: DROP THAT QUESTION
+        # pylint: disable=fixme
+        # sometimes word won't be in sense2vec in that case we can't produce any
+        # output -- ##### TODO DO: DROP THAT QUESTION
         try:
             assert query_al in self._s2v
             # get most similar 20 words (if any)
@@ -172,7 +175,8 @@ class AnsGenModel:
             # if answers are numbers then we don't need to filter
             if query_al.split('|')[1] == 'CARDINAL':
                 return formatted_string[:4]
-            # else filter because sometimes similar words will be US, U.S, USA, AMERICA.. bt all are same no?
+            # else filter because sometimes similar words will be US, U.S, USA, AMERICA..
+            #  bt all are same no?
             return self._filter_output(query, formatted_string)
-        except:
+        except AssertionError:
             return None
