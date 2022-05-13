@@ -79,7 +79,7 @@ def change_format(distractors):
     """ change s2v format to fair readable form. Remove '|,_' and toggle case.
 
     Args:
-        distractors (list[tuple(str,int)]): list of most similar words and their 
+        distractors (list[tuple(str,int)]): list of most similar words and their
         similiarity.
 
     Returns:

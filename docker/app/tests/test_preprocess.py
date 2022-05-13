@@ -54,6 +54,8 @@ class TestPreprocessBulkText:
 
 
 class TestSplitText:
+    """class holding test cases for split_text function"""
+    # pylint: disable=no-self-use
     @pytest.mark.parametrize('text, result', [
         ("This test will split correctly at period.",
          ["This test will split correctly at period."]),
