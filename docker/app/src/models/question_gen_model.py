@@ -8,7 +8,7 @@ from transformers import AutoTokenizer
 
 
 from src.preprocess import preprocess_summary, preprocess_splitted_text
-from src.postprocess import *
+from src.postprocess import postprocess_question, postprocess_summary
 
 
 class SummarizeModel:
@@ -54,7 +54,7 @@ class SummarizeModel:
 
         Args:
             text (str): corpus to be summarized.
-            num_beams (int, optional): max 3 prob will get considered for 
+            num_beams (int, optional): max 3 prob will get considered for
             each step. Defaults to 3.
             no_repeat_ngram_size (int, optional): no of repeat ngrams. Defaults to 2.
             max_length (int, optional): max output token length. Defaults to 512.
@@ -68,7 +68,7 @@ class SummarizeModel:
         summary_encoded = self._sum_model.generate(input_ids=input_tokens_ids,
                                                    attention_mask=attention_mask,
                                                    num_beams=num_beams,
-                                                   num_return_sequences=1,                  # only need 1 output
+                                                   num_return_sequences=1,
                                                    no_repeat_ngram_size=no_repeat_ngram_size,
                                                    max_length=max_length,
                                                    early_stopping=True)
@@ -85,7 +85,7 @@ class QuestionGenModel:
     """
     _QUESTION_MODEL_NAME = 't5_question'
 
-    def _init_question_model(self):
+    def __init__(self):
         """initialize question generator.
         """
         model_path = './pre-downloaded/t5-question'
@@ -104,7 +104,8 @@ class QuestionGenModel:
 
     def tokenize_corpus(self, context, answer):
         """tokenize input corpus
-           "context: XXXXXXXXxxxxx answer: XXXXXXXXX" is the required format for question generation model.
+           "context: XXXXXXXXxxxxx answer: XXXXXXXXX" is the required format
+           for question generation model.
 
         Args:
             context (str): corpus to input model context.
@@ -116,7 +117,6 @@ class QuestionGenModel:
         text = "context: {} answer: {}".format(context, answer)
         encode = self._q_tokenizer.encode_plus(text,
                                                return_tensors='pt',
-                                               # for meaningful context-question pair ---- no a magical number
                                                max_length=382,
                                                pad_to_max_length=False,
                                                truncation=True)

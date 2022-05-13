@@ -1,3 +1,5 @@
+"""process output of models to readable form"""
+
 import nltk
 from nltk.tokenize import sent_tokenize
 nltk.download('punkt')
@@ -15,9 +17,9 @@ def postprocess_summary(text):
     """
     output = ""
 
-    for x in sent_tokenize(text):
-        x = x.capitalize()
-        output += " " + x
+    for token in sent_tokenize(text):
+        token = token.capitalize()
+        output += " " + token
     return output
 
 

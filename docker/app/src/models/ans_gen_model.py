@@ -22,7 +22,7 @@ class AnsGenModel:
         """
         self._init_sentence_transformer()
         self._init_sense2vec()
-        self._init_keyBERT()
+        self._init_keybert()
 
     def _init_sentence_transformer(self):
         """initialize sentence embedding .
@@ -39,7 +39,7 @@ class AnsGenModel:
         """
         self._s2v = Sense2Vec().from_disk("./pre-downloaded/s2v-old")
 
-    def _init_keyBERT(self):
+    def _init_keybert(self):
         """initialize keyword extration model (KeyBERT) and keypharse
            vectorizer for meaningful keywords.
 
@@ -58,10 +58,11 @@ class AnsGenModel:
         Returns:
             list[str]: list of keywords extracted from input corpus.
         """
-        kw = self._kw_model.extract_keywords(text, vectorizer=self._vectorizer)
+        kwx = self._kw_model.extract_keywords(
+            text, vectorizer=self._vectorizer)
 
         kw_ls = []
-        for i in kw:
+        for i in kwx:
             # 0 -> keyword, 1-> confidence / probability
             kw_ls.append(i[0])
         return kw_ls
@@ -108,9 +109,9 @@ class AnsGenModel:
         dist = self._mmr(ans_embedded, dis_embedded, dummies)
 
         filtered_dist = []
-        for d in dist:
+        for dis in dist:
             # 0 -> word, 1 -> confidence / probability
-            filtered_dist.append(d[0].capitalize())
+            filtered_dist.append(dis[0].capitalize())
 
         return filtered_dist
 

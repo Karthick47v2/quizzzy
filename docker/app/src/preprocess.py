@@ -1,8 +1,11 @@
+"""preprocess inputs for models"""
+
 import re
 
 
 def preprocess_bulk_text(text):
-    """remove all signs other than -,-,a-z,A-Z,0-9, and some symbols..... and remove all extra blank spaces.
+    """remove all signs other than -,-,a-z,A-Z,0-9, and some symbols..... 
+       and remove all extra blank spaces.
 
     Args:
         text (str): input string for preprocessing.
@@ -17,21 +20,21 @@ def preprocess_bulk_text(text):
     return text
 
 
-def split_text(text, range=300):
+def split_text(text, char_range=300):
     """split the bulk input text into required input length for summarizing model.
 
     Args:
         text (str): preprocessed string to be splitted.
-        range (int, optional): approx range of splitted chars. Defaults to 300.
+        char_range (int, optional): approx character range of splitted chars. Defaults to 300.
 
     Returns:
         list[str]: list of splitted corpus.
     """
     bulk_text = preprocess_bulk_text(text)
     splitted_texts = []
-    # split whole input into $(range) block of meaningful text. (only split after a full stop)
-    while(len(bulk_text) > range):
-        i = range
+    # split whole input into $(char_range) block of meaningful text. (only split after a full stop)
+    while len(bulk_text) > char_range:
+        i = char_range
         while((i < len(bulk_text)) and (bulk_text[i] != '.')):
             i += 1
         splitted_texts.append(bulk_text[:(i+1)])
