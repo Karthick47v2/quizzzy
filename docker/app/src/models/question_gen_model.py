@@ -25,10 +25,12 @@ class SummarizeModel:
 
         if not os.path.isdir(os.getcwd() + 'pre-downloaded'):
             # pylint: disable=import-outside-toplevel
-            from google_drive_downloader import GoogleDriveDownloader as gdd
-            gdd.download_file_from_google_drive(
-                file_id='1_0dPLdv8WNtSYQdKEWxFc03IR-szs0kB',
-                dest_path="./docker/file.zip", showsize=True, unzip=True)
+            import gdown
+            gdown.download_folder(id='1_0dPLdv8WNtSYQdKEWxFc03IR-szs0kB',
+                                  output='./docker/file.zip', quiet=True, use_cookies=False)
+            # gdd.download_file_from_google_drive(
+            #     file_id='1_0dPLdv8WNtSYQdKEWxFc03IR-szs0kB',
+            #     dest_path="./docker/file.zip", showsize=True, unzip=True)
             os.chdir(os.getcwd() + '/docker')
             os.system('ls')
             import zipfile
