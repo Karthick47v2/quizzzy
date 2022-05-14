@@ -26,23 +26,9 @@ class SummarizeModel:
         if not os.path.isdir(os.getcwd() + 'pre-downloaded'):
             # pylint: disable=import-outside-toplevel
             import gdown
-            gdown.download_folder(id='1_0dPLdv8WNtSYQdKEWxFc03IR-szs0kB',
-                                  output='model', quiet=True, use_cookies=False)
-            # model_path = 'model/t5'
-            # gdd.download_file_from_google_drive(
-            #     file_id='1_0dPLdv8WNtSYQdKEWxFc03IR-szs0kB',
-            #     dest_path="./docker/file.zip", showsize=True, unzip=True)
-            # os.chdir(os.getcwd() + '/docker')
-            os.system('ls')
-            os.chdir(os.getcwd() + '/model')
-            os.system('ls')
-            # import zipfile
-            # with zipfile.ZipFile('file.zip', 'r') as zip_ref:
-            #     zip_ref.extractall("target")
-            #     os.system('ls')
-            #     os.chdir(os.getcwd() + '/target')
-            #     os.system('ls')
-            #     model_path = '/t5-summarize'
+            gdown.download_folder(id='1-50SZ_WIHX4A6mkpsz-t0EAF_VhtHb-9',
+                                  output='sum_model', quiet=True, use_cookies=False)
+            model_path = 'sum_model/'
 
         encoder_path = os.path.join(
             model_path, f"{SummarizeModel._SUMMARIZE_MODEL_NAME}-encoder-quantized.onnx")
@@ -111,13 +97,12 @@ class QuestionGenModel:
         """
         model_path = './pre-downloaded/t5-question'
 
-        # if not os.path.isdir(os.getcwd() + 'pre-downloaded'):
-        #     # pylint: disable=import-outside-toplevel
-        #     from google_drive_downloader import GoogleDriveDownloader as gdd
-        #     gdd.download_file_from_google_drive(
-        #         file_id='1-50SZ_WIHX4A6mkpsz-t0EAF_VhtHb-9', dest_path=os.getcwd(), unzip=True)
-        #     os.system('ls')
-        #     model_path = '/t5-question'
+        if not os.path.isdir(os.getcwd() + 'pre-downloaded'):
+            # pylint: disable=import-outside-toplevel
+            import gdown
+            gdown.download_folder(id='1_0dPLdv8WNtSYQdKEWxFc03IR-szs0kB',
+                                  output='que_model', quiet=True, use_cookies=False)
+            model_path = 'que_model/'
 
         encoder_path = os.path.join(
             model_path, f"{QuestionGenModel._QUESTION_MODEL_NAME}-encoder-quantized.onnx")
