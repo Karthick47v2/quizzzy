@@ -51,6 +51,8 @@ jobs:
     # if: "contains(github.event.head_commit.message, 'deploy to cloud')"
     # ............../////////DO i need to checkout... and wait for////////////////////////
     steps:
+      - name: Checkout source repo
+        uses: actions/checkout@v3
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v0
         with:
