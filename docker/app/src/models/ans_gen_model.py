@@ -52,8 +52,9 @@ class AnsGenModel:
                     file.extractall()
                     print(os.system('ls'))
                     print(os.getcwd())
-                    os.chdir(os.getcwd() + '/s2v-old')
+                    os.chdir(os.getcwd() + '/s2v_old')
                     print(os.getcwd())
+                    print(os.system('ls'))
                     self._s2v = Sense2Vec().from_disk("")
 
     def _init_keybert(self):
