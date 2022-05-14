@@ -66,9 +66,9 @@ jobs:
       - name: Authorize docker push
         run: gcloud auth configure-docker
       - name: Build and push container
-        # working-directory: ./docker
+        working-directory: ./docker
         run: |-
-          docker build -t gcr.io/${{ secrets.GCP_PRJ_ID }}/${{ env.APP_ID }}:${{ github.sha }} . -f docker
+          docker build -t gcr.io/${{ secrets.GCP_PRJ_ID }}/${{ env.APP_ID }}:${{ github.sha }} .
           docker push gcr.io/${{ secrets.GCP_PRJ_ID }}/${{ env.APP_ID }}:${{ github.sha }}
       - name: Deploy to Cloud Run
         # working-directory: ./docker
