@@ -2,22 +2,21 @@ name: Python test
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  test:
+  py_test:
     runs-on: ubuntu-latest
     name: CI workflow
-    strategy:
-      matrix:
-        python-version: ["3.8"]
     steps:
       - name: Checkout source repo
         uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v3
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '3.8'
       - name: Decode base64 secrets
         run: echo $SERVICE_ACCOUNT_SECRET | base64 -d > docker/app/secret/mock-key.json
         env:
