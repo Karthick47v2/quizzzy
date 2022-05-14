@@ -2,41 +2,77 @@ name: Python test
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
+
+env:
+  PRJ_ID: ${{ secrets.GCP_PRJ_ID }}
+  APP_ID: mcq-gen
+  S_ID: github-actions
+  REGION: asia-south1
+  EMAIL: "Karthicksharma11@gmail.com"
+  GCP_SA_KEY_JSON: ${{ secrets.GCP_SA_KEY_JSON }}
+  FB_SA_KEY_JSON: ${{ secrets.FB_SA_KEY_JSON }}
 
 jobs:
-  py_test:
+  # py_test:
+  #   runs-on: ubuntu-latest
+  #   name: Test python
+  #   steps:
+  #     - name: Checkout source repo
+  #       uses: actions/checkout@v3
+  #     - name: Set up Python 3.8
+  #       uses: actions/setup-python@v3
+  #       with:
+  #         python-version: '3.8'
+  #     - name: Decode base64 secrets
+  #       run: echo $SERVICE_ACCOUNT_SECRET | base64 -d > docker/app/secret/mock-key.json
+  #       env:
+  #         SERVICE_ACCOUNT_SECRET: $FB_SA_KEY_JSON
+  #     - name: Install dependencies
+  #       run: |
+  #         python -m pip install --upgrade pip
+  #         pip install pylint pytest pytest-cov spacy gdown
+  #         pip install -r docker/app/requirements.txt
+  #         python3 -m spacy download en_core_web_sm
+  #     - name: Analysing the code with pylint
+  #       run: |
+  #         pylint $(git ls-files '*.py')
+  #     - name: Test with pytest
+  #       run: |
+  #         python -m pytest --cov=./ --cov-report=xml
+  #     - name: Upload coverage report to Codecov
+  #       uses: codecov/codecov-action@v2
+  #       with:
+  #         env_vars: OS,PYTHON
+  #         fail_ci_if_error: false
+  #         flags: unittests
+  #         verbose: true
+  cloud_deploy:
     runs-on: ubuntu-latest
-    name: CI workflow
+    name: Deploy to Cloud Run
+    defaults:
+      run:
+        working-directory: ./docker/
+    # if: "contains(github.event.head_commit.message, 'deploy to cloud')"
+    # ............../////////DO i need to checkout... and wait for////////////////////////
     steps:
-      - name: Checkout source repo
-        uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v0
         with:
-          python-version: '3.8'
-      - name: Decode base64 secrets
-        run: echo $SERVICE_ACCOUNT_SECRET | base64 -d > docker/app/secret/mock-key.json
-        env:
-          SERVICE_ACCOUNT_SECRET: ${{ secrets.SERVICE_ACCOUNT_SECRET }}
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install pylint pytest pytest-cov spacy gdown
-          pip install -r docker/app/requirements.txt
-          python3 -m spacy download en_core_web_sm
-      - name: Analysing the code with pylint
-        run: |
-          pylint $(git ls-files '*.py')
-      - name: Test with pytest
-        run: |
-          python -m pytest --cov=./ --cov-report=xml
-      - name: Upload coverage report to Codecov
-        uses: codecov/codecov-action@v2
+          service_account_key: $GCP_SA_KEY_JSON
+          service_account_email: $EMAIL
+          project_id: $PRJ_ID
+      - name: Build container
+        run: gcloud builds submit --tag gcr.io/$PRJ_ID/$APP_ID
+      - name: Deploy
+        uses: google-github-actions/deploy-cloudrun@v0
         with:
-          env_vars: OS,PYTHON
-          fail_ci_if_error: false
-          flags: unittests
-          verbose: true
+          service: $S_ID
+          image: gcr.io/$PRJ_ID/$APP_ID
+          region: $REGION
+          credentials: $GCP_SA_KEY_JSON
+          project_id: $PRJ_ID
+          flags: "--cpu 2 --concurrency 1 --memory 16Gi --platform managed --min-instances 0 --timeout 60m --port 80"
+        # run: gcloud run deploy $APP_ID --image gcr.io/$PRJ_ID/$APP_ID:$GITHUB_SHA --platform managed --region $REGION --allow-unauthenticated

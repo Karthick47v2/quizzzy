@@ -15,6 +15,7 @@ __pycache__
 
 # api keys
 serviceAccountKey.json
+keys.json
 
 # large files
 pre-downloaded
