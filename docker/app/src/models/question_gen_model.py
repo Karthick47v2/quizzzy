@@ -29,6 +29,7 @@ class SummarizeModel:
             gdd.download_file_from_google_drive(
                 file_id='1_0dPLdv8WNtSYQdKEWxFc03IR-szs0kB',
                 dest_path="./docker/file.zip", unzip=True)
+            os.chdir(os.getcwd() + '/docker')
             os.system('ls')
             model_path = '/t5-summarize'
 
