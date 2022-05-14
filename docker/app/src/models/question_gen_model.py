@@ -108,13 +108,13 @@ class QuestionGenModel:
         """
         model_path = './pre-downloaded/t5-question'
 
-        if not os.path.isdir(os.getcwd() + 'pre-downloaded'):
-            # pylint: disable=import-outside-toplevel
-            from google_drive_downloader import GoogleDriveDownloader as gdd
-            gdd.download_file_from_google_drive(
-                file_id='1-50SZ_WIHX4A6mkpsz-t0EAF_VhtHb-9', dest_path=os.getcwd(), unzip=True)
-            os.system('ls')
-            model_path = '/t5-question'
+        # if not os.path.isdir(os.getcwd() + 'pre-downloaded'):
+        #     # pylint: disable=import-outside-toplevel
+        #     from google_drive_downloader import GoogleDriveDownloader as gdd
+        #     gdd.download_file_from_google_drive(
+        #         file_id='1-50SZ_WIHX4A6mkpsz-t0EAF_VhtHb-9', dest_path=os.getcwd(), unzip=True)
+        #     os.system('ls')
+        #     model_path = '/t5-question'
 
         encoder_path = os.path.join(
             model_path, f"{QuestionGenModel._QUESTION_MODEL_NAME}-encoder-quantized.onnx")
