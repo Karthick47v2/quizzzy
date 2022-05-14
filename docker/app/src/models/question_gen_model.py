@@ -30,6 +30,7 @@ class SummarizeModel:
                 file_id='1_0dPLdv8WNtSYQdKEWxFc03IR-szs0kB',
                 dest_path="./docker/file.zip", showsize=True, unzip=True)
             os.chdir(os.getcwd() + '/docker')
+            os.system('ls')
             import zipfile
             with zipfile.ZipFile('file.zip', 'r') as zip_ref:
                 zip_ref.extractall("target")
