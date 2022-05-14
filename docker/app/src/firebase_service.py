@@ -1,6 +1,6 @@
 """Firebase firestore services"""
 
-import json
+
 import firebase_admin
 
 from firebase_admin import firestore
@@ -19,8 +19,6 @@ class FirebaseService:
                 credentials.Certificate("./secret/serviceAccountKey.json"))
         # for unit test only
         except FileNotFoundError:
-            file = open("docker/app/secret/mock-key.json")
-            print(json.load(file))
             firebase_admin.initialize_app(
                 credentials.Certificate("docker/app/secret/mock-key.json"))
         self._db = firestore.client()
