@@ -46,13 +46,11 @@ class AnsGenModel:
             # pylint: disable=import-outside-toplevel
             import urllib.request
             import tarfile
-            # import os
             s2v_url = "https://github.com/explosion/sense2vec/releases/download/"
             s2v_ver_url = s2v_url + "v1.0.0/s2v_reddit_2015_md.tar.gz"
             with urllib.request.urlopen(s2v_ver_url) as req:
                 with tarfile.open(fileobj=req, mode='r|gz') as file:
                     file.extractall()
-                    # os.chdir(os.getcwd() + '/s2v_old')
                     self._s2v = Sense2Vec().from_disk("s2v_old")
 
     def _init_keybert(self):
