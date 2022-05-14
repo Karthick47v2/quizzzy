@@ -1,11 +1,9 @@
 """unit tests for firebase_service.py"""
 
 
-from main import ModelInput, fs
 import pytest
 
-
-from src import firebase_service
+from main import ModelInput, fs
 from tests.test_main import REQUEST
 
 
