@@ -1,7 +1,5 @@
 """question generation from given context and keyword"""
 
-import urllib.request
-import tarfile
 import os
 
 from fastT5 import get_onnx_runtime_sessions, OnnxT5
@@ -25,7 +23,8 @@ class SummarizeModel:
         """
         model_path = './pre-downloaded/t5-summarize/'
 
-        if(not os.path.isdir(os.getcwd() + 'pre-downloaded')):
+        if not os.path.isdir(os.getcwd() + 'pre-downloaded'):
+            # pylint: disable=import-outside-toplevel
             from google_drive_downloader import GoogleDriveDownloader as gdd
             gdd.download_file_from_google_drive(
                 file_id='1_0dPLdv8WNtSYQdKEWxFc03IR-szs0kB', dest_path="", unzip=True)
@@ -99,7 +98,8 @@ class QuestionGenModel:
         """
         model_path = './pre-downloaded/t5-question'
 
-        if(not os.path.isdir(os.getcwd() + 'pre-downloaded')):
+        if not os.path.isdir(os.getcwd() + 'pre-downloaded'):
+            # pylint: disable=import-outside-toplevel
             from google_drive_downloader import GoogleDriveDownloader as gdd
             gdd.download_file_from_google_drive(
                 file_id='1-50SZ_WIHX4A6mkpsz-t0EAF_VhtHb-9', dest_path="", unzip=True)
