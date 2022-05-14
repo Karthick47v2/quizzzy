@@ -52,8 +52,8 @@ class AnsGenModel:
             with urllib.request.urlopen(s2v_ver_url) as req:
                 with tarfile.open(fileobj=req, mode='r|gz') as file:
                     file.extractall()
-                    os.chdir(os.getcwd() + '/s2v_old')
-                    self._s2v = Sense2Vec().from_disk("")
+                    # os.chdir(os.getcwd() + '/s2v_old')
+                    self._s2v = Sense2Vec().from_disk("s2v_old")
 
     def _init_keybert(self):
         """initialize keyword extration model (KeyBERT) and keypharse
