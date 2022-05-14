@@ -14,7 +14,7 @@ firebase-debug.*.log*
 __pycache__
 
 # api keys
-secret/
+serviceAccountKey.json
 
 # large files
 pre-downloaded
