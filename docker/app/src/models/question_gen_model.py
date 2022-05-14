@@ -27,19 +27,21 @@ class SummarizeModel:
             # pylint: disable=import-outside-toplevel
             import gdown
             gdown.download_folder(id='1_0dPLdv8WNtSYQdKEWxFc03IR-szs0kB',
-                                  output='./docker/file.zip', quiet=True, use_cookies=False)
+                                  output='./docker/file', quiet=True, use_cookies=False)
             # gdd.download_file_from_google_drive(
             #     file_id='1_0dPLdv8WNtSYQdKEWxFc03IR-szs0kB',
             #     dest_path="./docker/file.zip", showsize=True, unzip=True)
             os.chdir(os.getcwd() + '/docker')
             os.system('ls')
-            import zipfile
-            with zipfile.ZipFile('file.zip', 'r') as zip_ref:
-                zip_ref.extractall("target")
-                os.system('ls')
-                os.chdir(os.getcwd() + '/target')
-                os.system('ls')
-                model_path = '/t5-summarize'
+            os.chdir(os.getcwd() + '/file')
+            os.system('ls')
+            # import zipfile
+            # with zipfile.ZipFile('file.zip', 'r') as zip_ref:
+            #     zip_ref.extractall("target")
+            #     os.system('ls')
+            #     os.chdir(os.getcwd() + '/target')
+            #     os.system('ls')
+            #     model_path = '/t5-summarize'
 
         encoder_path = os.path.join(
             model_path, f"{SummarizeModel._SUMMARIZE_MODEL_NAME}-encoder-quantized.onnx")
