@@ -30,6 +30,10 @@ class FirebaseService:
             request (ModelInput): request format from flutter.
             status (bool): state whether question generated.
         """
+
+        if not isinstance(status, bool):
+            raise TypeError("'status' must be a bool value")
+
         doc_ref = self._db.collection('users').document(request.uid)
         doc_ref.update({'isGenerated': status})
 
@@ -42,6 +46,16 @@ class FirebaseService:
             crct_ans (list[str]): list of correct answers.
             all_ans (list[list[str]]): list of list of all answers.
         """
+
+        if not isinstance(questions, list):
+            raise TypeError("'questions' must be list of strings")
+
+        if not isinstance(crct_ans, list):
+            raise TypeError("'crct_ans' must be list of strings")
+
+        if not all(isinstance(ans, list) for ans in all_ans):
+            raise TypeError("'all_ans' must be list of list of strings")
+
         doc_ref = self._db.collection('users').document(request.uid)
         for idx, question in enumerate(questions):
             q_dict = {

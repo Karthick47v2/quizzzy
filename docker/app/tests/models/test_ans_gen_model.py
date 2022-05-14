@@ -2,6 +2,8 @@
 
 import pytest
 import spacy
+
+
 from src.models import ans_gen_model
 from tests.test_main import CORPUS
 
@@ -19,9 +21,6 @@ def nlp():
     return spacy.load('en_core_web_sm')
 
 
-@pytest.skip(reason="This will run when all dependecies are available, skipping this\
-             coz i haven't added large files to git..it needs sense2vec",
-             allow_module_level=True)
 @pytest.mark.usefixtures('model', 'nlp')
 class TestAnsGenModel:
     """class holding test cases for AnsGenModel class"""

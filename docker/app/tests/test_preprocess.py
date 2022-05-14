@@ -9,11 +9,11 @@ class TestPreprocessBulkText:
     # pylint: disable=no-self-use
     @pytest.mark.parametrize('text, result', [
         ("""
-        Natural language processing (NLP) is the ability of a computer 
-        
-        program to        understand human     language as it is spoken and written -- referred 
-        
-        
+        Natural language processing (NLP) is the ability of a computer
+
+        program to        understand human     language as it is spoken and written -- referred
+
+
         to as natural language.
          """, "Natural language processing (NLP) is the ability of a computer program to understand"
          + " human language as it is spoken and written -- referred to as natural language."), (
