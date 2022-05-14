@@ -43,7 +43,8 @@ class AnsGenModel:
         # except:
         #     import urllib.request
         #     import tarfile
-        #     url = "https://github.com/explosion/sense2vec/releases/download/v1.0.0/s2v_reddit_2015_md.tar.gz"
+        #     s2v_url = "https://github.com/explosion/sense2vec/releases/download/"
+        #     s2v_ver_url = s2v_url + "v1.0.0/s2v_reddit_2015_md.tar.gz"
         #     req = urllib.request.urlopen(url)
         #     file = tarfile.open(fileobj=req, mode='r|gz')
         #     file.extractall()

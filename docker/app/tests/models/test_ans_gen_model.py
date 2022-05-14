@@ -3,8 +3,11 @@
 import pytest
 import spacy
 from src.models import ans_gen_model
+from test_main import CORPUS
 
 # pylint: disable=redefined-outer-name
+
+
 @pytest.fixture(scope='class')
 def model():
     """fixture for loading class obj"""
@@ -29,21 +32,14 @@ class TestAnsGenModel:
         """check if generated keyword is on both context and summarized text. Because due to word
            sense disambugiation words in summarize text may not be correct for question generation
         """
-        corpus = "NLP enables computers to understand natural language as humans do. Whether " +\
-            "the language is spoken or written, natural language processing uses artificial " +\
-            "intelligence to take real-world input, process it, and make sense of it in a way " +\
-            "a computer can understand. Just as humans have different sensors -- such as ears " +\
-            "to hear and eyes to see -- computers have programs to read and microphones to " +\
-            "collect audio. And just as humans have a brain to process that input, computers " +\
-            "have a program to process their respective inputs. At some point in processing, " +\
-            "the input is converted to code that the computer can understand."
+
         summarized = "Natural language processing uses artificial intelligence to take " +\
             "real-world input and make sense of it. NLP enables computers to understand " +\
             "natural language as humans do. Just as humans have different sensors -- such as " +\
             "ears to hear and eyes to see -- computers have programs to read and microphones to " +\
             "collect audio."
 
-        corpus = corpus.lower()
+        corpus = CORPUS.lower()
         summarized = summarized.lower()
         result = model.filter_keywords(corpus, summarized)
 
