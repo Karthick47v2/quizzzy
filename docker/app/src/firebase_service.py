@@ -15,6 +15,7 @@ class FirebaseService:
         try:
             firebase_admin.initialize_app(
                 credentials.Certificate("./secret/serviceAccountKey.json"))
+        # for unit test only
         except FileNotFoundError:
             firebase_admin.initialize_app(
                 credentials.Certificate("docker/app/secret/mock-key.json"))

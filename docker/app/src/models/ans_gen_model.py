@@ -40,6 +40,8 @@ class AnsGenModel:
         self.s2v = None
         try:
             self._s2v = Sense2Vec().from_disk("./pre-downloaded/s2v-old")
+
+        # for unit test only
         except ValueError:
             # pylint: disable=import-outside-toplevel
             import urllib.request
@@ -50,11 +52,7 @@ class AnsGenModel:
             with urllib.request.urlopen(s2v_ver_url) as req:
                 with tarfile.open(fileobj=req, mode='r|gz') as file:
                     file.extractall()
-                    print(os.system('ls'))
-                    print(os.getcwd())
                     os.chdir(os.getcwd() + '/s2v_old')
-                    print(os.getcwd())
-                    print(os.system('ls'))
                     self._s2v = Sense2Vec().from_disk("")
 
     def _init_keybert(self):
