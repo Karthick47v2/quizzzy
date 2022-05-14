@@ -27,11 +27,12 @@ class SummarizeModel:
             # pylint: disable=import-outside-toplevel
             import gdown
             gdown.download_folder(id='1_0dPLdv8WNtSYQdKEWxFc03IR-szs0kB',
-                                  output='./docker/file', quiet=True, use_cookies=False)
+                                  output='file/', quiet=True, use_cookies=False)
+            # model_path = 'docker/'
             # gdd.download_file_from_google_drive(
             #     file_id='1_0dPLdv8WNtSYQdKEWxFc03IR-szs0kB',
             #     dest_path="./docker/file.zip", showsize=True, unzip=True)
-            os.chdir(os.getcwd() + '/docker')
+            # os.chdir(os.getcwd() + '/docker')
             os.system('ls')
             os.chdir(os.getcwd() + '/file')
             os.system('ls')
