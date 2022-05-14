@@ -11,26 +11,26 @@ from tests.test_main import REQUEST
 
 # pylint: disable=redefined-outer-name
 @pytest.fixture(scope='class')
-def fs():
+def fsx():
     """fixture for loading class obj"""
     return firebase_service.FirebaseService()
 
 
-@pytest.mark.usefixtures('fs')
+@pytest.mark.usefixtures('fsx')
 class TestFirebaseService:
     """class holding test cases for AnsGenModel class"""
     # pylint: disable=no-self-use
 
-    def test_update_generated_status_validation(self, fs):
+    def test_update_generated_status_validation(self, fsx):
         """validating input for update_generated_status function"""
         with pytest.raises(TypeError, match=r".* bool *."):
-            fs.update_generated_status(ModelInput(**REQUEST), "True")
+            fsx.update_generated_status(ModelInput(**REQUEST), "True")
 
-    def test_send_results_to_fs_validation(self, fs):
+    def test_send_results_to_fs_validation(self, fsx):
         """validating input for send_results_to_fs function"""
         with pytest.raises(TypeError, match=r"'questions' *."):
-            fs.send_results_to_fs(ModelInput(**REQUEST), "", [], [[]])
+            fsx.send_results_to_fs(ModelInput(**REQUEST), "", [], [[]])
         with pytest.raises(TypeError, match=r"'crct_ans' *."):
-            fs.send_results_to_fs(ModelInput(**REQUEST), [], "", [[]])
+            fsx.send_results_to_fs(ModelInput(**REQUEST), [], "", [[]])
         with pytest.raises(TypeError, match=r"'all_ans' *."):
-            fs.send_results_to_fs(ModelInput(**REQUEST), [], [], "list")
+            fsx.send_results_to_fs(ModelInput(**REQUEST), [], [], "list")
