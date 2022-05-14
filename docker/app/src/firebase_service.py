@@ -19,8 +19,8 @@ class FirebaseService:
                 credentials.Certificate("./secret/serviceAccountKey.json"))
         # for unit test only
         except FileNotFoundError:
-            with open("docker/app/secret/mock-key.json") as file:
-                print(json.load(file))
+            file = open("docker/app/secret/mock-key.json")
+            print(json.load(file))
             firebase_admin.initialize_app(
                 credentials.Certificate("docker/app/secret/mock-key.json"))
         self._db = firestore.client()
