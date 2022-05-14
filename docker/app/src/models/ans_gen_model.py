@@ -44,7 +44,7 @@ class AnsGenModel:
         self.s2v = None
 
         # for unit test only
-        if not os.path.isdir(os.getcwd() + 'pre-downloaded'):
+        if not os.path.isdir(os.getcwd() + '/pre-downloaded'):
             # pylint: disable=import-outside-toplevel
             import urllib.request
             import tarfile

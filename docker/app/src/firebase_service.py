@@ -44,7 +44,7 @@ class FirebaseService:
             request (ModelInput): request format from flutter.
             questions (list[str]): list of generated questions.
             crct_ans (list[str]): list of correct answers.
-            all_ans (list[list[str]]): list of list of all answers.
+            all_ans (list[str]): list of all answers squeezed together.
         """
 
         if not isinstance(questions, list):
@@ -53,8 +53,8 @@ class FirebaseService:
         if not isinstance(crct_ans, list):
             raise TypeError("'crct_ans' must be list of strings")
 
-        if not all(isinstance(ans, list) for ans in all_ans):
-            raise TypeError("'all_ans' must be list of list of strings")
+        if not isinstance(all_ans, list):
+            raise TypeError("'all_ans' must be list of strings")
 
         doc_ref = self._db.collection('users').document(request.uid)
         for idx, question in enumerate(questions):
