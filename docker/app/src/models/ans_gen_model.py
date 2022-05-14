@@ -53,7 +53,7 @@ class AnsGenModel:
                     print(os.getcwd())
                     os.chdir(os.getcwd() + '/s2v-old')
                     print(os.getcwd())
-                    self._s2v = Sense2Vec().from_disk()
+                    self._s2v = Sense2Vec().from_disk("")
 
     def _init_keybert(self):
         """initialize keyword extration model (KeyBERT) and keypharse
