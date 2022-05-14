@@ -46,10 +46,9 @@ class AnsGenModel:
             import tarfile
             s2v_url = "https://github.com/explosion/sense2vec/releases/download/"
             s2v_ver_url = s2v_url + "v1.0.0/s2v_reddit_2015_md.tar.gz"
-            req = urllib.request.urlopen(s2v_ver_url)
-            file = tarfile.open(fileobj=req, mode='r|gz')
-            file.extractall()
-            file.close()
+            with urllib.request.urlopen(s2v_ver_url) as req:
+                file = tarfile.open(fileobj=req, mode='r|gz')
+                file.extractall()
 
             self._s2v = Sense2Vec().from_disk("")
 
