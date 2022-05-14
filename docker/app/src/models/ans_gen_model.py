@@ -41,11 +41,12 @@ class AnsGenModel:
         try:
             self._s2v = Sense2Vec().from_disk("./pre-downloaded/s2v-old")
         except ValueError:
+            # pylint: disable=import-outside-toplevel
             import urllib.request
             import tarfile
             s2v_url = "https://github.com/explosion/sense2vec/releases/download/"
             s2v_ver_url = s2v_url + "v1.0.0/s2v_reddit_2015_md.tar.gz"
-            req = urllib.request.urlopen(url)
+            req = urllib.request.urlopen(s2v_ver_url)
             file = tarfile.open(fileobj=req, mode='r|gz')
             file.extractall()
             file.close()
