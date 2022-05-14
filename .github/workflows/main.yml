@@ -43,9 +43,6 @@ jobs:
   cloud_deploy:
     runs-on: ubuntu-latest
     name: Deploy to Cloud Run
-    defaults:
-      run:
-        working-directory: docker/
     # if: "contains(github.event.head_commit.message, 'deploy to cloud')"
     # ............../////////DO i need to checkout... and wait for////////////////////////
     steps:
@@ -56,9 +53,11 @@ jobs:
           service_account_email: "karthicksharma11@gmail.com"
           project_id: ${{ secrets.GCP_PRJ_ID }}
       - name: Build container
+        working-directory: ./docker
         run: gcloud builds submit --tag gcr.io/${{ secrets.GCP_PRJ_ID }}/mcq-gen
       - name: Deploy
         uses: google-github-actions/deploy-cloudrun@v0
+        working-directory: ./docker
         with:
           service: github-actions
           image: gcr.io/${{ secrets.GCP_PRJ_ID }}/mcq-gen
