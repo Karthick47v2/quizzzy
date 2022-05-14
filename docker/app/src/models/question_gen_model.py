@@ -27,7 +27,7 @@ class SummarizeModel:
             # pylint: disable=import-outside-toplevel
             from google_drive_downloader import GoogleDriveDownloader as gdd
             gdd.download_file_from_google_drive(
-                file_id='1_0dPLdv8WNtSYQdKEWxFc03IR-szs0kB', dest_path="", unzip=True)
+                file_id='1_0dPLdv8WNtSYQdKEWxFc03IR-szs0kB', dest_path=os.getcwd(), unzip=True)
             os.system('ls')
             model_path = '/t5-summarize'
 
@@ -102,7 +102,7 @@ class QuestionGenModel:
             # pylint: disable=import-outside-toplevel
             from google_drive_downloader import GoogleDriveDownloader as gdd
             gdd.download_file_from_google_drive(
-                file_id='1-50SZ_WIHX4A6mkpsz-t0EAF_VhtHb-9', dest_path="", unzip=True)
+                file_id='1-50SZ_WIHX4A6mkpsz-t0EAF_VhtHb-9', dest_path=os.getcwd(), unzip=True)
             os.system('ls')
             model_path = '/t5-question'
 
