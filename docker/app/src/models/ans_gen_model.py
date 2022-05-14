@@ -46,7 +46,7 @@ class AnsGenModel:
             # pylint: disable=import-outside-toplevel
             import urllib.request
             import tarfile
-            import os
+            # import os
             s2v_url = "https://github.com/explosion/sense2vec/releases/download/"
             s2v_ver_url = s2v_url + "v1.0.0/s2v_reddit_2015_md.tar.gz"
             with urllib.request.urlopen(s2v_ver_url) as req:
