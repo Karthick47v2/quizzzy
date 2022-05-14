@@ -2,8 +2,8 @@
     with diversity for those keywords.
 """
 
-import numpy as np
 import os
+import numpy as np
 
 
 from sklearn.metrics.pairwise import cosine_similarity
