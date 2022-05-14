@@ -17,7 +17,7 @@ class FirebaseService:
                 credentials.Certificate("./secret/serviceAccountKey.json"))
         except FileNotFoundError:
             firebase_admin.initialize_app(
-                credentials.Certificate("./secret/mock-key.json"))
+                credentials.Certificate("docker/app/secret/mock-key.json"))
         self._db = firestore.client()
 
     def update_generated_status(self, request, status):
