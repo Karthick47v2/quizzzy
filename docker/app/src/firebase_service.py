@@ -12,9 +12,13 @@ class FirebaseService:
     def __init__(self):
         """initialize firebase firestore client.
         """
-        firebase_admin.initialize_app(
-            credentials.Certificate("./secret/serviceAccountKey.json"))
-
+        try:
+            firebase_admin.initialize_app(
+                credentials.Certificate("./secret/serviceAccountKey.json"))
+        # for unit test only
+        except FileNotFoundError:
+            firebase_admin.initialize_app(
+                credentials.Certificate("docker/app/secret/mock-key.json"))
         self._db = firestore.client()
 
     def update_generated_status(self, request, status):
