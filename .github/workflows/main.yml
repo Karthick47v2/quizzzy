@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Decode base64 secrets
-        run: echo $SERVICE_ACCOUNT_SECRET | base64 -d > docker/app/secret/serviceAccountKey.json
+        run: echo $SERVICE_ACCOUNT_SECRET | base64 -d > docker/app/secret/mock-key.json
         env:
           SERVICE_ACCOUNT_SECRET: ${{ secrets.SERVICE_ACCOUNT_SECRET }}
       - name: Install dependencies
