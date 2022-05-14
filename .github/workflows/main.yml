@@ -6,15 +6,6 @@ on:
   pull_request:
     branches: [main]
 
-env:
-  PRJ_ID: ${{ secrets.GCP_PRJ_ID }}
-  APP_ID: mcq-gen
-  S_ID: github-actions
-  REGION: asia-south1
-  EMAIL: "Karthicksharma11@gmail.com"
-  GCP_SA_KEY_JSON: ${{ secrets.GCP_SA_KEY_JSON }}
-  FB_SA_KEY_JSON: ${{ secrets.FB_SA_KEY_JSON }}
-
 jobs:
   # py_test:
   #   runs-on: ubuntu-latest
@@ -29,7 +20,7 @@ jobs:
   #     - name: Decode base64 secrets
   #       run: echo $SERVICE_ACCOUNT_SECRET | base64 -d > docker/app/secret/mock-key.json
   #       env:
-  #         SERVICE_ACCOUNT_SECRET: $FB_SA_KEY_JSON
+  #         SERVICE_ACCOUNT_SECRET: ${{ secrets.FB_SA_KEY_JSON }}
   #     - name: Install dependencies
   #       run: |
   #         python -m pip install --upgrade pip
@@ -54,7 +45,7 @@ jobs:
     name: Deploy to Cloud Run
     defaults:
       run:
-        working-directory: ./docker/
+        working-directory: docker/
     # if: "contains(github.event.head_commit.message, 'deploy to cloud')"
     # ............../////////DO i need to checkout... and wait for////////////////////////
     steps:
@@ -62,17 +53,17 @@ jobs:
         uses: google-github-actions/setup-gcloud@v0
         with:
           service_account_key: ${{ secrets.GCP_SA_KEY_JSON }}
-          service_account_email: $EMAIL
+          service_account_email: "karthicksharma11@gmail.com"
           project_id: ${{ secrets.GCP_PRJ_ID }}
       - name: Build container
-        run: gcloud builds submit --tag gcr.io/$PRJ_ID/$APP_ID
+        run: gcloud builds submit --tag gcr.io/${{ secrets.GCP_PRJ_ID }}/mcq-gen
       - name: Deploy
         uses: google-github-actions/deploy-cloudrun@v0
         with:
-          service: $S_ID
-          image: gcr.io/$PRJ_ID/$APP_ID
-          region: $REGION
-          credentials: $GCP_SA_KEY_JSON
-          project_id: $PRJ_ID
+          service: github-actions
+          image: gcr.io/${{ secrets.GCP_PRJ_ID }}/mcq-gen
+          region: asia-south1
+          credentials: ${{ secrets.GCP_SA_KEY_JSON }}
+          project_id: ${{ secrets.GCP_PRJ_ID }}
           flags: "--cpu 2 --concurrency 1 --memory 16Gi --platform managed --min-instances 0 --timeout 60m --port 80"
         # run: gcloud run deploy $APP_ID --image gcr.io/$PRJ_ID/$APP_ID:$GITHUB_SHA --platform managed --region $REGION --allow-unauthenticated
