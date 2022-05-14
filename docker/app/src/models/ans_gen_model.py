@@ -52,7 +52,7 @@ class AnsGenModel:
                     file.extractall()
                     os.system('ls')
                     print(os.system('ls'))
-                    self._s2v = Sense2Vec().from_disk("s2v-old")
+                    self._s2v = Sense2Vec().from_disk("./s2v-old")
 
     def _init_keybert(self):
         """initialize keyword extration model (KeyBERT) and keypharse
