@@ -23,6 +23,7 @@ class SummarizeModel:
         """
         model_path = './pre-downloaded/t5-summarize/'
 
+        # for unit test only
         if not os.path.isdir(os.getcwd() + 'pre-downloaded'):
             # pylint: disable=import-outside-toplevel
             import gdown
@@ -97,6 +98,7 @@ class QuestionGenModel:
         """
         model_path = './pre-downloaded/t5-question'
 
+        # for unit test only
         if not os.path.isdir(os.getcwd() + 'pre-downloaded'):
             # pylint: disable=import-outside-toplevel
             import gdown

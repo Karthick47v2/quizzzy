@@ -2,14 +2,18 @@
     with diversity for those keywords.
 """
 
-from src.preprocess import change_format
 import numpy as np
+import os
+
 
 from sklearn.metrics.pairwise import cosine_similarity
 from keyphrase_vectorizers import KeyphraseCountVectorizer
 from sentence_transformers import SentenceTransformer
 from sense2vec import Sense2Vec
 from keybert import KeyBERT
+
+
+from src.preprocess import change_format
 
 
 class AnsGenModel:
@@ -38,11 +42,9 @@ class AnsGenModel:
            https://github.com/explosion/sense2vec
         """
         self.s2v = None
-        try:
-            self._s2v = Sense2Vec().from_disk("./pre-downloaded/s2v-old")
 
         # for unit test only
-        except ValueError:
+        if not os.path.isdir(os.getcwd() + 'pre-downloaded'):
             # pylint: disable=import-outside-toplevel
             import urllib.request
             import tarfile
@@ -52,6 +54,9 @@ class AnsGenModel:
                 with tarfile.open(fileobj=req, mode='r|gz') as file:
                     file.extractall()
                     self._s2v = Sense2Vec().from_disk("s2v_old")
+
+        else:
+            self._s2v = Sense2Vec().from_disk("./pre-downloaded/s2v-old")
 
     def _init_keybert(self):
         """initialize keyword extration model (KeyBERT) and keypharse
