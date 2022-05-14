@@ -3,11 +3,10 @@
 import pytest
 import spacy
 from src.models import ans_gen_model
-from test_main import CORPUS
+from tests.test_main import CORPUS
+
 
 # pylint: disable=redefined-outer-name
-
-
 @pytest.fixture(scope='class')
 def model():
     """fixture for loading class obj"""
