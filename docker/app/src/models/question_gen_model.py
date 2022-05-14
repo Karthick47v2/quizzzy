@@ -27,14 +27,14 @@ class SummarizeModel:
             # pylint: disable=import-outside-toplevel
             import gdown
             gdown.download_folder(id='1_0dPLdv8WNtSYQdKEWxFc03IR-szs0kB',
-                                  output='file/', quiet=True, use_cookies=False)
-            # model_path = 'docker/'
+                                  output='model', quiet=True, use_cookies=False)
+            # model_path = 'model/t5'
             # gdd.download_file_from_google_drive(
             #     file_id='1_0dPLdv8WNtSYQdKEWxFc03IR-szs0kB',
             #     dest_path="./docker/file.zip", showsize=True, unzip=True)
             # os.chdir(os.getcwd() + '/docker')
             os.system('ls')
-            os.chdir(os.getcwd() + '/file')
+            os.chdir(os.getcwd() + '/model')
             os.system('ls')
             # import zipfile
             # with zipfile.ZipFile('file.zip', 'r') as zip_ref:
