@@ -37,7 +37,19 @@ class AnsGenModel:
 
            https://github.com/explosion/sense2vec
         """
+        # self.s2v = None
+        # try:
         self._s2v = Sense2Vec().from_disk("./pre-downloaded/s2v-old")
+        # except:
+        #     import urllib.request
+        #     import tarfile
+        #     url = "https://github.com/explosion/sense2vec/releases/download/v1.0.0/s2v_reddit_2015_md.tar.gz"
+        #     req = urllib.request.urlopen(url)
+        #     file = tarfile.open(fileobj=req, mode='r|gz')
+        #     file.extractall()
+        #     file.close()
+
+        #     self._s2v = Sense2Vec().from_disk("")
 
     def _init_keybert(self):
         """initialize keyword extration model (KeyBERT) and keypharse

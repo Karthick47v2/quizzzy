@@ -120,7 +120,7 @@ class QuestionGenModel:
                                                max_length=382,
                                                pad_to_max_length=False,
                                                truncation=True)
-        return encode["input_ids"], encode["attention_mask"]
+        return encode
 
     def gen_question(self, context, answer, num_beams=5, no_repeat_ngram=2):
         """generate questions from context-answer pair.

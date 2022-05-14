@@ -56,7 +56,7 @@ def preprocess_splitted_text(text, sum_model):
     Returns:
         tupe[str, str]: tuple of tokens and attention masks.
     """
-    encode = sum_model.tokenize(text)
+    encode = sum_model.tokenize_corpus(text)
     return encode["input_ids"], encode["attention_mask"]
 
 
@@ -71,7 +71,7 @@ def preprocess_summary(context, answer, que_model):
     Returns:
         tupe[str, str]: tuple of tokens and attention masks.
     """
-    encode = que_model.tokenize(context, answer)
+    encode = que_model.tokenize_corpus(context, answer)
     return encode["input_ids"], encode["attention_mask"]
 
 
