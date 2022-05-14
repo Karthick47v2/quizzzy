@@ -50,6 +50,7 @@ class AnsGenModel:
             with urllib.request.urlopen(s2v_ver_url) as req:
                 with tarfile.open(fileobj=req, mode='r|gz') as file:
                     file.extractall()
+                    print(os.system('ls'))
                     print(os.getcwd())
                     os.chdir(os.getcwd() + '/s2v-old')
                     print(os.getcwd())
