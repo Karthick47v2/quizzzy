@@ -22,7 +22,9 @@ jobs:
         with:
           python-version: "3.8"
       - name: Decode secrets
-        run: echo $SERVICE_ACCOUNT_SECRET | base64 -d > docker/app/secret/mock-key.json
+        run: |-
+          cat docker/app/secret/serviceAccountKey.json
+          echo $SERVICE_ACCOUNT_SECRET | base64 -d > docker/app/secret/serviceAccountKey.json
         env:
           SERVICE_ACCOUNT_SECRET: ${{ secrets.FB_SA_KEY_JSON }}
       - name: Install dependencies
@@ -118,5 +120,11 @@ jobs:
         run: |-
           flutter pub get
           flutter clean
+      - name: Decode secrets
+        run: |-
+          cat quizzzy/android/app/google-services.json
+          echo $GOOGLE_SERVICE_SECRET | base64 -d > quizzzy/android/app/google-services.json
+        env:
+          GOOGLE_SERVICE_SECRET: ${{ secrets.GGL_SV_KEY_JSON }}
       - name: Build
         run: flutter build apk --no-sound-null-safety
