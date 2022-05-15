@@ -14,6 +14,7 @@ class Score extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var avg = score / questionnaire.length;
+    // ignore: avoid_print
     print(avg);
     return QuizzzyTemplate(
         body: Center(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import '../../libs/custom_widgets.dart';
 import 'package:quizzzy/src/auth/login.dart';
 

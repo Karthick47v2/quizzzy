@@ -16,7 +16,7 @@ class QuestionBank extends StatefulWidget {
 }
 
 class _QuestionBankState extends State<QuestionBank> {
-  late final questionSetBox;
+  late Box questionSetBox;
   setBox() async {
     questionSetBox = await Hive.openBox((user?.displayName)!);
   }

@@ -46,5 +46,6 @@ class DynamicLinks {
 
 handleDynamicLink(Uri url) {
   List<String> splitLink = url.path.split('/');
+  // ignore: avoid_print
   print(splitLink);
 }

@@ -1,3 +1,4 @@
+// ignore_for_file: file_names
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -5,8 +6,9 @@ import 'package:quizzzy/src/service/fs_database.dart';
 
 import '../libs/custom_widgets.dart';
 
+// ignore: must_be_immutable
 class UserType extends StatefulWidget {
-  bool firstTime = true;
+  bool firstTime;
 
   UserType({Key? key, required this.firstTime}) : super(key: key);
 

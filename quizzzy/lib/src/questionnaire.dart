@@ -221,6 +221,7 @@ class _QuestionnaireState extends State<Questionnaire> {
           refreshAns();
           currentQ++;
         } else {
+          // ignore: avoid_print
           print(score);
         }
       });
