@@ -25,7 +25,7 @@ jobs:
         run: |-
           ls
 
-          echo $SERVICE_ACCOUNT_SECRET | base64 -d > /home/runner/work/mcq-gen/mcq-gen/docker/app/secret/mock-key.json
+          echo $SERVICE_ACCOUNT_SECRET | base64 -d > docker/app/secret/mock-key.json
         env:
           SERVICE_ACCOUNT_SECRET: ${{ secrets.FB_SA_KEY_JSON }}
       - name: Install dependencies
