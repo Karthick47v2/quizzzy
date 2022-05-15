@@ -119,7 +119,7 @@ jobs:
           flutter pub get
           flutter clean
       - name: Decode secrets
-        run: echo $GOOGLE_SERVICE_SECRET | base64 -d > quizzzy/android/app/mock-key.json
+        run: echo $GOOGLE_SERVICE_SECRET | base64 -d > android/app/mock-key.json
         env:
           GOOGLE_SERVICE_SECRET: ${{ secrets.GGL_SV_KEY_JSON }}
       - name: Build
