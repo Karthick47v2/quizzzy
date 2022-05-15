@@ -1,4 +1,4 @@
-name: Python test
+name: CI Workflow
 
 on:
   push:
@@ -13,15 +13,15 @@ env:
 jobs:
   py_test:
     runs-on: ubuntu-latest
-    name: Test -Python
+    name: Test - Python
     steps:
       - name: Checkout source repo
         uses: actions/checkout@v3
-      - name: Set up Python 3.8
+      - name: Setup Python 3.8
         uses: actions/setup-python@v3
         with:
           python-version: "3.8"
-      - name: Decode base64 secrets
+      - name: Decode secrets
         run: echo $SERVICE_ACCOUNT_SECRET | base64 -d > docker/app/secret/mock-key.json
         env:
           SERVICE_ACCOUNT_SECRET: ${{ secrets.FB_SA_KEY_JSON }}
@@ -31,10 +31,10 @@ jobs:
           pip install pylint pytest pytest-cov spacy gdown
           pip install -r docker/app/requirements.txt
           python3 -m spacy download en_core_web_sm
-      - name: Analysing the code with pylint
+      - name: Analyze
         run: |
           pylint $(git ls-files '*.py')
-      - name: Test with pytest
+      - name: Test
         run: |
           python -m pytest --cov=./ --cov-report=xml
       - name: Upload coverage report to Codecov
@@ -70,3 +70,46 @@ jobs:
         run: |-
           gcloud run deploy ${{ env.APP_ID }} --region ${{ env.REGION }} --image gcr.io/${{ secrets.GCP_PRJ_ID }}/${{ env.APP_ID }}:${{ github.sha }} \
           --platform managed --cpu 4 --concurrency 1 --memory 16Gi --min-instances 0 --timeout 60m --port 80 --allow-unauthenticated
+  flutter_test:
+    runs-on: ubuntu-latest
+    name: Test - Flutter
+    steps:
+      - name: Checkout source repo
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: "11"
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "2.10.5"
+          channel: "stable"
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Analyze
+        run: flutter analyze
+      - name: Test
+        run: flutter test
+  build_apk:
+    needs: flutter_test
+    runs-on: ubuntu-latest
+    name: Build Flutter - Apk
+    steps:
+      - name: Checkout source repo
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: "11"
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "2.10.5"
+          channel: "stable"
+      - name: Install dependencies
+        run: |-
+          flutter pub get
+          flutter clean
+      - name: Build
+        run: flutter build apk --no-sound-null-safety 
