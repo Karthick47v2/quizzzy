@@ -48,6 +48,9 @@ jobs:
     needs: py_test
     runs-on: ubuntu-latest
     name: Deploy to cloud
+    defaults:
+      run:
+        working-directory: ./docker
     if: "contains(github.event.head_commit.message, 'deploy to cloud')"
     steps:
       - name: Checkout source repo
@@ -61,12 +64,10 @@ jobs:
       - name: Authorize docker push
         run: gcloud auth configure-docker
       - name: Build and push container
-        working-directory: ./docker
         run: |-
           docker build -t gcr.io/${{ secrets.GCP_PRJ_ID }}/${{ env.APP_ID }}:${{ github.sha }} .
           docker push gcr.io/${{ secrets.GCP_PRJ_ID }}/${{ env.APP_ID }}:${{ github.sha }}
       - name: Deploy to Cloud Run
-        working-directory: ./docker
         run: |-
           gcloud run deploy ${{ env.APP_ID }} --region ${{ env.REGION }} --image gcr.io/${{ secrets.GCP_PRJ_ID }}/${{ env.APP_ID }}:${{ github.sha }} \
           --platform managed --cpu 4 --concurrency 1 --memory 16Gi --min-instances 0 --timeout 60m --port 80 --allow-unauthenticated
