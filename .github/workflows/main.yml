@@ -73,6 +73,9 @@ jobs:
   flutter_test:
     runs-on: ubuntu-latest
     name: Test - Flutter
+    defaults:
+      run:
+        working-directory: ./quizzzy
     steps:
       - name: Checkout source repo
         uses: actions/checkout@v3
@@ -95,6 +98,9 @@ jobs:
     needs: flutter_test
     runs-on: ubuntu-latest
     name: Build Flutter - Apk
+    defaults:
+      run:
+        working-directory: ./quizzzy
     steps:
       - name: Checkout source repo
         uses: actions/checkout@v3
@@ -112,4 +118,4 @@ jobs:
           flutter pub get
           flutter clean
       - name: Build
-        run: flutter build apk --no-sound-null-safety 
+        run: flutter build apk --no-sound-null-safety
