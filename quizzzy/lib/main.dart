@@ -8,6 +8,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:quizzzy/src/greeting.dart';
 import 'package:quizzzy/src/service/db_model/question_set.dart';
 import 'package:quizzzy/src/service/dynamic_links.dart';
+import 'package:quizzzy/src/service/fbase_auth.dart';
+import 'package:quizzzy/src/service/fs_database.dart';
 import 'package:quizzzy/src/service/local_database.dart';
 
 import 'src/auth/signup.dart';
@@ -22,7 +24,9 @@ Future main() async {
   Hive.registerAdapter(QuestionSetAdapter());
   await UserSharedPrefernces.init();
   FirebaseMessaging.onBackgroundMessage(bgNotificationHandler);
-  User? user = FirebaseAuth.instance.currentUser;
+  // User? user = FirebaseAuth.instance.currentUser;
+  auth = Auth(auth: FirebaseAuth.instance);
+  user = auth.auth.currentUser;
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,

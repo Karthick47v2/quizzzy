@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-User? user = FirebaseAuth.instance.currentUser;
+late User? user;
 late String userType;
 CollectionReference users = FirebaseFirestore.instance.collection("users");
 

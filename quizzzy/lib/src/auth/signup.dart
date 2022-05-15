@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../libs/custom_widgets.dart';
 import 'package:quizzzy/src/auth/login.dart';
 
+import '../service/fbase_auth.dart';
+
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
 
@@ -14,6 +16,7 @@ class _SignUpState extends State<SignUp> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  late String res;
 
   @override
   Widget build(BuildContext context) {
@@ -71,21 +74,31 @@ class _SignUpState extends State<SignUp> {
                   text: "Sign Up",
                   onTap: () async {
                     if (_key.currentState!.validate()) {
-                      try {
-                        await FirebaseAuth.instance
-                            .createUserWithEmailAndPassword(
-                                email: emailController.text,
-                                password: passwordController.text)
-                            .then((_) => FirebaseAuth.instance.currentUser!
-                                .sendEmailVerification())
-                            .then((_) => snackBar(
-                                context,
-                                "A verification email has been sent to your mail",
-                                (Colors.amber.shade400)));
-                        await FirebaseAuth.instance.signOut();
-                      } on FirebaseAuthException catch (e) {
-                        snackBar(context, e.message!, (Colors.red.shade800));
+                      res = await auth.userSignup(
+                          emailController.text, passwordController.text);
+                      if (res == "Success") {
+                        snackBar(
+                            context,
+                            "A verification email has been sent to your mail",
+                            (Colors.amber.shade400));
+                      } else {
+                        snackBar(context, res, (Colors.red.shade800));
                       }
+                      // try {
+                      //   await FirebaseAuth.instance
+                      //       .createUserWithEmailAndPassword(
+                      //           email: emailController.text,
+                      //           password: passwordController.text)
+                      //       .then((_) => FirebaseAuth.instance.currentUser!
+                      //           .sendEmailVerification())
+                      //       .then((_) => snackBar(
+                      //           context,
+                      //           "A verification email has been sent to your mail",
+                      //           (Colors.amber.shade400)));
+                      //   await FirebaseAuth.instance.signOut();
+                      // } on FirebaseAuthException catch (e) {
+                      //   snackBar(context, e.message!, (Colors.red.shade800));
+                      // }
                     }
                   }),
             ),

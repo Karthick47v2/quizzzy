@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:quizzzy/src/auth/signup.dart';
 import 'package:quizzzy/src/auth/verify.dart';
 import 'package:quizzzy/src/home_page.dart';
+import 'package:quizzzy/src/service/fbase_auth.dart';
 import '../../libs/custom_widgets.dart';
 
 class Login extends StatefulWidget {
@@ -15,6 +16,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  late String res;
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   @override
@@ -70,35 +72,55 @@ class _LoginState extends State<Login> {
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 0),
               child: QuizzzyNavigatorBtn(
                 text: "Log In",
-                onTap: () async {
-                  try {
-                    await FirebaseAuth.instance
-                        .signInWithEmailAndPassword(
-                            email: emailController.text,
-                            password: passwordController.text)
-                        .then((_) => {
-                              if (FirebaseAuth
-                                  .instance.currentUser!.emailVerified)
-                                {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const HomePage()))
-                                }
-                              else
-                                {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const VerifyEmail()))
-                                }
-                            });
-                  } on FirebaseAuthException catch (e) {
-                    snackBar(context, e.message!, (Colors.red.shade800));
-                  }
+                onTap: () async => {
+                  res = await auth.userLogin(
+                      emailController.text, passwordController.text),
+                  if (res == "Verified")
+                    {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomePage()))
+                    }
+                  else if (res == "Not Verified")
+                    {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const VerifyEmail()))
+                    }
+                  else
+                    {snackBar(context, res, (Colors.red.shade800))}
                 },
+                // onTap: () async {
+                //   try {
+                //     await FirebaseAuth.instance
+                //         .signInWithEmailAndPassword(
+                //             email: emailController.text,
+                //             password: passwordController.text)
+                //         .then((_) => {
+                //               if (FirebaseAuth
+                //                   .instance.currentUser!.emailVerified)
+                //                 {
+                //                   Navigator.push(
+                //                       context,
+                //                       MaterialPageRoute(
+                //                           builder: (context) =>
+                //                               const HomePage()))
+                //                 }
+                //               else
+                //                 {
+                //                   Navigator.push(
+                //                       context,
+                //                       MaterialPageRoute(
+                //                           builder: (context) =>
+                //                               const VerifyEmail()))
+                //                 }
+                //             });
+                //   } on FirebaseAuthException catch (e) {
+                //     snackBar(context, e.message!, (Colors.red.shade800));
+                //   }
+                // },
               ),
             ),
             Container(
