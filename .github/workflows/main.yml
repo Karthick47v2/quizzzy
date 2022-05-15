@@ -94,7 +94,7 @@ jobs:
       - name: Analyze
         run: flutter analyze
       - name: Test
-        run: flutter test
+        run: flutter test --no-sound-null-safety
   build_apk:
     needs: flutter_test
     runs-on: ubuntu-latest
