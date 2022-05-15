@@ -14,6 +14,9 @@ jobs:
   py_test:
     runs-on: ubuntu-latest
     name: Test - Python
+    defaults:
+      run:
+        working-directory: ./docker/app
     steps:
       - name: Checkout source repo
         uses: actions/checkout@v3
@@ -22,8 +25,9 @@ jobs:
         with:
           python-version: "3.8"
       - name: Decode secrets
-        working-directory: ./docker/app/secret
-        run: echo $SERVICE_ACCOUNT_SECRET | base64 -d > serviceAccountKey.json
+        working-directory: ./secret
+        run: |-
+        echo $SERVICE_ACCOUNT_SECRET | base64 -d > serviceAccountKey.json
         env:
           SERVICE_ACCOUNT_SECRET: ${{ secrets.FB_SA_KEY_JSON }}
       - name: Install dependencies
@@ -121,7 +125,7 @@ jobs:
           flutter clean
       - name: Decode secrets
         working-directory: ./android/app
-        run: echo $GOOGLE_SERVICE_SECRET | base64 -d > android/app/google-services.json
+        run: echo $GOOGLE_SERVICE_SECRET | base64 -d > google-services.json
         env:
           GOOGLE_SERVICE_SECRET: ${{ secrets.GGL_SV_KEY_JSON }}
       - name: Build
