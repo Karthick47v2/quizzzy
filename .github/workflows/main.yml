@@ -58,6 +58,10 @@ jobs:
     steps:
       - name: Checkout source repo
         uses: actions/checkout@v3
+      - name: Decode secrets
+        run: echo $SERVICE_ACCOUNT_SECRET | base64 -d > app/secret/serviceAccountKey.json
+        env:
+          SERVICE_ACCOUNT_SECRET: ${{ secrets.FB_SA_KEY_JSON }}
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v0
         with:
