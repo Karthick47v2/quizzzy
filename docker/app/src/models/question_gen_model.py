@@ -21,7 +21,7 @@ class SummarizeModel:
 
            https://github.com/Ki6an/fastT5
         """
-        model_path = 'resources/t5-summarize'
+        model_path = './resources/t5-summarize'
 
         # for CI/CD
         if not os.path.isdir(os.getcwd() + '/resources/t5-summarize'):
@@ -96,7 +96,7 @@ class QuestionGenModel:
     def __init__(self):
         """initialize question generator.
         """
-        model_path = 'resources/t5-question'
+        model_path = './resources/t5-question'
 
         # for CI/CD
         if not os.path.isdir(os.getcwd() + '/resources/t5-question'):
