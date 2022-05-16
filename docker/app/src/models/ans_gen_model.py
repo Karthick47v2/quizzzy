@@ -41,9 +41,7 @@ class AnsGenModel:
 
            https://github.com/explosion/sense2vec
         """
-        self.s2v = None
 
-        # for unit test only
         if not os.path.isdir(os.getcwd() + '/s2v_old'):
             # pylint: disable=import-outside-toplevel
             import urllib.request
@@ -53,10 +51,8 @@ class AnsGenModel:
             with urllib.request.urlopen(s2v_ver_url) as req:
                 with tarfile.open(fileobj=req, mode='r|gz') as file:
                     file.extractall()
-                    self._s2v = Sense2Vec().from_disk("s2v_old")
 
-        else:
-            self._s2v = Sense2Vec().from_disk("s2v_old")
+        self._s2v = Sense2Vec().from_disk("s2v_old")
 
     def _init_keybert(self):
         """initialize keyword extration model (KeyBERT) and keypharse

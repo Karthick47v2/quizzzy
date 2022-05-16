@@ -21,7 +21,7 @@ class SummarizeModel:
 
            https://github.com/Ki6an/fastT5
         """
-        model_path = './app/resources/t5-summarize'
+        model_path = 'resources/t5-summarize'
 
         # for CI/CD
         if not os.path.isdir(os.getcwd() + '/resources/t5-summarize'):
@@ -30,7 +30,6 @@ class SummarizeModel:
             gdown.download_folder(id='1-50SZ_WIHX4A6mkpsz-t0EAF_VhtHb-9',
                                   output='resources/t5-summarize',
                                   quiet=True, use_cookies=False)
-            model_path = 'resources/t5-summarize/'
 
         encoder_path = os.path.join(
             model_path, f"{SummarizeModel._SUMMARIZE_MODEL_NAME}-encoder-quantized.onnx")
@@ -97,7 +96,7 @@ class QuestionGenModel:
     def __init__(self):
         """initialize question generator.
         """
-        model_path = './app/resources/t5-question'
+        model_path = 'resources/t5-question'
 
         # for CI/CD
         if not os.path.isdir(os.getcwd() + '/resources/t5-question'):
@@ -105,7 +104,6 @@ class QuestionGenModel:
             import gdown
             gdown.download_folder(id='1_0dPLdv8WNtSYQdKEWxFc03IR-szs0kB',
                                   output='resources/t5-question', quiet=True, use_cookies=False)
-            model_path = 'resources/t5-question/'
 
         encoder_path = os.path.join(
             model_path, f"{QuestionGenModel._QUESTION_MODEL_NAME}-encoder-quantized.onnx")
