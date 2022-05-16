@@ -17,7 +17,7 @@ class _GreetingsState extends State<Greetings> {
     super.initState();
 
     // initialze local notification handler (when in foreground)
-    LocalNotificationService.initialize(context);
+    localNotificationService = LocalNotificationService(context);
 
     // always go to home when notification is pressed (bg / terminated state only)
     FirebaseMessaging.instance.getInitialMessage().then((msg) {
@@ -33,7 +33,7 @@ class _GreetingsState extends State<Greetings> {
         //TODO: LATER
       }
 
-      LocalNotificationService.display(msg);
+      localNotificationService.display(msg);
     });
 
     // onTap

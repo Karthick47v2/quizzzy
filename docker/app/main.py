@@ -4,16 +4,15 @@
 """
 import random
 
+# pylint: disable=no-name-in-module
+from pydantic import BaseModel
+from fastapi import FastAPI, BackgroundTasks
 
 from src.models.question_gen_model import SummarizeModel, QuestionGenModel
 from src.firebase_service import FirebaseService
 from src.models.ans_gen_model import AnsGenModel
 from src.preprocess import split_text
 
-
-# pylint: disable=no-name-in-module
-from pydantic import BaseModel
-from fastapi import FastAPI, BackgroundTasks
 
 
 # initialize fireabse client

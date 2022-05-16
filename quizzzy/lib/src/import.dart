@@ -100,13 +100,13 @@ class _ImportFileState extends State<ImportFile> {
     //TODO: ADD SECURITY
     var url =
         Uri.parse("https://mcq-gen-nzbm4e7jxa-el.a.run.app/get-questions");
-    Map body = {'context': cont, 'uid': fs.user?.uid, 'name': qName};
+    Map body = {'context': cont, 'uid': fs.user.uid, 'name': qName};
 
     var res = await http.post(url,
         headers: {"Content-Type": "application/json"}, body: json.encode(body));
 
     if (res.statusCode == 200) {
-      await fs.users.doc(fs.user?.uid).set({
+      await fs.users.doc(fs.user.uid).set({
         'isWaiting': true,
       }, SetOptions(merge: true)).catchError(
           (err) => snackBar(context, err.toString(), (Colors.red.shade800)));

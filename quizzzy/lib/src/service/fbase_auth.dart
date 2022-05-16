@@ -1,17 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Auth {
-  final FirebaseAuth auth;
+  FirebaseAuth _auth;
 
-  Auth({required this.auth});
+  Auth({required auth}) : _auth = auth;
+
+  set auth(FirebaseAuth auth) => _auth = auth;
+  // ignore: unnecessary_getters_setters
+  FirebaseAuth get auth => _auth;
 
   Future<String> userLogin(String email, String password) async {
     late String res;
     try {
-      await auth
+      await _auth
           .signInWithEmailAndPassword(email: email, password: password)
           .then((_) => {
-                if (auth.currentUser!.emailVerified)
+                if (_auth.currentUser!.emailVerified)
                   {res = "Verified"}
                 else
                   {res = "Not Verified"}
@@ -25,10 +29,10 @@ class Auth {
   Future<String> userSignup(String email, String password) async {
     late String res;
     try {
-      await auth
+      await _auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((_) => res = "Success");
-      await auth.signOut();
+      await _auth.signOut();
     } on FirebaseAuthException catch (e) {
       res = e.message!;
     }

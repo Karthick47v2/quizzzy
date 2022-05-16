@@ -5,14 +5,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 late String userType;
 
 class FirestoreService {
-  final User? user;
-  final CollectionReference users;
+  User? _user;
+  CollectionReference _users;
 
-  FirestoreService({required this.users, required this.user});
+  FirestoreService({required users, required user})
+      : _user = user,
+        _users = users;
+
+  set user(User? user) => _user = user;
+  User get user => _user!;
+
+  set users(CollectionReference users) => _users = users;
+  // ignore: unnecessary_getters_setters
+  CollectionReference get users =>
+      _users; ///////////////////////////////////////////////////////
 
   // get user type from firestore (teacher / student)
   Future<String?> getUserType() async {
-    DocumentSnapshot docSnap = await users.doc(user?.uid).get();
+    DocumentSnapshot docSnap = await _users.doc(_user?.uid).get();
 
     if (docSnap.exists) {
       Map<String, dynamic> data = docSnap.data() as Map<String, dynamic>;
@@ -23,7 +33,7 @@ class FirestoreService {
   }
 
   Future<String?> getGeneratorStatus() async {
-    DocumentSnapshot docSnap = await users.doc(user?.uid).get();
+    DocumentSnapshot docSnap = await _users.doc(_user?.uid).get();
 
     if (docSnap.exists) {
       Map<String, dynamic> data = docSnap.data() as Map<String, dynamic>;
@@ -35,12 +45,12 @@ class FirestoreService {
   }
 
   Future saveTokenToDatabase(String token) async =>
-      await users.doc(user?.uid).set({
+      await _users.doc(_user?.uid).set({
         'token': token,
       }, SetOptions(merge: true));
 
   Future<DocumentSnapshot?> getUserDoc(String colID) async =>
-      users.doc(user?.uid).collection(colID).doc('0').get();
+      _users.doc(_user?.uid).collection(colID).doc('0').get();
 
   Future<List<dynamic>> getQuestionnaireNameList(String docPath) async {
     HttpsCallable callable =
@@ -52,7 +62,7 @@ class FirestoreService {
   }
 
   Future<List<Map<String, dynamic>>> getQuestionnaire(String colID) async {
-    var snapShot = await users.doc(user?.uid).collection(colID).get();
+    var snapShot = await _users.doc(_user?.uid).collection(colID).get();
     final allData = snapShot.docs.map((doc) => doc.data()).toList();
     return allData;
   }
@@ -62,7 +72,7 @@ class FirestoreService {
         FirebaseFunctions.instance.httpsCallable('storeUserInfo');
     final res = await callable.call(<String, dynamic>{
       'docPath': docPath,
-      'name': user?.displayName,
+      'name': _user?.displayName,
       'type': type,
     });
     return res.data['status'] == 200;

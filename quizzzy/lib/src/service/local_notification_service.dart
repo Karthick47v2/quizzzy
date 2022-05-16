@@ -3,9 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class LocalNotificationService {
-  static final FlutterLocalNotificationsPlugin _notificationPlugin =
-      FlutterLocalNotificationsPlugin();
-  static initialize(BuildContext context) {
+  late FlutterLocalNotificationsPlugin _notificationPlugin;
+
+  LocalNotificationService(BuildContext context) {
+    _notificationPlugin = FlutterLocalNotificationsPlugin();
     const InitializationSettings initializationSettings =
         InitializationSettings(
             android: AndroidInitializationSettings("@mipmap/ic_launcher"));
@@ -13,7 +14,7 @@ class LocalNotificationService {
     _notificationPlugin.initialize(initializationSettings);
   }
 
-  static display(RemoteMessage msg) async {
+  display(RemoteMessage msg) async {
     try {
       final id = DateTime.now().millisecondsSinceEpoch ~/ 1000;
 
@@ -24,7 +25,9 @@ class LocalNotificationService {
       await _notificationPlugin.show(id, msg.notification!.title,
           msg.notification!.body, notificationDetails,
           payload: msg.notification!.body);
-    // ignore: unused_catch_clause, empty_catches
+      // ignore: unused_catch_clause, empty_catches
     } on Exception catch (e) {}
   }
 }
+
+late LocalNotificationService localNotificationService;

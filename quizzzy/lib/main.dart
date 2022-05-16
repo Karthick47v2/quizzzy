@@ -25,13 +25,14 @@ Future main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(QuestionSetAdapter());
   sharedPref =
-      UserSharedPrefernces(prefs: await SharedPreferences.getInstance());
+      UserSharedPreferences(prefs: await SharedPreferences.getInstance());
   FirebaseMessaging.onBackgroundMessage(bgNotificationHandler);
   auth = Auth(auth: FirebaseAuth.instance);
+
   fs = FirestoreService(
       users: FirebaseFirestore.instance.collection("users"),
       user: auth.auth.currentUser);
-
+  
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
   ));
@@ -71,9 +72,10 @@ class _RootState extends State<Root> {
             : const NeverScrollableScrollPhysics(),
         children: [
           const Greetings(),
+          // ignore: unnecessary_null_comparison
           (fs.user == null)
               ? const SignUp()
-              : (fs.user!.emailVerified)
+              : (fs.user.emailVerified)
                   ? const HomePage()
                   : const VerifyEmail(),
         ],

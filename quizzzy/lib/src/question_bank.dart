@@ -18,7 +18,7 @@ class QuestionBank extends StatefulWidget {
 class _QuestionBankState extends State<QuestionBank> {
   late Box questionSetBox;
   setBox() async {
-    questionSetBox = await Hive.openBox((fs.user?.displayName)!);
+    questionSetBox = await Hive.openBox((fs.user.displayName)!);
   }
 
   @override
@@ -82,7 +82,7 @@ class _QuestionBankState extends State<QuestionBank> {
                                     questionSetBox
                                         .delete(widget.data[idx].toString());
                                     bool isOK = await fs.deleteQuestionnaire(
-                                        'users/${fs.user!.uid}/${widget.data[idx].toString()}');
+                                        'users/${fs.user.uid}/${widget.data[idx].toString()}');
                                     snackBar(
                                         context,
                                         isOK

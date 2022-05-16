@@ -35,7 +35,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   initState() {
-    super.initState();
+    super.initState();  
+
+
     pushToken();
     userFuture = fs.getUserType();
   }
@@ -50,56 +52,6 @@ class _HomePageState extends State<HomePage> {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data == null && firstTime) {
             ret = UserType(firstTime: firstTime);
-            // ret = Builder(
-            //     builder: (context) => Column(
-            //           children: [
-            //             Expanded(
-            //               child: Container(
-            //                 alignment: Alignment.center,
-            //                 child: Image.asset(
-            //                   'assets/images/Quizzzy.png',
-            //                 ),
-            //               ),
-            //             ),
-            //             QuizzzyTextInput(
-            //                 text: "Name", controller: nameController),
-            //             Container(
-            //               width: double.maxFinite - 20,
-            //               padding: const EdgeInsets.symmetric(
-            //                   horizontal: 30, vertical: 0),
-            //               alignment: Alignment.bottomCenter,
-            //               child: Column(children: [
-            //                 SizedBox(
-            //                   width: double.maxFinite - 20,
-            //                   child: QuizzzyNavigatorBtn(
-            //                     text: "I'm a Teacher",
-            //                     onTap: () => {
-            //                       sendUserType(
-            //                           context, nameController.text, true),
-            //                       setState(() {
-            //                         // user will stuck at user type assign if network is slow, so
-            //                         // bypassing fireabse response (only needed for first time use)
-            //                         firstTime = false;
-            //                       })
-            //                     },
-            //                   ),
-            //                 ),
-            //                 SizedBox(
-            //                   width: double.maxFinite - 20,
-            //                   child: QuizzzyNavigatorBtn(
-            //                       text: "I'm a Student",
-            //                       onTap: () => {
-            //                             sendUserType(context,
-            //                                 nameController.text, false),
-            //                             setState(() {
-            //                               firstTime = false;
-            //                             }),
-            //                           }),
-            //                 ),
-            //               ]),
-            //             )
-            //           ],
-            //         ));
           } else {
             ret = (Builder(
               builder: (context) => Column(
@@ -185,7 +137,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> checkQuesGenerated(BuildContext context) async {
     List<Object?> data =
-        await fs.getQuestionnaireNameList('users/${fs.user!.uid}');
+        await fs.getQuestionnaireNameList('users/${fs.user.uid}');
     String? str = await fs.getGeneratorStatus();
     if (str == "Generated" || data.isNotEmpty) {
       Navigator.push(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:quizzzy/src/auth/signup.dart';
 import 'package:quizzzy/src/auth/verify.dart';
 import 'package:quizzzy/src/home_page.dart';
@@ -92,35 +91,6 @@ class _LoginState extends State<Login> {
                   else
                     {snackBar(context, res, (Colors.red.shade800))}
                 },
-                // onTap: () async {
-                //   try {
-                //     await FirebaseAuth.instance
-                //         .signInWithEmailAndPassword(
-                //             email: emailController.text,
-                //             password: passwordController.text)
-                //         .then((_) => {
-                //               if (FirebaseAuth
-                //                   .instance.currentUser!.emailVerified)
-                //                 {
-                //                   Navigator.push(
-                //                       context,
-                //                       MaterialPageRoute(
-                //                           builder: (context) =>
-                //                               const HomePage()))
-                //                 }
-                //               else
-                //                 {
-                //                   Navigator.push(
-                //                       context,
-                //                       MaterialPageRoute(
-                //                           builder: (context) =>
-                //                               const VerifyEmail()))
-                //                 }
-                //             });
-                //   } on FirebaseAuthException catch (e) {
-                //     snackBar(context, e.message!, (Colors.red.shade800));
-                //   }
-                // },
               ),
             ),
             Container(

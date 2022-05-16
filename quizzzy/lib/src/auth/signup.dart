@@ -83,21 +83,6 @@ class _SignUpState extends State<SignUp> {
                       } else {
                         snackBar(context, res, (Colors.red.shade800));
                       }
-                      // try {
-                      //   await FirebaseAuth.instance
-                      //       .createUserWithEmailAndPassword(
-                      //           email: emailController.text,
-                      //           password: passwordController.text)
-                      //       .then((_) => FirebaseAuth.instance.currentUser!
-                      //           .sendEmailVerification())
-                      //       .then((_) => snackBar(
-                      //           context,
-                      //           "A verification email has been sent to your mail",
-                      //           (Colors.amber.shade400)));
-                      //   await FirebaseAuth.instance.signOut();
-                      // } on FirebaseAuthException catch (e) {
-                      //   snackBar(context, e.message!, (Colors.red.shade800));
-                      // }
                     }
                   }),
             ),

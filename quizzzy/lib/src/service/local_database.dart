@@ -1,13 +1,15 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UserSharedPrefernces {
-  final SharedPreferences prefs;
+class UserSharedPreferences {
+  SharedPreferences _prefs;
 
-  UserSharedPrefernces({required this.prefs});
+  UserSharedPreferences({required prefs}) : _prefs = prefs;
 
-  Future setToken(String token) async => await prefs.setString('token', token);
+  set prefs(SharedPreferences prefs) => _prefs = prefs;
 
-  Future<String?> getToken() async => prefs.getString('token');
+  Future setToken(String token) async => await _prefs.setString('token', token);
+
+  Future<String?> getToken() async => _prefs.getString('token');
 }
 
-late UserSharedPrefernces sharedPref;
+late UserSharedPreferences sharedPref;
