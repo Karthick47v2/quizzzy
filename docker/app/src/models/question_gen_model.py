@@ -24,13 +24,13 @@ class SummarizeModel:
         model_path = './app/resources/t5-summarize'
 
         # for CI/CD
-        if not os.path.isdir(os.getcwd() + '/app/resources/t5-summarize'):
+        if not os.path.isdir(os.getcwd() + '/resources/t5-summarize'):
             # pylint: disable=import-outside-toplevel
             import gdown
             gdown.download_folder(id='1-50SZ_WIHX4A6mkpsz-t0EAF_VhtHb-9',
-                                  output='app/resources/t5-summarize',
+                                  output='/resources/t5-summarize',
                                   quiet=True, use_cookies=False)
-            model_path = 'app/resources/t5-summarize/'
+            model_path = 'resources/t5-summarize/'
 
         encoder_path = os.path.join(
             model_path, f"{SummarizeModel._SUMMARIZE_MODEL_NAME}-encoder-quantized.onnx")
@@ -100,12 +100,12 @@ class QuestionGenModel:
         model_path = './app/resources/t5-question'
 
         # for CI/CD
-        if not os.path.isdir(os.getcwd() + '/app/resources/t5-question'):
+        if not os.path.isdir(os.getcwd() + '/resources/t5-question'):
             # pylint: disable=import-outside-toplevel
             import gdown
             gdown.download_folder(id='1_0dPLdv8WNtSYQdKEWxFc03IR-szs0kB',
-                                  output='app/resources/t5-question', quiet=True, use_cookies=False)
-            model_path = 'app/resources/t5-question/'
+                                  output='resources/t5-question', quiet=True, use_cookies=False)
+            model_path = 'resources/t5-question/'
 
         encoder_path = os.path.join(
             model_path, f"{QuestionGenModel._QUESTION_MODEL_NAME}-encoder-quantized.onnx")
