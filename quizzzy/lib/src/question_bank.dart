@@ -18,7 +18,7 @@ class QuestionBank extends StatefulWidget {
 class _QuestionBankState extends State<QuestionBank> {
   late Box questionSetBox;
   setBox() async {
-    questionSetBox = await Hive.openBox((user?.displayName)!);
+    questionSetBox = await Hive.openBox((fs.user?.displayName)!);
   }
 
   @override
@@ -81,8 +81,8 @@ class _QuestionBankState extends State<QuestionBank> {
                                   onTap: () async {
                                     questionSetBox
                                         .delete(widget.data[idx].toString());
-                                    bool isOK = await deleteQuestionnaire(
-                                        'users/${user!.uid}/${widget.data[idx].toString()}');
+                                    bool isOK = await fs.deleteQuestionnaire(
+                                        'users/${fs.user!.uid}/${widget.data[idx].toString()}');
                                     snackBar(
                                         context,
                                         isOK
@@ -111,10 +111,10 @@ class _QuestionBankState extends State<QuestionBank> {
                     var questionnaire =
                         questionSetBox.get(widget.data[idx].toString());
                     if (questionnaire == null) {
-                      questionnaire =
-                          (await getQuestionnaire(widget.data[idx].toString()))
-                              .map((e) => (QuestionSet.fromJson(e)))
-                              .toList();
+                      questionnaire = (await fs
+                              .getQuestionnaire(widget.data[idx].toString()))
+                          .map((e) => (QuestionSet.fromJson(e)))
+                          .toList();
                       questionSetBox.put(
                           widget.data[idx].toString(), questionnaire);
                     } else {

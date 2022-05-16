@@ -25,19 +25,19 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> pushToken() async {
     String? token = await FirebaseMessaging.instance.getToken();
-    String? oldToken = await UserSharedPrefernces.getToken();
+    String? oldToken = await sharedPref.getToken();
     if (oldToken != token) {
-      await UserSharedPrefernces.setToken(token!);
-      await saveTokenToDatabase(token);
+      await sharedPref.setToken(token!);
+      await fs.saveTokenToDatabase(token);
     }
-    FirebaseMessaging.instance.onTokenRefresh.listen(saveTokenToDatabase);
+    FirebaseMessaging.instance.onTokenRefresh.listen(fs.saveTokenToDatabase);
   }
 
   @override
   initState() {
     super.initState();
     pushToken();
-    userFuture = getUserType();
+    userFuture = fs.getUserType();
   }
 
   @override
@@ -184,8 +184,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> checkQuesGenerated(BuildContext context) async {
-    List<Object?> data = await getQuestionnaireNameList('users/${user!.uid}');
-    String? str = await getGeneratorStatus();
+    List<Object?> data =
+        await fs.getQuestionnaireNameList('users/${fs.user!.uid}');
+    String? str = await fs.getGeneratorStatus();
     if (str == "Generated" || data.isNotEmpty) {
       Navigator.push(
           context,
@@ -214,7 +215,7 @@ class _HomePageState extends State<HomePage> {
     await user.reload();
     user = FirebaseAuth.instance.currentUser;
 
-    if (!await saveUser((user?.uid)!, isTeacher ? 'Teacher' : 'Student')) {
+    if (!await fs.saveUser((user?.uid)!, isTeacher ? 'Teacher' : 'Student')) {
       snackBar(context, "Internal server error", (Colors.red.shade800));
     }
   }

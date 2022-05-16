@@ -1,4 +1,5 @@
 //TODO: FIND MULTIPLE INSTANCES OF FIREBASE
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +12,7 @@ import 'package:quizzzy/src/service/dynamic_links.dart';
 import 'package:quizzzy/src/service/fbase_auth.dart';
 import 'package:quizzzy/src/service/fs_database.dart';
 import 'package:quizzzy/src/service/local_database.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'src/auth/signup.dart';
 import 'src/auth/verify.dart';
@@ -22,11 +24,13 @@ Future main() async {
   await Firebase.initializeApp();
   await Hive.initFlutter();
   Hive.registerAdapter(QuestionSetAdapter());
-  await UserSharedPrefernces.init();
+  sharedPref =
+      UserSharedPrefernces(prefs: await SharedPreferences.getInstance());
   FirebaseMessaging.onBackgroundMessage(bgNotificationHandler);
-  // User? user = FirebaseAuth.instance.currentUser;
   auth = Auth(auth: FirebaseAuth.instance);
-  user = auth.auth.currentUser;
+  fs = FirestoreService(
+      users: FirebaseFirestore.instance.collection("users"),
+      user: auth.auth.currentUser);
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
@@ -35,9 +39,7 @@ Future main() async {
   // store box to mem
   await Hive.openBox('user');
 
-  runApp(Root(
-    user: user,
-  ));
+  runApp(const Root());
 }
 
 // bg notification handler
@@ -46,8 +48,7 @@ Future bgNotificationHandler(RemoteMessage msg) async {
 }
 
 class Root extends StatefulWidget {
-  final User? user;
-  const Root({Key? key, required this.user}) : super(key: key);
+  const Root({Key? key}) : super(key: key);
 
   @override
   State<Root> createState() => _RootState();
@@ -70,9 +71,9 @@ class _RootState extends State<Root> {
             : const NeverScrollableScrollPhysics(),
         children: [
           const Greetings(),
-          (widget.user == null)
+          (fs.user == null)
               ? const SignUp()
-              : (widget.user!.emailVerified)
+              : (fs.user!.emailVerified)
                   ? const HomePage()
                   : const VerifyEmail(),
         ],

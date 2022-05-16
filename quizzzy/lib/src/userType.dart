@@ -20,54 +20,56 @@ class _UserTypeState extends State<UserType> {
   final nameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Builder(
-        builder: (context) => Column(
-              children: [
-                Expanded(
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: Image.asset(
-                      'assets/images/Quizzzy.png',
-                    ),
-                  ),
-                ),
-                QuizzzyTextInput(text: "Name", controller: nameController),
-                Container(
-                  width: double.maxFinite - 20,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 0),
-                  alignment: Alignment.bottomCenter,
-                  child: Column(children: [
-                    SizedBox(
-                      width: double.maxFinite - 20,
-                      child: QuizzzyNavigatorBtn(
-                        text: "I'm a Teacher",
-                        onTap: () => {
-                          sendUserType(context, nameController.text, true),
-                          setState(() {
-                            // user will stuck at user type assign if network is slow, so
-                            // bypassing fireabse response (only needed for first time use)
-                            widget.firstTime = false;
-                          })
-                        },
+    return QuizzzyTemplate(
+      body: Builder(
+          builder: (context) => Column(
+                children: [
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: Image.asset(
+                        'assets/images/Quizzzy.png',
                       ),
                     ),
-                    SizedBox(
-                      width: double.maxFinite - 20,
-                      child: QuizzzyNavigatorBtn(
-                          text: "I'm a Student",
+                  ),
+                  QuizzzyTextInput(text: "Name", controller: nameController),
+                  Container(
+                    width: double.maxFinite - 20,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 30, vertical: 0),
+                    alignment: Alignment.bottomCenter,
+                    child: Column(children: [
+                      SizedBox(
+                        width: double.maxFinite - 20,
+                        child: QuizzzyNavigatorBtn(
+                          text: "I'm a Teacher",
                           onTap: () => {
-                                sendUserType(
-                                    context, nameController.text, false),
-                                setState(() {
-                                  widget.firstTime = false;
+                            sendUserType(context, nameController.text, true),
+                            setState(() {
+                              // user will stuck at user type assign if network is slow, so
+                              // bypassing fireabse response (only needed for first time use)
+                              widget.firstTime = false;
+                            })
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        width: double.maxFinite - 20,
+                        child: QuizzzyNavigatorBtn(
+                            text: "I'm a Student",
+                            onTap: () => {
+                                  sendUserType(
+                                      context, nameController.text, false),
+                                  setState(() {
+                                    widget.firstTime = false;
+                                  }),
                                 }),
-                              }),
-                    ),
-                  ]),
-                )
-              ],
-            ));
+                      ),
+                    ]),
+                  )
+                ],
+              )),
+    );
   }
 
   Future sendUserType(
@@ -83,7 +85,7 @@ class _UserTypeState extends State<UserType> {
     await user.reload();
     user = FirebaseAuth.instance.currentUser;
 
-    await users.doc(user?.uid).set({
+    await fs.users.doc(user?.uid).set({
       ////////////////TODO: USE CLOUD FUNCTIONS
       'name': user?.displayName,
       'userType': isTeacher ? 'Teacher' : 'Student'

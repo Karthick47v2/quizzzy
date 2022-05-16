@@ -100,13 +100,13 @@ class _ImportFileState extends State<ImportFile> {
     //TODO: ADD SECURITY
     var url =
         Uri.parse("https://mcq-gen-nzbm4e7jxa-el.a.run.app/get-questions");
-    Map body = {'context': cont, 'uid': user?.uid, 'name': qName};
+    Map body = {'context': cont, 'uid': fs.user?.uid, 'name': qName};
 
     var res = await http.post(url,
         headers: {"Content-Type": "application/json"}, body: json.encode(body));
 
     if (res.statusCode == 200) {
-      await users.doc(user?.uid).set({
+      await fs.users.doc(fs.user?.uid).set({
         'isWaiting': true,
       }, SetOptions(merge: true)).catchError(
           (err) => snackBar(context, err.toString(), (Colors.red.shade800)));
@@ -120,7 +120,7 @@ class _ImportFileState extends State<ImportFile> {
   }
 
   getFile(BuildContext context, String fileName) async {
-    if (await getGeneratorStatus() != "Generated") {
+    if (await fs.getGeneratorStatus() != "Generated") {
       snackBar(context, "Please wait for previous document to get processed.",
           (Colors.amber.shade400));
       return;
@@ -136,7 +136,7 @@ class _ImportFileState extends State<ImportFile> {
     int i = 0;
     String tempName = fileName;
     while (docExists) {
-      if ((await getUserDoc(tempName))!.exists) {
+      if ((await fs.getUserDoc(tempName))!.exists) {
         tempName = fileName + "(" + (++i).toString() + ")";
       } else {
         docExists = false;

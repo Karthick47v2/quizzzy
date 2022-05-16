@@ -18,9 +18,11 @@ class MockFirebaseAuth extends Mock implements FirebaseAuth {
 
 main() {
   late MockFirebaseAuth mockFirebaseAuth;
+  late MockAuthResult mockAuthResult;
   late Auth auth;
   setUp(() {
     mockFirebaseAuth = MockFirebaseAuth();
+    mockAuthResult = MockAuthResult();
     auth = Auth(auth: mockFirebaseAuth);
   });
 
@@ -31,7 +33,7 @@ main() {
       when(
         mockFirebaseAuth.signInWithEmailAndPassword(
             email: "user@mail.com", password: "Abc@12345"),
-      ).thenAnswer((realInvocation) async => MockAuthResult());
+      ).thenAnswer((_) async => mockAuthResult);
       expect(await auth.userLogin("user@mail.com", "Abc@12345"), "Verified");
     });
 
@@ -40,7 +42,7 @@ main() {
       when(
         mockFirebaseAuth.signInWithEmailAndPassword(
             email: "user@mail.com", password: "Abc@12345"),
-      ).thenAnswer((realInvocation) async => MockAuthResult());
+      ).thenAnswer((_) async => mockAuthResult);
       expect(
           await auth.userLogin("user@mail.com", "Abc@12345"), "Not Verified");
     });
@@ -50,7 +52,7 @@ main() {
       when(
         mockFirebaseAuth.signInWithEmailAndPassword(
             email: "user@mail.com", password: "Abc@12345"),
-      ).thenAnswer(((realInvocation) =>
+      ).thenAnswer(((_) =>
           throw FirebaseAuthException(code: "400", message: "Login failed")));
       expect(
           await auth.userLogin("user@mail.com", "Abc@12345"), "Login failed");
@@ -63,7 +65,7 @@ main() {
       when(
         mockFirebaseAuth.createUserWithEmailAndPassword(
             email: "user@mail.com", password: "Abc@12345"),
-      ).thenAnswer((realInvocation) async => MockAuthResult());
+      ).thenAnswer((_) async => mockAuthResult);
       expect(await auth.userSignup("user@mail.com", "Abc@12345"), "Success");
     });
 
@@ -71,7 +73,7 @@ main() {
       when(
         mockFirebaseAuth.createUserWithEmailAndPassword(
             email: "user@mail.com", password: "Abc@12345"),
-      ).thenAnswer(((realInvocation) =>
+      ).thenAnswer(((_) =>
           throw FirebaseAuthException(code: "400", message: "Signup failed")));
       expect(
           await auth.userSignup("user@mail.com", "Abc@12345"), "Signup failed");

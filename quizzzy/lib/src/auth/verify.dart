@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quizzzy/src/home_page.dart';
 import '../../libs/custom_widgets.dart';
+import '../service/fs_database.dart';
 
 class VerifyEmail extends StatefulWidget {
   const VerifyEmail({Key? key}) : super(key: key);
@@ -12,7 +12,6 @@ class VerifyEmail extends StatefulWidget {
 }
 
 class _VerifyEmailState extends State<VerifyEmail> {
-  User? user;
   Timer? timer;
 
   @override
@@ -47,7 +46,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
         ),
         QuizzzyNavigatorBtn(
           text: "Resend Email",
-          onTap: () => user?.sendEmailVerification(),
+          onTap: () => fs.user?.sendEmailVerification(),
           clr: Colors.green[400],
         ),
       ],
@@ -55,9 +54,9 @@ class _VerifyEmailState extends State<VerifyEmail> {
   }
 
   Future<void> checkEmailVerification() async {
-    await user?.reload();
+    await fs.user?.reload();
 
-    if (user!.emailVerified) {
+    if (fs.user!.emailVerified) {
       timer?.cancel();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => const HomePage()));
