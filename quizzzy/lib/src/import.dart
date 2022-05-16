@@ -105,7 +105,7 @@ class _ImportFileState extends State<ImportFile> {
     var res = await http.post(url,
         headers: {"Content-Type": "application/json"}, body: json.encode(body));
 
-    print(res.statusCode);
+    // print(res.statusCode);
 
     if (res.statusCode == 200) {
       await fs.users.doc(fs.user.uid).set({
