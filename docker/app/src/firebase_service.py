@@ -14,11 +14,8 @@ class FirebaseService:
     def __init__(self):
         """initialize firebase firestore client.
         """
-        # pylint: disable=import-outside-toplevel
-        import os
-        os.system('ls')
         firebase_admin.initialize_app(
-            credentials.Certificate("app/secret/serviceAccountKey.json"))
+            credentials.Certificate("secret/serviceAccountKey.json"))
         self._db = firestore.client()
 
     def update_generated_status(self, request, status):

@@ -38,6 +38,7 @@ jobs:
         run: |
           pylint $(git ls-files '*.py')
       - name: Test
+        working-directory: ./docker
         run: |
           python -m pytest --cov=./ --cov-report=xml
       - name: Upload coverage report to Codecov
