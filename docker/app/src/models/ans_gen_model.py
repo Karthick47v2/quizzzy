@@ -44,7 +44,7 @@ class AnsGenModel:
         self.s2v = None
 
         # for unit test only
-        if not os.path.isdir(os.getcwd() + '/pre-downloaded'):
+        if not os.path.isdir(os.getcwd() + '/s2v_old'):
             # pylint: disable=import-outside-toplevel
             import urllib.request
             import tarfile
@@ -56,7 +56,7 @@ class AnsGenModel:
                     self._s2v = Sense2Vec().from_disk("s2v_old")
 
         else:
-            self._s2v = Sense2Vec().from_disk("./pre-downloaded/s2v-old")
+            self._s2v = Sense2Vec().from_disk("s2v_old")
 
     def _init_keybert(self):
         """initialize keyword extration model (KeyBERT) and keypharse

@@ -98,8 +98,8 @@ class _ImportFileState extends State<ImportFile> {
 
   Future getQuestions(String cont, BuildContext context, String qName) async {
     //TODO: ADD SECURITY
-    var url = Uri.parse(
-        "https://github-actions-nzbm4e7jxa-el.a.run.app/get-questions");
+    var url =
+        Uri.parse("https://mcq-gen-nzbm4e7jxa-el.a.run.app/get-questions");
     Map body = {'context': cont, 'uid': fs.user.uid, 'name': qName};
 
     var res = await http.post(url,

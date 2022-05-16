@@ -21,15 +21,15 @@ class SummarizeModel:
 
            https://github.com/Ki6an/fastT5
         """
-        model_path = './pre-downloaded/t5-summarize/'
+        model_path = './app/resources/t5-summarize'
 
-        # for unit test only
-        if not os.path.isdir(os.getcwd() + '/pre-downloaded'):
+        # for CI/CD
+        if not os.path.isdir(os.getcwd() + '/app/resources/t5-summarize'):
             # pylint: disable=import-outside-toplevel
             import gdown
             gdown.download_folder(id='1-50SZ_WIHX4A6mkpsz-t0EAF_VhtHb-9',
-                                  output='sum_model', quiet=True, use_cookies=False)
-            model_path = 'sum_model/'
+                                  output='app/resources/t5-summarize', quiet=True, use_cookies=False)
+            model_path = 'app/resources/t5-summarize/'
 
         encoder_path = os.path.join(
             model_path, f"{SummarizeModel._SUMMARIZE_MODEL_NAME}-encoder-quantized.onnx")
@@ -96,15 +96,15 @@ class QuestionGenModel:
     def __init__(self):
         """initialize question generator.
         """
-        model_path = './pre-downloaded/t5-question'
+        model_path = './app/resources/t5-question'
 
-        # for unit test only
-        if not os.path.isdir(os.getcwd() + '/pre-downloaded'):
+        # for CI/CD
+        if not os.path.isdir(os.getcwd() + '/app/resources/t5-question'):
             # pylint: disable=import-outside-toplevel
             import gdown
             gdown.download_folder(id='1_0dPLdv8WNtSYQdKEWxFc03IR-szs0kB',
-                                  output='que_model', quiet=True, use_cookies=False)
-            model_path = 'que_model/'
+                                  output='app/resources/t5-question', quiet=True, use_cookies=False)
+            model_path = 'app/resources/t5-question/'
 
         encoder_path = os.path.join(
             model_path, f"{QuestionGenModel._QUESTION_MODEL_NAME}-encoder-quantized.onnx")
