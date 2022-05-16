@@ -32,7 +32,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pylint pytest pytest-cov spacy gdown
-          pip install -r requirements.txt
+          pip install -r app/requirements.txt
           python3 -m spacy download en_core_web_sm
       - name: Analyze
         run: |
