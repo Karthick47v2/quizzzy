@@ -18,7 +18,7 @@ class FirebaseService:
         import os
         os.system('ls')
         firebase_admin.initialize_app(
-            credentials.Certificate("./secret/serviceAccountKey.json"))
+            credentials.Certificate(".app/secret/serviceAccountKey.json"))
         self._db = firestore.client()
 
     def update_generated_status(self, request, status):
