@@ -28,7 +28,8 @@ class SummarizeModel:
             # pylint: disable=import-outside-toplevel
             import gdown
             gdown.download_folder(id='1-50SZ_WIHX4A6mkpsz-t0EAF_VhtHb-9',
-                                  output='app/resources/t5-summarize', quiet=True, use_cookies=False)
+                                  output='app/resources/t5-summarize',
+                                  quiet=True, use_cookies=False)
             model_path = 'app/resources/t5-summarize/'
 
         encoder_path = os.path.join(
