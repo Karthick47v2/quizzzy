@@ -19,7 +19,7 @@ keys.json
 
 # large files
 pre-downloaded
-
+s2v_old/
 # onnx
 *.onnx
 
