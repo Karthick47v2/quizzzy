@@ -20,7 +20,7 @@ def model():
 #     """fixture for loading spacy"""
 #     return spacy.load('en_core_web_lg')
 
-
+# pylint: disable=too-few-public-methods
 @pytest.mark.usefixtures('model', 'nlp')
 class TestAnsGenModel:
     """class holding test cases for AnsGenModel class"""
