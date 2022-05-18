@@ -68,9 +68,6 @@ def process_request(request):
     """
     fs.update_generated_status(request, False)
     questions, crct_ans, all_ans = generate_que_n_ans(request.context)
-    print(questions)
-    print(crct_ans)
-    print(all_ans)
     fs.update_generated_status(request, True)
     fs.send_results_to_fs(request, questions, crct_ans, all_ans)
 
