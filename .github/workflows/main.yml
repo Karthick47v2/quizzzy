@@ -72,6 +72,7 @@ jobs:
   deploy_container:
     runs-on: ubuntu-latest
     name: Deploy to cloud Run
+    # needs: py_test
     if: "contains(github.event.head_commit.message, 'deploy to cloud')"
     defaults:
       run:
