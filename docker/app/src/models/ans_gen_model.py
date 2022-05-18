@@ -182,6 +182,9 @@ class AnsGenModel:
         # sometimes word won't be in sense2vec in that case we can't produce any
         # output -- ##### TODO DO: DROP THAT QUESTION
         print("WHAT THE FUCK")
+
+        print(query)
+        print("NOW FUCK STATERS")
         print(query_al)
         try:
             assert query_al in self._s2v
