@@ -46,7 +46,6 @@ class AnsGenModel:
             # pylint: disable=import-outside-toplevel
             import urllib.request
             import tarfile
-            print("ITS GOING IN")
             s2v_url = "https://github.com/explosion/sense2vec/releases/download/"
             s2v_ver_url = s2v_url + "v1.0.0/s2v_reddit_2015_md.tar.gz"
             with urllib.request.urlopen(s2v_ver_url) as req:
@@ -182,6 +181,8 @@ class AnsGenModel:
         # pylint: disable=fixme
         # sometimes word won't be in sense2vec in that case we can't produce any
         # output -- ##### TODO DO: DROP THAT QUESTION
+        print("WHAT THE FUCK")
+        print(query_al)
         try:
             assert query_al in self._s2v
             # get most similar 20 words (if any)
