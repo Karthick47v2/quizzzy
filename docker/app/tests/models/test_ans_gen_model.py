@@ -21,7 +21,7 @@ def model():
 #     return spacy.load('en_core_web_lg')
 
 # pylint: disable=too-few-public-methods
-@pytest.mark.usefixtures('model', 'nlp')
+@pytest.mark.usefixtures('model')
 class TestAnsGenModel:
     """class holding test cases for AnsGenModel class"""
     # pylint: disable=no-self-use
