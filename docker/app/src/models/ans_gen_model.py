@@ -181,11 +181,10 @@ class AnsGenModel:
         # pylint: disable=fixme
         # sometimes word won't be in sense2vec in that case we can't produce any
         # output -- ##### TODO DO: DROP THAT QUESTION
-        print("WHAT THE FUCK")
 
-        print(query)
-        print("NOW FUCK STATERS")
-        print(query_al)
+        if query_al is None:
+            return None
+
         try:
             assert query_al in self._s2v
             # get most similar 20 words (if any)
