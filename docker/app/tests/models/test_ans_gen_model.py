@@ -31,17 +31,11 @@ class TestAnsGenModel:
            sense disambugiation words in summarize text may not be correct for question generation
         """
 
-        # summarized = "Natural language processing uses artificial intelligence to take " +\
-        #     "real-world input and make sense of it. NLP enables computers to understand " +\
-        #     "natural language as humans do. Just as humans have different sensors -- such as " +\
-        #     "ears to hear and eyes to see -- computers have programs to read and microphones to " +\
-        #     "collect audio."
-
-        summarized = """Manufacturing processes are the steps through which raw materials are 
-        transformed into a final product. The manufacturing process begins with the use of the 
-        materials and then modified through manufacturing processes to become the required part. 
-        The process involves use of machinery, tools, power and labour. During the process, it 
-        adds greater valve to the final product. Therefore, manufacturing is a value added 
+        summarized = """Manufacturing processes are the steps through which raw materials are
+        transformed into a final product. The manufacturing process begins with the use of the
+        materials and then modified through manufacturing processes to become the required part.
+        The process involves use of machinery, tools, power and labour. During the process, it
+        adds greater valve to the final product. Therefore, manufacturing is a value added
         process."""
 
         corpus = CORPUS.lower()
