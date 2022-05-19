@@ -13,7 +13,7 @@ class QuizzzyTemplate extends StatelessWidget {
       child: MaterialApp(
         home: Scaffold(
             resizeToAvoidBottomInset: false,
-            backgroundColor: const Color.fromARGB(255, 37, 37, 37),
+            backgroundColor: const Color.fromARGB(255, 19, 19, 19),
             body: body),
       ),
     );
