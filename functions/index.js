@@ -73,10 +73,11 @@ exports.sendSubCollectionIDs = functions.https.onCall(async (data, context) => {
   }
   let subColIds;
   let res = { status: 200 };
-  const subCols = await db
+  await db
     .doc(data.docPath)
     .listCollections()
-    .then((subColIds = subCols.map((col) => col.id)), (res["ids"] = subColIds))
+    .then((val) => val.map((col) => col.id))
+    .then((val) => res["ids"] = val )
     .catch((res["status"] = 401));
   return res;
 });
