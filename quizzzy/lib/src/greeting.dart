@@ -47,41 +47,43 @@ class _GreetingsState extends State<Greetings> {
   Widget build(BuildContext context) {
     return QuizzzyTemplate(
         body: Builder(
-      builder: (context) => Stack(
-        alignment: Alignment.center,
+      builder: (context) => Column(
         children: [
-          Positioned(
-            top: 40,
-            child: Image.asset(
-              'assets/images/Quizzzy.png',
-              width: 338,
-              height: 407,
-              fit: BoxFit.cover,
+          Expanded(
+            child: Container(
+              alignment: Alignment.center,
+              child: Image.asset(
+                'assets/images/Quizzzy.png',
+              ),
             ),
           ),
-          const Positioned(
-            bottom: 80,
-            child: Text(
-              "WELCOME",
-              style: TextStyle(
-                  fontFamily: 'Heebo',
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600,
-                  color: Color.fromARGB(255, 93, 0, 155)),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          const Positioned(
-            bottom: 40,
-            child: Text(
-              "Scroll up to continue",
-              style: TextStyle(
-                  fontFamily: 'Heebo',
-                  fontSize: 17,
-                  fontWeight: FontWeight.w400,
-                  color: Color.fromARGB(255, 209, 209, 209)),
-              textAlign: TextAlign.center,
-            ),
+          Container(
+            width: double.maxFinite - 20,
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 0),
+            alignment: Alignment.bottomCenter,
+            child: Column(children: const [
+              Text(
+                "WELCOME",
+                style: TextStyle(
+                    fontFamily: 'Heebo',
+                    fontSize: 47,
+                    fontWeight: FontWeight.w800,
+                    color: Color.fromARGB(255, 93, 0, 155)),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                "Scroll up to continue",
+                style: TextStyle(
+                    fontFamily: 'Heebo',
+                    fontSize: 17,
+                    fontWeight: FontWeight.w400,
+                    color: Color.fromARGB(255, 209, 209, 209)),
+                textAlign: TextAlign.center,
+              ),
+            ]),
           ),
         ],
       ),

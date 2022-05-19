@@ -43,13 +43,13 @@ class _UserTypeState extends State<UserType> {
                         width: double.maxFinite - 20,
                         child: QuizzzyNavigatorBtn(
                           text: "I'm a Teacher",
-                          onTap: () => {
-                            sendUserType(context, nameController.text, true),
+                          onTap: () {
+                            sendUserType(context, nameController.text, true);
                             setState(() {
                               // user will stuck at user type assign if network is slow, so
                               // bypassing fireabse response (only needed for first time use)
                               widget.firstTime = false;
-                            })
+                            });
                           },
                         ),
                       ),
@@ -57,13 +57,12 @@ class _UserTypeState extends State<UserType> {
                         width: double.maxFinite - 20,
                         child: QuizzzyNavigatorBtn(
                             text: "I'm a Student",
-                            onTap: () => {
-                                  sendUserType(
-                                      context, nameController.text, false),
-                                  setState(() {
-                                    widget.firstTime = false;
-                                  }),
-                                }),
+                            onTap: () {
+                              sendUserType(context, nameController.text, false);
+                              setState(() {
+                                widget.firstTime = false;
+                              });
+                            }),
                       ),
                     ]),
                   )

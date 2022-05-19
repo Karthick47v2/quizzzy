@@ -32,7 +32,7 @@ Future main() async {
   fs = FirestoreService(
       users: FirebaseFirestore.instance.collection("users"),
       user: auth.auth.currentUser);
-  
+
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
   ));
@@ -75,7 +75,7 @@ class _RootState extends State<Root> {
           // ignore: unnecessary_null_comparison
           (fs.user == null)
               ? const SignUp()
-              : (fs.user.emailVerified)
+              : (fs.user!.emailVerified)
                   ? const HomePage()
                   : const VerifyEmail(),
         ],
