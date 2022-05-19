@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:quizzzy/src/auth/login.dart';
 import 'package:quizzzy/src/import.dart';
+import 'package:quizzzy/src/service/fbase_auth.dart';
 import 'package:quizzzy/src/service/fs_database.dart';
 import 'package:quizzzy/src/service/local_database.dart';
 import 'package:quizzzy/src/teacher/review_quiz.dart';
@@ -35,8 +37,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   initState() {
-    super.initState();  
-
+    super.initState();
 
     pushToken();
     userFuture = fs.getUserType();
@@ -81,7 +82,7 @@ class _HomePageState extends State<HomePage> {
                         width: double.maxFinite - 20,
                         child: QuizzzyNavigatorBtn(
                             text: "Question Bank",
-                            onTap: () => {checkQuesGenerated(context)}),
+                            onTap: () => checkQuesGenerated(context)),
                       ),
                       snapshot.data == "Student"
                           ? SizedBox(
@@ -116,9 +117,52 @@ class _HomePageState extends State<HomePage> {
                         width: double.maxFinite - 20,
                         child: QuizzzyNavigatorBtn(
                           text: "Log out",
-                          cont: context,
-                          route: MaterialPageRoute(
-                              builder: (context) => const ReviewQuiz()),
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext cntxt) {
+                                  return PopupModal(size: 150.0, wids: [
+                                    const Text(
+                                      "Are you sure ?",
+                                      style: TextStyle(
+                                          fontFamily: 'Heebo',
+                                          fontSize: 19,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.white),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        QuizzzyNavigatorBtn(
+                                          text: "Yes",
+                                          onTap: () async {
+                                            String res =
+                                                await auth.userSignout();
+                                            if (res == "Success") {
+                                              Navigator.of(cntxt).pop();
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: ((context) =>
+                                                          const Login())));
+                                            } else {
+                                              snackBar(context, res,
+                                                  Colors.red.shade800);
+                                            }
+                                          },
+                                        ),
+                                        QuizzzyNavigatorBtn(
+                                          text: "No",
+                                          onTap: () =>
+                                              Navigator.of(cntxt).pop(),
+                                        )
+                                      ],
+                                    )
+                                  ]);
+                                });
+                          },
                         ),
                       )
                     ]),
@@ -137,13 +181,13 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> checkQuesGenerated(BuildContext context) async {
     List<Object?> data =
-        await fs.getQuestionnaireNameList('users/${fs.user.uid}');
+        await fs.getQuestionnaireNameList('users/${fs.user!.uid}');
     String? str = await fs.getGeneratorStatus();
     if (str == "Generated" || data.isNotEmpty) {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => QuestionBank(data: data, status: str!)));
+              builder: (context) => QuestionBank(objData: data, status: str!)));
     } else {
       snackBar(
           context,
