@@ -46,7 +46,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
         ),
         QuizzzyNavigatorBtn(
           text: "Resend Email",
-          onTap: () => fs.user.sendEmailVerification(),
+          onTap: () => fs.user!.sendEmailVerification(),
           clr: Colors.green[400],
         ),
       ],
@@ -54,9 +54,9 @@ class _VerifyEmailState extends State<VerifyEmail> {
   }
 
   Future<void> checkEmailVerification() async {
-    await fs.user.reload();
+    await fs.user!.reload();
 
-    if (fs.user.emailVerified) {
+    if (fs.user!.emailVerified) {
       timer?.cancel();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => const HomePage()));
