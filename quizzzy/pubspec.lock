@@ -211,13 +211,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
-  fdottedline_nullsafety:
+  fdottedline:
     dependency: "direct main"
     description:
-      name: fdottedline_nullsafety
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
+      path: "."
+      ref: img-fix
+      resolved-ref: cabe72465b7bb22c59e7346e1d7385b541a024eb
+      url: "https://github.com/Karthick47v2/fdottedline.git"
+    source: git
+    version: "1.0.1"
   ffi:
     dependency: transitive
     description:

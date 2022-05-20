@@ -101,7 +101,7 @@ jobs:
       - name: Analyze
         run: flutter analyze
       - name: Test
-        run: flutter test --no-sound-null-safety
+        run: flutter test
   build_apk:
     needs: flutter_test
     runs-on: ubuntu-latest
@@ -130,4 +130,4 @@ jobs:
         env:
           GOOGLE_SERVICE_SECRET: ${{ secrets.GGL_SV_KEY_JSON }}
       - name: Build
-        run: flutter build apk --no-sound-null-safety
+        run: flutter build apk
