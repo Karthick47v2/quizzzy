@@ -1,10 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:quizzzy/src/auth/signup.dart';
-///////////  /// DO FOR... QUESTIONNAIRE
 
-///////////////////// YOU CAN D OFOR LOCAL_DATABSE
 main() {
-  // test functionality of email validator
   group("Email validation", (() {
     test('Empty email field returns error', () {
       expect("Email is required.", validateEmail(""));
@@ -22,7 +19,6 @@ main() {
     });
   }));
 
-  // test functionality of password validator
   group("Password validation", () {
     test('Empty passsword field returns error', () {
       expect("Password is required.", validatePassword(""));

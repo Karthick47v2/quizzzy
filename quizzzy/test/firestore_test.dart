@@ -1,37 +1,33 @@
-// ignore_for_file: subtype_of_sealed_class, must_be_immutable
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:quizzzy/src/service/fs_database.dart';
 
-class MockFirestore extends Mock implements FirebaseFirestore {}
-
-class MockCollectionRef extends Mock implements CollectionReference {}
-
-class MockQuerySnapshot extends Mock implements QuerySnapshot {}
-
-class MockDocumentRef extends Mock implements DocumentReference {}
-
-class MockDocumentSnapshot extends Mock implements DocumentSnapshot {}
-
-class MockUser extends Mock implements User {}
+import 'firestore_test.mocks.dart';
 
 // TODO: ADD MORE UNIT TESTS
 
+@GenerateMocks([
+  CollectionReference,
+  QuerySnapshot,
+  DocumentReference,
+  DocumentSnapshot,
+  User
+])
 main() {
-  late MockCollectionRef mockCollectionRef;
+  late MockCollectionReference mockCollectionRef;
   late MockQuerySnapshot mockQuerySnapshot;
-  late MockDocumentRef mockDocumentRef;
+  late MockDocumentReference mockDocumentRef;
   late MockDocumentSnapshot mockDocumentSnapshot;
   late MockUser mockUser;
   late FirestoreService fs;
   late dynamic studentDict;
 
   setUp(() {
-    mockCollectionRef = MockCollectionRef();
-    mockDocumentRef = MockDocumentRef();
+    mockCollectionRef = MockCollectionReference();
+    mockDocumentRef = MockDocumentReference();
     mockQuerySnapshot = MockQuerySnapshot();
     mockDocumentSnapshot = MockDocumentSnapshot();
     mockUser = MockUser();
@@ -42,6 +38,7 @@ main() {
       'isWaiting': true
     };
 
+    when(mockUser.uid).thenAnswer((_) => 'mock_user');
     when(mockCollectionRef.get())
         .thenAnswer((_) => Future.value(mockQuerySnapshot));
     when(mockDocumentSnapshot.exists).thenAnswer((_) => true);
