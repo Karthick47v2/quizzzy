@@ -7,7 +7,7 @@ import 'package:quizzzy/src/service/fbase_auth.dart';
 import 'package:quizzzy/src/service/fs_database.dart';
 import 'package:quizzzy/src/service/local_database.dart';
 import 'package:quizzzy/src/teacher/review_quiz.dart';
-import 'package:quizzzy/src/teacher/saved_questions.dart';
+import 'package:quizzzy/src/service/dynamic_links.dart';
 import 'package:quizzzy/src/student/saved_quiz.dart';
 import 'package:quizzzy/src/question_bank.dart';
 import 'package:quizzzy/src/userType.dart';
@@ -89,10 +89,10 @@ class _HomePageState extends State<HomePage> {
                               width: double.maxFinite - 20,
                               child: QuizzzyNavigatorBtn(
                                 text: "Saved questionnaire",
-                                cont: context,
-                                route: MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SavedQuestions()),
+                                onTap: () async {
+                                  await dlink.generateDynamicLink(
+                                      "teacherID", "quizID");
+                                },
                               ),
                             )
                           : SizedBox(

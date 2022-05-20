@@ -1,5 +1,5 @@
-//TODO: FIND MULTIPLE INSTANCES OF FIREBASE
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -61,7 +61,8 @@ class _RootState extends State<Root> {
   @override
   Widget build(BuildContext context) {
     //initialize dynamic links
-    DynamicLinks.initDynamicLink(context);
+    dlink = DynamicLinks(dLink: FirebaseDynamicLinks.instance);
+    dlink.initDynamicLink(context);
     // if user email is verified show homepage or else show login page
     return MaterialApp(
         home: Scaffold(
