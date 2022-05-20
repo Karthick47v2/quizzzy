@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fdottedline/fdottedline.dart';
@@ -72,15 +73,21 @@ class _ImportFileState extends State<ImportFile> {
                     ),
                     QuizzzyNavigatorBtn(
                       text: "Confirm",
-                      onTap: () {
-                        getFile(
-                            cntxt,
-                            (fileNameController.text == "")
-                                ? "noname"
-                                : fileNameController.text);
-                        setState(() {
-                          fileNameController.text = "";
-                        });
+                      onTap: () async {
+                        if (await Connectivity().checkConnectivity() !=
+                            ConnectivityResult.none) {
+                          getFile(
+                              cntxt,
+                              (fileNameController.text == "")
+                                  ? "noname"
+                                  : fileNameController.text);
+                          setState(() {
+                            fileNameController.text = "";
+                          });
+                        } else {
+                          snackBar(cntxt, "No network access",
+                              (Colors.red.shade800));
+                        }
                       },
                     )
                   ]);
