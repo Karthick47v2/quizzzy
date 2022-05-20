@@ -39,6 +39,7 @@ exports.notifyUser = functions.firestore
     });
   });
 
+// callable func => store info
 exports.storeUserInfo = functions.https.onCall(async (data, context) => {
   if (!context.auth) {
     throw new functions.https.HttpsError(
@@ -71,13 +72,13 @@ exports.sendSubCollectionIDs = functions.https.onCall(async (data, context) => {
       unauthenticatedErrorMsg
     );
   }
-  let subColIds;
+
   let res = { status: 200 };
   await db
     .doc(data.docPath)
     .listCollections()
     .then((val) => val.map((col) => col.id))
-    .then((val) => res["ids"] = val )
+    .then((val) => (res["ids"] = val))
     .catch((res["status"] = 401));
   return res;
 });
@@ -91,6 +92,6 @@ exports.dltSubCollection = functions.https.onCall(async (data, context) => {
     );
   }
 
-  doc.recursiveDelete(doc.collection(data.colPath));
+  db.recursiveDelete(db.collection(data.colPath));
   return { status: 200 };
 });
