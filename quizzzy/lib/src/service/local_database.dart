@@ -18,4 +18,5 @@ class UserSharedPreferences {
       _prefs.getStringList('popped_list');
 }
 
+
 late UserSharedPreferences sharedPref;

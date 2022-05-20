@@ -8,11 +8,12 @@ class FirestoreService {
   User? _user;
   CollectionReference _users;
 
-  FirestoreService({required users, required user})
+  FirestoreService({users, user})
       : _user = user,
         _users = users;
 
   set user(User? user) => _user = user;
+  // ignore: unnecessary_getters_setters
   User? get user => _user;
 
   set users(CollectionReference users) => _users = users;

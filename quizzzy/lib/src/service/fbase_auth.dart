@@ -2,11 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:quizzzy/src/service/fs_database.dart';
 
 class Auth {
-  FirebaseAuth _auth;
+  final FirebaseAuth _auth;
 
   Auth({required auth}) : _auth = auth;
 
-  set auth(FirebaseAuth auth) => _auth = auth;
   // ignore: unnecessary_getters_setters
   FirebaseAuth get auth => _auth;
 
@@ -18,7 +17,7 @@ class Auth {
           .then((_) {
         if (_auth.currentUser!.emailVerified) {
           res = "Verified";
-          fs.user = auth.currentUser;
+          fs.user = _auth.currentUser;
         } else {
           res = "Not Verified";
         }
@@ -45,7 +44,7 @@ class Auth {
   Future<String> userSignout() async {
     late String res;
     try {
-      await auth.signOut().then((_) => res = 'Success');
+      await _auth.signOut().then((_) => res = 'Success');
     } on FirebaseAuthException catch (e) {
       res = e.message!;
     }

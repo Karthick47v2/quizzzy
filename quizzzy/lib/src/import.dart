@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:fdottedline/fdottedline.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:pdf_text/pdf_text.dart';
@@ -53,11 +52,8 @@ class _ImportFileState extends State<ImportFile> {
           child: FDottedLine(
             child: Container(
               margin: const EdgeInsets.all(5),
-              child: Image.asset(
-                'assets/images/upload.png',
-                scale: 2,
-                color: Colors.black45,
-              ),
+              child: Image.asset('assets/images/upload.png',
+                  scale: 2, color: const Color.fromARGB(115, 155, 155, 155)),
             ),
             color: Colors.grey.shade700,
             strokeWidth: 2.0,
@@ -76,16 +72,15 @@ class _ImportFileState extends State<ImportFile> {
                     ),
                     QuizzzyNavigatorBtn(
                       text: "Confirm",
-                      onTap: () => {
+                      onTap: () {
                         getFile(
-                            context,
+                            cntxt,
                             (fileNameController.text == "")
                                 ? "noname"
-                                : fileNameController.text),
+                                : fileNameController.text);
                         setState(() {
                           fileNameController.text = "";
-                        }),
-                        Navigator.of(cntxt).pop()
+                        });
                       },
                     )
                   ]);
@@ -97,28 +92,26 @@ class _ImportFileState extends State<ImportFile> {
   }
 
   Future getQuestions(String cont, BuildContext context, String qName) async {
-    //TODO: ADD SECURITY
     var url =
         Uri.parse("https://mcq-gen-nzbm4e7jxa-el.a.run.app/get-questions");
-    Map body = {'context': cont, 'uid': fs.user.uid, 'name': qName};
+    Map body = {'context': cont, 'uid': fs.user!.uid, 'name': qName};
 
     var res = await http.post(url,
         headers: {"Content-Type": "application/json"}, body: json.encode(body));
 
-    // print(res.statusCode);
-
     if (res.statusCode == 200) {
-      await fs.users.doc(fs.user.uid).set({
+      snackBar(
+          context,
+          "Generating question may take a while. It will be available under 'Question Bank' once process is finished.",
+          Colors.green.shade700);
+      await fs.users.doc(fs.user!.uid).set({
         'isWaiting': true,
       }, SetOptions(merge: true)).catchError(
           (err) => snackBar(context, err.toString(), (Colors.red.shade800)));
     } else {
       snackBar(context, res.body.toString(), (Colors.red.shade800));
     }
-    snackBar(
-        context,
-        "Generating question may take a while. It will be available under 'Question Bank' once process is finished.",
-        Colors.green.shade700);
+    Navigator.pop(context);
   }
 
   getFile(BuildContext context, String fileName) async {
