@@ -13,6 +13,9 @@ dependencies:
   pdf_text: ^0.5.0
   file_picker: ^4.5.0
   cloud_firestore: ^3.1.10
+  # As firebase cache data and work in offline (which will mess up this app) and
+  # doesn't throw any errors.. we need to check connectivity using another plugin
+  connectivity_plus: ^2.3.0
   ################################## Change when PR merged
   fdottedline:
     git:
@@ -27,6 +30,7 @@ dependencies:
   firebase_analytics: ^9.1.6
   cloud_functions: ^3.2.13
   firebase_analytics_web: ^0.4.0+11
+  share_plus: ^4.0.4
   shared_preferences: ^2.0.13
   hive: ^2.1.0
   hive_flutter: ^1.1.0
