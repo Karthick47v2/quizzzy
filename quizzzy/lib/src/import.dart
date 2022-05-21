@@ -1,5 +1,4 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:file_picker/file_picker.dart';
@@ -65,6 +64,7 @@ class _ImportFileState extends State<ImportFile> {
           onTap: () {
             showDialog(
                 context: context,
+                barrierDismissible: false,
                 builder: (BuildContext cntxt) {
                   return PopupModal(size: 200.0, wids: [
                     QuizzzyTextInput(
@@ -103,18 +103,23 @@ class _ImportFileState extends State<ImportFile> {
         Uri.parse("https://mcq-gen-nzbm4e7jxa-el.a.run.app/get-questions");
     Map body = {'context': cont, 'uid': fs.user!.uid, 'name': qName};
 
-    var res = await http.post(url,
-        headers: {"Content-Type": "application/json"}, body: json.encode(body));
+    var res = await http
+        .post(url,
+            headers: {"Content-Type": "application/json"},
+            body: json.encode(body))
+        .timeout(const Duration(seconds: 5), onTimeout: () {
+      return http.Response(
+          'Service unavailabe. Check your internet connection', 408);
+    });
 
     if (res.statusCode == 200) {
       snackBar(
           context,
           "Generating question may take a while. It will be available under 'Question Bank' once process is finished.",
           Colors.green.shade700);
-      await fs.users.doc(fs.user!.uid).set({
-        'isWaiting': true,
-      }, SetOptions(merge: true)).catchError(
-          (err) => snackBar(context, err.toString(), (Colors.red.shade800)));
+      if (!await fs.setWaiting(true)) {
+        snackBar(context, "Connection error", (Colors.red.shade800));
+      }
     } else {
       snackBar(context, res.body.toString(), (Colors.red.shade800));
     }
@@ -122,7 +127,7 @@ class _ImportFileState extends State<ImportFile> {
   }
 
   getFile(BuildContext context, String fileName) async {
-    if (await fs.getGeneratorStatus() != "Generated") {
+    if (await fs.getGeneratorStatus() == "Waiting") {
       snackBar(context, "Please wait for previous document to get processed.",
           (Colors.amber.shade400));
       return;
