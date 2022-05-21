@@ -18,8 +18,7 @@ exports.newUser = functions.auth.user().onCreate((user) => {
 
 // auth trigger => delete user db
 exports.dltUser = functions.auth.user().onDelete((user) => {
-  const doc = db.collection("users").doc(user.uid);
-  return doc.delete();
+  return db.collection("users").doc(user.uid).delete();
 });
 
 // firestore trigger => send notification when question get generated
@@ -27,15 +26,21 @@ exports.notifyUser = functions.firestore
   .document("users/{userID}/{qCol}/0")
   .onCreate(async (data, context) => {
     // get fcm token
-    const user = await db.collection("users").doc(context.params.userID).get();
-    const token = user.data()["token"];
+    const user = await db
+      .collection("users")
+      .doc(`users/${context.auth.uid}`)
+      .get();
+
+    await db
+      .doc(`users/${context.auth.uid}`)
+      .set({ isWaiting: false }, { merge: true });
 
     await admin.messaging().send({
       notification: {
         title: "Questionnaire has been generated.",
         body: `Check out, '${context.params.qCol}' is added`,
       },
-      token: token,
+      token: user.data()["token"],
     });
   });
 
@@ -48,17 +53,11 @@ exports.storeUserInfo = functions.https.onCall(async (data, context) => {
     );
   }
 
-  const docRef = db.doc(data.docPath);
   let res = { status: 200 };
 
-  await docRef
-    .set(
-      {
-        name: data.name,
-        userType: data.type,
-      },
-      { merge: true }
-    )
+  await db
+    .doc(`users/${context.auth.uid}`)
+    .set(data, { merge: true })
     .catch((err) => (res["status"] = 401));
 
   return res;
@@ -75,7 +74,7 @@ exports.sendSubCollectionIDs = functions.https.onCall(async (data, context) => {
 
   let res = { status: 200 };
   await db
-    .doc(data.docPath)
+    .doc(`users/${context.auth.uid}`)
     .listCollections()
     .then((val) => val.map((col) => col.id))
     .then((val) => (res["ids"] = val))
