@@ -10,6 +10,7 @@ import 'firestore_test.mocks.dart';
 // TODO: ADD MORE UNIT TESTS
 
 @GenerateMocks([
+  FirebaseFirestore,
   CollectionReference,
   QuerySnapshot,
   DocumentReference,
@@ -21,17 +22,19 @@ main() {
   late MockQuerySnapshot mockQuerySnapshot;
   late MockDocumentReference mockDocumentRef;
   late MockDocumentSnapshot mockDocumentSnapshot;
+  late MockFirebaseFirestore mockFirebaseFirestore;
   late MockUser mockUser;
   late FirestoreService fs;
   late dynamic studentDict;
 
   setUp(() {
+    mockFirebaseFirestore = MockFirebaseFirestore();
     mockCollectionRef = MockCollectionReference();
     mockDocumentRef = MockDocumentReference();
     mockQuerySnapshot = MockQuerySnapshot();
     mockDocumentSnapshot = MockDocumentSnapshot();
     mockUser = MockUser();
-    fs = FirestoreService(users: mockCollectionRef, user: mockUser);
+    fs = FirestoreService(inst: mockFirebaseFirestore, user: mockUser);
     studentDict = {
       'userType': 'Student',
       'isGenerated': false,

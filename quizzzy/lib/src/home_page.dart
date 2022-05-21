@@ -10,7 +10,6 @@ import 'package:quizzzy/src/teacher/review_quiz.dart';
 import 'package:quizzzy/src/service/dynamic_links.dart';
 import 'package:quizzzy/src/student/saved_quiz.dart';
 import 'package:quizzzy/src/question_bank.dart';
-import 'package:quizzzy/src/userType.dart';
 import '../libs/custom_widgets.dart';
 
 class HomePage extends StatefulWidget {
@@ -38,7 +37,6 @@ class _HomePageState extends State<HomePage> {
   @override
   initState() {
     super.initState();
-
     pushToken();
     userFuture = fs.getUserType();
   }
@@ -52,7 +50,56 @@ class _HomePageState extends State<HomePage> {
         Widget ret = Container();
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data == null && firstTime) {
-            ret = UserType(firstTime: firstTime);
+            ret = Builder(
+                builder: (context) => Column(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Image.asset(
+                              'assets/images/Quizzzy.png',
+                            ),
+                          ),
+                        ),
+                        QuizzzyTextInput(
+                            text: "Name", controller: nameController),
+                        Container(
+                          width: double.maxFinite - 20,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 30, vertical: 0),
+                          alignment: Alignment.bottomCenter,
+                          child: Column(children: [
+                            SizedBox(
+                              width: double.maxFinite - 20,
+                              child: QuizzzyNavigatorBtn(
+                                text: "I'm a Teacher",
+                                onTap: () {
+                                  sendUserType(
+                                      context, nameController.text, true);
+                                  setState(() {
+                                    // user will stuck at user type assign if network is slow, so
+                                    // bypassing fireabse response (only needed for first time use)
+                                    firstTime = false;
+                                  });
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              width: double.maxFinite - 20,
+                              child: QuizzzyNavigatorBtn(
+                                  text: "I'm a Student",
+                                  onTap: () {
+                                    sendUserType(
+                                        context, nameController.text, false);
+                                    setState(() {
+                                      firstTime = false;
+                                    });
+                                  }),
+                            ),
+                          ]),
+                        )
+                      ],
+                    ));
           } else {
             ret = (Builder(
               builder: (context) => Column(
@@ -180,14 +227,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> checkQuesGenerated(BuildContext context) async {
-    List<Object?> data =
-        await fs.getQuestionnaireNameList('users/${fs.user!.uid}');
+    List<Object?> data = await fs.getQuestionnaireNameList();
     String? str = await fs.getGeneratorStatus();
     if (str == "Generated" || data.isNotEmpty) {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => QuestionBank(objData: data, status: str!)));
+              builder: (context) => QuestionBank(objData: data, status: str)));
     } else {
       snackBar(
           context,
@@ -197,24 +243,22 @@ class _HomePageState extends State<HomePage> {
           (Colors.amber.shade400));
     }
   }
-
-  Future sendUserType(
-    BuildContext context,
-    String str,
-    bool isTeacher,
-  ) async {
-    // explicitly initialize inorder to reload
-    User? user = FirebaseAuth.instance.currentUser;
-
-    await user!.reload();
-    await user.updateDisplayName(str);
-    await user.reload();
-    user = FirebaseAuth.instance.currentUser;
-
-    if (!await fs.saveUser((user?.uid)!, isTeacher ? 'Teacher' : 'Student')) {
-      snackBar(context, "Internal server error", (Colors.red.shade800));
-    }
-  }
 }
 
-//////////////////////////////// await user?.delete()
+Future sendUserType(
+  BuildContext context,
+  String str,
+  bool isTeacher,
+) async {
+  // explicitly initialize inorder to reload
+  User? user = FirebaseAuth.instance.currentUser;
+
+  await user!.reload();
+  await user.updateDisplayName(str);
+  await user.reload();
+  user = FirebaseAuth.instance.currentUser;
+
+  if (!await fs.saveUser(str, isTeacher ? 'Teacher' : 'Student')) {
+    snackBar(context, "Internal server error", (Colors.red.shade800));
+  }
+}

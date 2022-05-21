@@ -33,6 +33,7 @@ class Auth {
     try {
       await _auth
           .createUserWithEmailAndPassword(email: email, password: password)
+          .then((_) => _auth.currentUser!.sendEmailVerification())
           .then((_) => res = "Success");
       await _auth.signOut();
     } on FirebaseAuthException catch (e) {

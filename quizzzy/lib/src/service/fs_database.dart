@@ -2,15 +2,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-late String userType;
+late String? userType;
 
 class FirestoreService {
   User? _user;
   CollectionReference _users;
+  late FirebaseFunctions fFunc;
 
-  FirestoreService({users, user})
+  FirestoreService({inst, user})
       : _user = user,
-        _users = users;
+        _users = inst.collection("users") {
+    inst.settings = const Settings(persistenceEnabled: false);
+    fFunc = FirebaseFunctions.instance;
+  }
 
   set user(User? user) => _user = user;
   // ignore: unnecessary_getters_setters
@@ -23,69 +27,73 @@ class FirestoreService {
 
   // get user type from firestore (teacher / student)
   Future<String?> getUserType() async {
-    DocumentSnapshot docSnap = await _users.doc(_user?.uid).get();
-
-    if (docSnap.exists) {
-      Map<String, dynamic> data = docSnap.data() as Map<String, dynamic>;
-      userType = data['userType'];
-      return data['userType'];
-    }
-    return null;
+    return await _users.doc(_user?.uid).get().then((docSnap) {
+      if (docSnap.exists) {
+        Map<String, dynamic> data = docSnap.data() as Map<String, dynamic>;
+        userType = data['userType'];
+        return data['userType'];
+      } else {
+        return "None";
+      }
+    }).onError((error, stackTrace) => error.toString());
   }
 
-  Future<String?> getGeneratorStatus() async {
-    DocumentSnapshot docSnap = await _users.doc(_user?.uid).get();
-
-    if (docSnap.exists) {
-      Map<String, dynamic> data = docSnap.data() as Map<String, dynamic>;
-      return data['isGenerated'] == true
-          ? "Generated"
-          : (data['isWaiting'] ? "Waiting" : "None");
-    }
-    return null;
+  Future<String> getGeneratorStatus() async {
+    return await _users.doc(_user?.uid).get().then((docSnap) {
+      if (docSnap.exists) {
+        Map<String, dynamic> data = docSnap.data() as Map<String, dynamic>;
+        return data['isGenerated'] == true
+            ? "Generated"
+            : (data['isWaiting'] ? "Waiting" : "None");
+      } else {
+        return "None";
+      }
+    }).onError((error, stackTrace) => error.toString());
   }
 
-  Future saveTokenToDatabase(String token) async =>
-      await _users.doc(_user?.uid).set({
-        'token': token,
-      }, SetOptions(merge: true));
+  Future<bool> saveTokenToDatabase(String token) async {
+    HttpsCallable callable = fFunc.httpsCallable('storeUserInfo');
+    return await callable.call(<String, dynamic>{
+      'token': token,
+    }).then((value) => value.data['status'] == 200);
+  }
 
   Future<DocumentSnapshot?> getUserDoc(String colID) async =>
       _users.doc(_user?.uid).collection(colID).doc('0').get();
 
-  Future<List<dynamic>> getQuestionnaireNameList(String docPath) async {
-    HttpsCallable callable =
-        FirebaseFunctions.instance.httpsCallable('sendSubCollectionIDs');
-    final res = await callable.call(<String, dynamic>{
-      'docPath': docPath,
-    });
-    return res.data['ids'];
+  Future<List<dynamic>> getQuestionnaireNameList() async {
+    HttpsCallable callable = fFunc.httpsCallable('sendSubCollectionIDs');
+    return await callable.call().then((value) => value.data['ids']);
   }
 
   Future<List<Map<String, dynamic>>> getQuestionnaire(String colID) async {
-    var snapShot = await _users.doc(_user?.uid).collection(colID).get();
-    final allData = snapShot.docs.map((doc) => doc.data()).toList();
-    return allData;
+    return await _users
+        .doc(_user?.uid)
+        .collection(colID)
+        .get()
+        .then((value) => value.docs.map((doc) => doc.data()).toList());
   }
 
-  Future<bool> saveUser(String docPath, String type) async {
-    HttpsCallable callable =
-        FirebaseFunctions.instance.httpsCallable('storeUserInfo');
-    final res = await callable.call(<String, dynamic>{
-      'docPath': docPath,
-      'name': _user?.displayName,
-      'type': type,
-    });
-    return res.data['status'] == 200;
+  Future<bool> saveUser(String name, String type) async {
+    HttpsCallable callable = fFunc.httpsCallable('storeUserInfo');
+    return await callable.call(<String, dynamic>{
+      'name': name,
+      'userType': type,
+    }).then((value) => value.data['status'] == 200);
+  }
+
+  Future<bool> setWaiting(bool state) async {
+    HttpsCallable callable = fFunc.httpsCallable('storeUserInfo');
+    return await callable.call(<String, dynamic>{
+      'isWaiting': state,
+    }).then((value) => value.data['status'] == 200);
   }
 
   Future<bool> deleteQuestionnaire(String colPath) async {
-    HttpsCallable callable =
-        FirebaseFunctions.instance.httpsCallable('dltSubCollection');
-    final res = await callable.call(<String, dynamic>{
+    HttpsCallable callable = fFunc.httpsCallable('dltSubCollection');
+    return await callable.call(<String, dynamic>{
       'colPath': colPath,
-    });
-    return res.data['status'] == 200;
+    }).then((value) => value.data['status'] == 200);
   }
 }
 
