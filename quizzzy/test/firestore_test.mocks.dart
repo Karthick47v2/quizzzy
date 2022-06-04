@@ -2,8 +2,6 @@
 // in quizzzy/test/firestore_test.dart.
 // Do not manually edit this file.
 
-// ignore_for_file: subtype_of_sealed_class
-
 import 'dart:async' as _i7;
 import 'dart:typed_data' as _i8;
 
