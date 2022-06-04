@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 
-class QuizzzyTemplate extends StatelessWidget {
+class QuizzzyTemplate extends StatefulWidget {
   final Widget body;
+
   const QuizzzyTemplate({Key? key, required this.body}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  State<QuizzzyTemplate> createState() => _QuizzzyTemplateState();
+}
+
+class _QuizzzyTemplateState extends State<QuizzzyTemplate> {
+  @override
+  Widget build(context) {
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -14,7 +20,7 @@ class QuizzzyTemplate extends StatelessWidget {
         home: Scaffold(
             resizeToAvoidBottomInset: false,
             backgroundColor: const Color.fromARGB(255, 19, 19, 19),
-            body: body),
+            body: widget.body),
       ),
     );
   }

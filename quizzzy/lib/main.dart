@@ -28,17 +28,19 @@ Future main() async {
       UserSharedPreferences(prefs: await SharedPreferences.getInstance());
   FirebaseMessaging.onBackgroundMessage(bgNotificationHandler);
   auth = Auth(auth: FirebaseAuth.instance);
+  dlink = DynamicLinks(dLink: FirebaseDynamicLinks.instance);
 
   fs = FirestoreService(
-      users: FirebaseFirestore.instance.collection("users"),
-      user: auth.auth.currentUser);
+      inst: FirebaseFirestore.instance, user: auth.auth.currentUser);
+
+  questionSetBox = await setBox();
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
   ));
 
-  // store box to mem
-  await Hive.openBox('user');
+  // // store box to mem
+  // await Hive.openBox('user');
 
   runApp(const Root());
 }
@@ -61,7 +63,6 @@ class _RootState extends State<Root> {
   @override
   Widget build(BuildContext context) {
     //initialize dynamic links
-    dlink = DynamicLinks(dLink: FirebaseDynamicLinks.instance);
     dlink.initDynamicLink(context);
     // if user email is verified show homepage or else show login page
     return MaterialApp(

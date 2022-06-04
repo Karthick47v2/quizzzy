@@ -18,12 +18,8 @@ class QuestionBank extends StatefulWidget {
 }
 
 class _QuestionBankState extends State<QuestionBank> {
-  late Box questionSetBox;
   late List<String>? popList;
   late List<QuestionSet> qSet;
-  setBox() async {
-    questionSetBox = await Hive.openBox((fs.user!.displayName)!);
-  }
 
   filterList() async {
     popList = await sharedPref.getPoppedItems();
@@ -38,8 +34,7 @@ class _QuestionBankState extends State<QuestionBank> {
       popList = newList;
       sharedPref.setPoppedItems(popList!);
     } else {
-      popList = []; ///////////////////////////CHECKHOW 2MINS
-
+      popList = [];
     }
   }
 
@@ -47,12 +42,14 @@ class _QuestionBankState extends State<QuestionBank> {
     var questionnaire = questionSetBox.get(widget.data[idx]);
     // ignore: unnecessary_null_comparison
     if (questionnaire == null) {
-      questionnaire = (await fs.getQuestionnaire(widget.data[1]))
+      questionnaire = (await fs.getQuestionnaire(widget.data[idx]))
           .map((e) => (QuestionSet.fromJson(e)))
           .toList();
-      questionSetBox.put(widget.data[1], questionnaire);
+      questionSetBox.put(widget.data[idx], questionnaire);
     } else {
       questionnaire = questionnaire..cast<QuestionSet>();
+      // fake waiting for future builder to work without break
+      await Future.delayed(Duration.zero);
     }
     qSet = questionnaire;
     return true;
@@ -62,7 +59,6 @@ class _QuestionBankState extends State<QuestionBank> {
   initState() {
     super.initState();
     setBox();
-    // filterList();
     if (widget.status == "Waiting") {
       snackBar(context, "Your last request is being processed.",
           (Colors.amber.shade400));
@@ -179,7 +175,9 @@ class _QuestionBankState extends State<QuestionBank> {
                                                           TextAlign.center,
                                                     ),
                                                     Text(
-                                                      "Time: ${qSet.length} mins",
+                                                      userType == 'Student'
+                                                          ? "Time: ${qSet.length} mins"
+                                                          : "Questions: ${qSet.length}",
                                                       style: const TextStyle(
                                                         fontFamily: 'Heebo',
                                                         fontSize: 20,
@@ -190,7 +188,10 @@ class _QuestionBankState extends State<QuestionBank> {
                                                       ),
                                                     ),
                                                     QuizzzyNavigatorBtn(
-                                                      text: "Start",
+                                                      text:
+                                                          userType == 'Student'
+                                                              ? "Start"
+                                                              : "View",
                                                       cont: context,
                                                       onTap: () {
                                                         Navigator.of(cntxt)
@@ -198,10 +199,12 @@ class _QuestionBankState extends State<QuestionBank> {
                                                         Navigator.push(
                                                             context,
                                                             MaterialPageRoute(
-                                                                builder: ((context) =>
-                                                                    Questionnaire(
-                                                                        questionnaire:
-                                                                            qSet))));
+                                                                builder: ((context) => Questionnaire(
+                                                                    questionnaire:
+                                                                        qSet,
+                                                                    name: widget
+                                                                            .data[
+                                                                        idx]))));
                                                       },
                                                     ),
                                                   ]);

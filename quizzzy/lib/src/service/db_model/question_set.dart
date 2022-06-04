@@ -1,15 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
+import 'package:quizzzy/src/service/fs_database.dart';
 
 part 'question_set.g.dart';
 
 @HiveType(typeId: 1)
 class QuestionSet extends HiveObject {
   @HiveField(0)
-  String question;
+  final String question;
   @HiveField(1)
-  String crctAns;
+  final String crctAns;
   @HiveField(2)
-  List<String> allAns;
+  final List<String> allAns;
 
   QuestionSet(
       {required this.question, required this.crctAns, required this.allAns});
@@ -20,4 +22,25 @@ class QuestionSet extends HiveObject {
         crctAns: parsedJson['crct_ans'],
         allAns: parsedJson['all_ans'].cast<String>());
   }
+
+  factory QuestionSet.fromFirestore(
+      DocumentSnapshot<Map<String, dynamic>> snapshot,
+      SnapshotOptions? options) {
+    final data = snapshot.data();
+    return QuestionSet(
+        question: data?['question'],
+        crctAns: data?['crctAns'],
+        allAns: List.from(data?['allAns']));
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return ({
+      'question': question,
+      'crctAns': crctAns,
+      'allAns': allAns,
+    });
+  }
 }
+
+late Box questionSetBox;
+Future setBox() async => await Hive.openBox((fs.user!.displayName)!);

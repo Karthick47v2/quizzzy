@@ -18,6 +18,7 @@ class ImportFile extends StatefulWidget {
 
 class _ImportFileState extends State<ImportFile> {
   final fileNameController = TextEditingController();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -66,31 +67,42 @@ class _ImportFileState extends State<ImportFile> {
                 context: context,
                 barrierDismissible: false,
                 builder: (BuildContext cntxt) {
-                  return PopupModal(size: 200.0, wids: [
-                    QuizzzyTextInput(
-                      text: "Questionnaire name",
-                      controller: fileNameController,
-                    ),
-                    QuizzzyNavigatorBtn(
-                      text: "Confirm",
-                      onTap: () async {
-                        if (await Connectivity().checkConnectivity() !=
-                            ConnectivityResult.none) {
-                          getFile(
-                              cntxt,
-                              (fileNameController.text == "")
-                                  ? "noname"
-                                  : fileNameController.text);
-                          setState(() {
-                            fileNameController.text = "";
-                          });
-                        } else {
-                          snackBar(cntxt, "No network access",
-                              (Colors.red.shade800));
-                        }
-                      },
-                    )
-                  ]);
+                  return StatefulBuilder(builder: (cntxt, setState) {
+                    return PopupModal(size: 200.0, wids: [
+                      isLoading
+                          ? const Loading()
+                          : Column(
+                              children: [
+                                QuizzzyTextInput(
+                                  text: "Questionnaire name",
+                                  controller: fileNameController,
+                                ),
+                                QuizzzyNavigatorBtn(
+                                  text: "Confirm",
+                                  onTap: () async {
+                                    if (await Connectivity()
+                                            .checkConnectivity() !=
+                                        ConnectivityResult.none) {
+                                      getFile(
+                                          cntxt,
+                                          (fileNameController.text == "")
+                                              ? "noname"
+                                              : fileNameController.text);
+                                      setState(() {
+                                        fileNameController.text = "";
+                                        isLoading = true;
+                                      });
+                                    } else {
+                                      snackBar(cntxt, "No network access",
+                                          (Colors.red.shade800));
+                                      Navigator.pop(cntxt);
+                                    }
+                                  },
+                                )
+                              ],
+                            ),
+                    ]);
+                  });
                 });
           },
         ))

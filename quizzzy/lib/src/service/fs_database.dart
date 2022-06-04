@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'db_model/question_set.dart';
+
 late String? userType;
 
 class FirestoreService {
@@ -93,6 +95,13 @@ class FirestoreService {
     HttpsCallable callable = fFunc.httpsCallable('dltSubCollection');
     return await callable.call(<String, dynamic>{
       'colPath': colPath,
+    }).then((value) => value.data['status'] == 200);
+  }
+
+  Future<bool> saveModifiedQuiz(List<QuestionSet> qSet) async {
+    HttpsCallable callable = fFunc.httpsCallable('storeQuiz');
+    return await callable.call(<String, dynamic>{
+      'qSet': qSet,
     }).then((value) => value.data['status'] == 200);
   }
 }
