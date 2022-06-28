@@ -157,7 +157,7 @@ class _HomePageState extends State<HomePage> {
                               child: QuizzzyNavigatorBtn(
                                 text: "Saved quiz",
                                 cont: context,
-                                page: HomePage(),
+                                page: const HomePage(),
                               ),
                             ),
                       SizedBox(
@@ -165,7 +165,7 @@ class _HomePageState extends State<HomePage> {
                         child: QuizzzyNavigatorBtn(
                           text: "Review quizzes",
                           cont: context,
-                          page: HomePage(),
+                          page: const HomePage(),
                         ),
                       ),
                       SizedBox(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizzzy/libs/custom_widgets.dart';
 import 'package:quizzzy/src/home_page.dart';
-import 'package:quizzzy/src/questionnaire.dart';
 import 'package:quizzzy/src/service/db_model/question_set.dart';
 
 class Score extends StatelessWidget {

@@ -29,7 +29,7 @@ class _QuizzzyTemplateState extends State<QuizzzyTemplate> {
 class QuizzzyNavigatorBtn extends StatelessWidget {
   final String text;
   final BuildContext? cont;
-  final dynamic? page;
+  final dynamic page;
   final VoidCallback? onTap;
   final Color? clr;
   final Color? txtClr;
