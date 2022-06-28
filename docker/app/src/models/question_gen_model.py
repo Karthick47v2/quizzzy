@@ -23,7 +23,6 @@ class SummarizeModel:
         """
         model_path = './resources/t5-summarize'
 
-        # for CI/CD
         if not os.path.isdir(os.getcwd() + '/resources/t5-summarize'):
             # pylint: disable=import-outside-toplevel
             import gdown

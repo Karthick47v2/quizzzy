@@ -8,7 +8,7 @@ from main import ModelInput, fs
 from tests.test_main import REQUEST
 
 
-# # pylint: disable=redefined-outer-name
+# pylint: disable=redefined-outer-name
 # @pytest.fixture(scope='class')
 # def fsx():
 #     """fixture for loading class obj"""
