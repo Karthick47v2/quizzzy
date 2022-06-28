@@ -11,7 +11,7 @@ from src.postprocess import postprocess_question, postprocess_summary
 
 
 class SummarizeModel:
-    """class holding summarization model
+    """class holding summarize model
     and it's operations
     """
     _SUMMARIZE_MODEL_NAME = 't5-base'
