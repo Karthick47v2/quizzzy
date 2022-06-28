@@ -51,14 +51,14 @@ class Score extends StatelessWidget {
             onTap: () => Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const HomePage())),
           ),
-          QuizzzyNavigatorBtn(
-            text: "Retake",
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        Questionnaire(questionnaire: questionnaire))),
-          ),
+          // QuizzzyNavigatorBtn(
+          //   text: "Retake",
+          //   onTap: () => Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //           builder: (context) =>
+          //               Questionnaire(questionnaire: questionnaire))),
+          // ),
         ],
       ),
     ));

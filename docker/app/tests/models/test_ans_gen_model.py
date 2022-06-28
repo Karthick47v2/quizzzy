@@ -24,7 +24,6 @@ def model():
 @pytest.mark.usefixtures('model')
 class TestAnsGenModel:
     """class holding test cases for AnsGenModel class"""
-    # pylint: disable=no-self-use
 
     def test_filter_keywords(self, model):
         """check if generated keyword is on both context and summarized text. Because due to word

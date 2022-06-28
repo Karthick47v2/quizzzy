@@ -33,8 +33,6 @@ Future main() async {
   fs = FirestoreService(
       inst: FirebaseFirestore.instance, user: auth.auth.currentUser);
 
-  questionSetBox = await setBox();
-
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
   ));

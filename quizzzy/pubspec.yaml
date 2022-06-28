@@ -17,15 +17,11 @@ dependencies:
   # doesn't throw any errors.. we need to check connectivity using another plugin
   connectivity_plus: ^2.3.0
   ################################## Change when PR merged
-  fdottedline:
-    git:
-      url: https://github.com/Karthick47v2/fdottedline.git
-      ref: img-fix
   firebase_auth: ^3.3.9
   firebase_core: ^1.13.1
   firebase_messaging: ^11.2.15
   flutter_local_notifications: ^9.4.1
-  firebase_dynamic_links: ^4.2.2
+  firebase_dynamic_links: ^4.2.3
   http: ^0.13.4
   firebase_analytics: ^9.1.6
   cloud_functions: ^3.2.13

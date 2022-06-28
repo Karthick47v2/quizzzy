@@ -130,7 +130,6 @@ class AnsGenModel:
 
         return filtered_dist
 
-    # pylint: disable=no-self-use
     def _mmr(self, doc_embedding, word_embedding, words, diversity=0.9):
         """word diversity using MMR - Maximal Marginal Relevence.
 

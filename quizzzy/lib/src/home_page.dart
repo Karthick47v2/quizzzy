@@ -1,14 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:quizzzy/src/auth/login.dart';
 import 'package:quizzzy/src/import.dart';
+import 'package:quizzzy/src/service/db_model/question_set.dart';
 import 'package:quizzzy/src/service/fbase_auth.dart';
 import 'package:quizzzy/src/service/fs_database.dart';
 import 'package:quizzzy/src/service/local_database.dart';
-import 'package:quizzzy/src/teacher/review_quiz.dart';
 import 'package:quizzzy/src/service/dynamic_links.dart';
-import 'package:quizzzy/src/student/saved_quiz.dart';
 import 'package:quizzzy/src/question_bank.dart';
 import '../libs/custom_widgets.dart';
 
@@ -25,6 +25,7 @@ class _HomePageState extends State<HomePage> {
   final nameController = TextEditingController();
 
   Future<void> pushToken() async {
+    questionSetBox = await setBox();
     String? token = await FirebaseMessaging.instance.getToken();
     String? oldToken = await sharedPref.getToken();
     if (oldToken != token) {
@@ -121,15 +122,24 @@ class _HomePageState extends State<HomePage> {
                         child: QuizzzyNavigatorBtn(
                           text: "Import PDF",
                           cont: context,
-                          route: MaterialPageRoute(
-                              builder: (context) => const ImportFile()),
+                          page: const ImportFile(),
                         ),
                       ),
                       SizedBox(
                         width: double.maxFinite - 20,
                         child: QuizzzyNavigatorBtn(
                             text: "Question Bank",
-                            onTap: () => checkQuesGenerated(context)),
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (BuildContext cntxt) {
+                                    checkQuesGenerated(cntxt);
+                                    return const Loading();
+                                  });
+
+                              // print("hi");
+                            }),
                       ),
                       snapshot.data == "Student"
                           ? SizedBox(
@@ -147,8 +157,7 @@ class _HomePageState extends State<HomePage> {
                               child: QuizzzyNavigatorBtn(
                                 text: "Saved quiz",
                                 cont: context,
-                                route: MaterialPageRoute(
-                                    builder: (context) => const SavedQuiz()),
+                                page: HomePage(),
                               ),
                             ),
                       SizedBox(
@@ -156,8 +165,7 @@ class _HomePageState extends State<HomePage> {
                         child: QuizzzyNavigatorBtn(
                           text: "Review quizzes",
                           cont: context,
-                          route: MaterialPageRoute(
-                              builder: (context) => const ReviewQuiz()),
+                          page: HomePage(),
                         ),
                       ),
                       SizedBox(
@@ -211,6 +219,45 @@ class _HomePageState extends State<HomePage> {
                                 });
                           },
                         ),
+                      ),
+                      SizedBox(
+                        width: double.maxFinite - 20,
+                        child: QuizzzyNavigatorBtn(
+                          text: "Quit",
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext cntxt) {
+                                  return PopupModal(size: 150.0, wids: [
+                                    const Text(
+                                      "Are you sure ?",
+                                      style: TextStyle(
+                                          fontFamily: 'Heebo',
+                                          fontSize: 19,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.white),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        QuizzzyNavigatorBtn(
+                                          text: "Yes",
+                                          onTap: () => SystemNavigator
+                                              .pop(), // it will only suspend app for iOS,
+                                        ), // need to manually close in iOS as of iOS policy ...
+                                        QuizzzyNavigatorBtn(
+                                          text: "No",
+                                          onTap: () =>
+                                              Navigator.of(cntxt).pop(),
+                                        )
+                                      ],
+                                    )
+                                  ]);
+                                });
+                          },
+                        ),
                       )
                     ]),
                   )
@@ -235,6 +282,7 @@ class _HomePageState extends State<HomePage> {
           MaterialPageRoute(
               builder: (context) => QuestionBank(objData: data, status: str)));
     } else {
+      Navigator.pop(context);
       snackBar(
           context,
           str == "Waiting"

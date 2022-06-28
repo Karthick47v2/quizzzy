@@ -2,6 +2,7 @@
 
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
+import 'package:quizzzy/src/home_page.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:quizzzy/libs/custom_widgets.dart';
 
@@ -11,24 +12,26 @@ class DynamicLinks {
   DynamicLinks({required dLink}) : _dLink = dLink;
 
   Future initDynamicLink(BuildContext context) async {
+    // fg/bg state
+    _dLink.onLink.listen((dynamicLink) {
+      _handleDynamicLink(dynamicLink.link, context);
+    }).onError((e) {
+      snackBar(context, e.toString(), (Colors.red.shade800));
+    });
+
     // initilize dynamic link for terminated state
-    final PendingDynamicLinkData? initialLink =
-        await FirebaseDynamicLinksPlatform.instance.getInitialLink();
+
+    final PendingDynamicLinkData? initialLink = await _dLink.getInitialLink();
 
     if (initialLink != null) {
       try {
-        _handleDynamicLink(initialLink.link);
+        _handleDynamicLink(initialLink.link, context);
       } catch (e) {
         snackBar(context, "Link not found", (Colors.red.shade800));
       }
     } else {
       return null;
     }
-
-    // fg/bg state
-    _dLink.onLink.listen((dynamicLink) async {
-      _handleDynamicLink(dynamicLink.link);
-    }).onError((e) => snackBar(context, e.toString(), (Colors.red.shade800)));
   }
 
   Future generateDynamicLink(String teacherID, String quizID) async {
@@ -49,9 +52,11 @@ class DynamicLinks {
     // Share.share(desc, subject:quizID)
   }
 
-  _handleDynamicLink(Uri url) {
+  _handleDynamicLink(Uri url, BuildContext context) {
     List<String> splitLink = url.path.split('/');
     print(splitLink);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const HomePage()));
   }
 }
 

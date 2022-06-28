@@ -14,7 +14,7 @@ class _QuizzzyTemplateState extends State<QuizzzyTemplate> {
   Widget build(context) {
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        return true; ///////////////////// TODO: CHECK IF SCREENS NEEDS TO BE LOCKED
       },
       child: MaterialApp(
         home: Scaffold(
@@ -29,7 +29,7 @@ class _QuizzzyTemplateState extends State<QuizzzyTemplate> {
 class QuizzzyNavigatorBtn extends StatelessWidget {
   final String text;
   final BuildContext? cont;
-  final Route? route;
+  final dynamic? page;
   final VoidCallback? onTap;
   final Color? clr;
   final Color? txtClr;
@@ -38,7 +38,7 @@ class QuizzzyNavigatorBtn extends StatelessWidget {
       {Key? key,
       required this.text,
       this.cont,
-      this.route,
+      this.page,
       this.onTap,
       this.clr,
       this.txtClr})
@@ -47,8 +47,10 @@ class QuizzzyNavigatorBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
-        onPressed:
-            (onTap != null) ? onTap : (() => Navigator.push(cont!, route!)),
+        onPressed: (onTap != null)
+            ? onTap
+            : () => Navigator.push(
+                cont!, MaterialPageRoute(builder: ((context) => page))),
         style: OutlinedButton.styleFrom(
           side: BorderSide(
             color:

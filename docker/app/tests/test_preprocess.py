@@ -6,7 +6,7 @@ from src import preprocess
 
 class TestPreprocessBulkText:
     """class holding test cases for preprocess_bulk_text function"""
-    # pylint: disable=no-self-use
+
     @pytest.mark.parametrize('text, result', [
         ("""
         Natural language processing (NLP) is the ability of a computer
@@ -55,7 +55,7 @@ class TestPreprocessBulkText:
 
 class TestSplitText:
     """class holding test cases for split_text function"""
-    # pylint: disable=no-self-use
+
     @pytest.mark.parametrize('text, result', [
         ("This test will split correctly at period.",
          ["This test will split correctly at period."]),

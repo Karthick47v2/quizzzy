@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:quizzzy/libs/custom_widgets.dart';
 import 'package:quizzzy/src/questionnaire.dart';
 import 'package:quizzzy/src/service/db_model/question_set.dart';

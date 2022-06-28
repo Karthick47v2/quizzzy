@@ -6,7 +6,6 @@ from src import postprocess
 
 class TestPostProcessQuestion:
     """class holding test cases for postprocess_question function"""
-    # pylint: disable=no-self-use
 
     @pytest.mark.parametrize('text, result', [
         ("  What is your name ?     ", "What is your name ?")

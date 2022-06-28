@@ -18,7 +18,6 @@ from tests.test_main import REQUEST
 # @pytest.mark.usefixtures('fsx')
 class TestFirebaseService:
     """class holding test cases for AnsGenModel class"""
-    # pylint: disable=no-self-use
 
     def test_update_generated_status_validation(self):
         """validating input for update_generated_status function"""
