@@ -26,7 +26,7 @@ class SummarizeModel:
         if not os.path.isdir(os.getcwd() + '/resources/t5-summarize'):
             # pylint: disable=import-outside-toplevel
             import gdown
-            gdown.download_folder(id='1UrF12A_hqBqYPNCNzFMHnLowuU-7dx0S',
+            gdown.download_folder(id='1ZN6h157mvqRxnGXpH7P20aUBwCtcikX',
                                   output='resources/t5-summarize',
                                   quiet=True, use_cookies=False)
 
@@ -101,7 +101,7 @@ class QuestionGenModel:
         if not os.path.isdir(os.getcwd() + '/resources/t5-question'):
             # pylint: disable=import-outside-toplevel
             import gdown
-            gdown.download_folder(id='1rwMYb2eCJf8Z86tdvi8OrjctySRBubJo',
+            gdown.download_folder(id='1mYnRMBk5-_3x5SX_8KW2G71zq8ohbJI5',
                                   output='resources/t5-question', quiet=True, use_cookies=False)
 
         encoder_path = os.path.join(
