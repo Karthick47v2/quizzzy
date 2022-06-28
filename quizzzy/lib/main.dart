@@ -20,7 +20,6 @@ import 'src/auth/verify.dart';
 import 'src/home_page.dart';
 
 Future main() async {
-  // initialize required things
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await Hive.initFlutter();
