@@ -11,11 +11,11 @@ class FirestoreService {
   CollectionReference _users;
   late FirebaseFunctions fFunc;
 
-  FirestoreService({inst, user})
+  FirestoreService({inst, user, fbFunc})
       : _user = user,
         _users = inst.collection("users") {
     inst.settings = const Settings(persistenceEnabled: false);
-    fFunc = FirebaseFunctions.instance;
+    fFunc = fbFunc;
   }
 
   set user(User? user) => _user = user;

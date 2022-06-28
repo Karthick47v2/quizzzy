@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ Future main() async {
   dlink = DynamicLinks(dLink: FirebaseDynamicLinks.instance);
 
   fs = FirestoreService(
-      inst: FirebaseFirestore.instance, user: auth.auth.currentUser);
+      inst: FirebaseFirestore.instance, user: auth.auth.currentUser, fbFunc: FirebaseFunctions.instance);
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,

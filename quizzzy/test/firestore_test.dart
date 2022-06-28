@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
@@ -7,10 +8,9 @@ import 'package:quizzzy/src/service/fs_database.dart';
 
 import 'firestore_test.mocks.dart';
 
-// TODO: ADD MORE UNIT TESTS
-
 @GenerateMocks([
   FirebaseFirestore,
+  FirebaseFunctions,
   CollectionReference,
   QuerySnapshot,
   DocumentReference,
@@ -20,8 +20,8 @@ import 'firestore_test.mocks.dart';
 main() {
   late MockCollectionReference mockCollectionRef;
   late MockQuerySnapshot mockQuerySnapshot;
-  late MockDocumentReference mockDocumentRef;
-  late MockDocumentSnapshot mockDocumentSnapshot;
+  late DocumentReference<Map<String, dynamic>> mockDocumentRef;
+  late DocumentSnapshot<Map<String, dynamic>> mockDocumentSnapshot;
   late MockFirebaseFirestore mockFirebaseFirestore;
   late MockUser mockUser;
   late FirestoreService fs;
@@ -34,7 +34,14 @@ main() {
     mockQuerySnapshot = MockQuerySnapshot();
     mockDocumentSnapshot = MockDocumentSnapshot();
     mockUser = MockUser();
-    fs = FirestoreService(inst: mockFirebaseFirestore, user: mockUser);
+
+    when(mockFirebaseFirestore.collection('users'))
+        .thenAnswer((_) => MockCollectionReference());
+
+    fs = FirestoreService(
+        inst: mockFirebaseFirestore,
+        user: mockUser,
+        fbFunc: MockFirebaseFunctions());
     studentDict = {
       'userType': 'Student',
       'isGenerated': false,
@@ -58,7 +65,7 @@ main() {
 
     test("Field name exeption", () async {
       when(mockDocumentSnapshot.exists).thenAnswer((_) => false);
-      expect(await fs.getUserType(), null);
+      expect(await fs.getUserType(), 'None');
     });
   });
 
@@ -81,7 +88,7 @@ main() {
 
     test("Generated status exeption", () async {
       when(mockDocumentSnapshot.exists).thenAnswer((_) => false);
-      expect(await fs.getGeneratorStatus(), null);
+      expect(await fs.getGeneratorStatus(), 'None');
     });
   });
 }

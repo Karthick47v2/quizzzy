@@ -2,15 +2,18 @@
 // in quizzzy/test/firestore_test.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i7;
-import 'dart:typed_data' as _i8;
+import 'dart:async' as _i9;
+import 'dart:typed_data' as _i10;
 
 import 'package:cloud_firestore/cloud_firestore.dart' as _i4;
 import 'package:cloud_firestore_platform_interface/cloud_firestore_platform_interface.dart'
     as _i3;
-import 'package:firebase_auth/firebase_auth.dart' as _i6;
-import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart'
+import 'package:cloud_functions/cloud_functions.dart' as _i6;
+import 'package:cloud_functions_platform_interface/cloud_functions_platform_interface.dart'
     as _i5;
+import 'package:firebase_auth/firebase_auth.dart' as _i8;
+import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart'
+    as _i7;
 import 'package:firebase_core/firebase_core.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -23,7 +26,6 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
-// ignore_for_file: subtype_of_sealed_class
 
 class _FakeFirebaseApp_0 extends _i1.Fake implements _i2.FirebaseApp {}
 
@@ -45,25 +47,30 @@ class _FakeQuery_6<T extends Object?> extends _i1.Fake implements _i4.Query<T> {
 class _FakeDocumentReference_7<T extends Object?> extends _i1.Fake
     implements _i4.DocumentReference<T> {}
 
-class _FakeFirebaseFirestore_8 extends _i1.Fake
+class _FakeFirebaseFunctionsPlatform_8 extends _i1.Fake
+    implements _i5.FirebaseFunctionsPlatform {}
+
+class _FakeHttpsCallable_9 extends _i1.Fake implements _i6.HttpsCallable {}
+
+class _FakeFirebaseFirestore_10 extends _i1.Fake
     implements _i4.FirebaseFirestore {}
 
-class _FakeSnapshotMetadata_9 extends _i1.Fake implements _i4.SnapshotMetadata {
-}
+class _FakeSnapshotMetadata_11 extends _i1.Fake
+    implements _i4.SnapshotMetadata {}
 
-class _FakeDocumentSnapshot_10<T extends Object?> extends _i1.Fake
+class _FakeDocumentSnapshot_12<T extends Object?> extends _i1.Fake
     implements _i4.DocumentSnapshot<T> {}
 
-class _FakeUserMetadata_11 extends _i1.Fake implements _i5.UserMetadata {}
+class _FakeUserMetadata_13 extends _i1.Fake implements _i7.UserMetadata {}
 
-class _FakeIdTokenResult_12 extends _i1.Fake implements _i5.IdTokenResult {}
+class _FakeIdTokenResult_14 extends _i1.Fake implements _i7.IdTokenResult {}
 
-class _FakeUserCredential_13 extends _i1.Fake implements _i6.UserCredential {}
+class _FakeUserCredential_15 extends _i1.Fake implements _i8.UserCredential {}
 
-class _FakeConfirmationResult_14 extends _i1.Fake
-    implements _i6.ConfirmationResult {}
+class _FakeConfirmationResult_16 extends _i1.Fake
+    implements _i8.ConfirmationResult {}
 
-class _FakeUser_15 extends _i1.Fake implements _i6.User {}
+class _FakeUser_17 extends _i1.Fake implements _i8.User {}
 
 /// A class which mocks [FirebaseFirestore].
 ///
@@ -101,19 +108,19 @@ class MockFirebaseFirestore extends _i1.Mock implements _i4.FirebaseFirestore {
   _i4.WriteBatch batch() => (super.noSuchMethod(Invocation.method(#batch, []),
       returnValue: _FakeWriteBatch_3()) as _i4.WriteBatch);
   @override
-  _i7.Future<void> clearPersistence() =>
+  _i9.Future<void> clearPersistence() =>
       (super.noSuchMethod(Invocation.method(#clearPersistence, []),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
-  _i7.Future<void> enablePersistence(
+  _i9.Future<void> enablePersistence(
           [_i3.PersistenceSettings? persistenceSettings]) =>
       (super.noSuchMethod(
           Invocation.method(#enablePersistence, [persistenceSettings]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
-  _i4.LoadBundleTask loadBundle(_i8.Uint8List? bundle) =>
+  _i4.LoadBundleTask loadBundle(_i10.Uint8List? bundle) =>
       (super.noSuchMethod(Invocation.method(#loadBundle, [bundle]),
           returnValue: _FakeLoadBundleTask_4()) as _i4.LoadBundleTask);
   @override
@@ -124,13 +131,13 @@ class MockFirebaseFirestore extends _i1.Mock implements _i4.FirebaseFirestore {
               #useFirestoreEmulator, [host, port], {#sslEnabled: sslEnabled}),
           returnValueForMissingStub: null);
   @override
-  _i7.Future<_i4.QuerySnapshot<Map<String, dynamic>>> namedQueryGet(
+  _i9.Future<_i4.QuerySnapshot<Map<String, dynamic>>> namedQueryGet(
           String? name,
           {_i3.GetOptions? options = const _i3.GetOptions()}) =>
       (super.noSuchMethod(
           Invocation.method(#namedQueryGet, [name], {#options: options}),
           returnValue: Future<_i4.QuerySnapshot<Map<String, dynamic>>>.value(
-              _FakeQuerySnapshot_5<Map<String, dynamic>>())) as _i7
+              _FakeQuerySnapshot_5<Map<String, dynamic>>())) as _i9
           .Future<_i4.QuerySnapshot<Map<String, dynamic>>>);
   @override
   _i4.Query<Map<String, dynamic>> collectionGroup(String? collectionPath) =>
@@ -138,41 +145,73 @@ class MockFirebaseFirestore extends _i1.Mock implements _i4.FirebaseFirestore {
               returnValue: _FakeQuery_6<Map<String, dynamic>>())
           as _i4.Query<Map<String, dynamic>>);
   @override
-  _i7.Future<void> disableNetwork() =>
+  _i9.Future<void> disableNetwork() =>
       (super.noSuchMethod(Invocation.method(#disableNetwork, []),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
   _i4.DocumentReference<Map<String, dynamic>> doc(String? documentPath) =>
       (super.noSuchMethod(Invocation.method(#doc, [documentPath]),
               returnValue: _FakeDocumentReference_7<Map<String, dynamic>>())
           as _i4.DocumentReference<Map<String, dynamic>>);
   @override
-  _i7.Future<void> enableNetwork() =>
+  _i9.Future<void> enableNetwork() =>
       (super.noSuchMethod(Invocation.method(#enableNetwork, []),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
-  _i7.Stream<void> snapshotsInSync() =>
+  _i9.Stream<void> snapshotsInSync() =>
       (super.noSuchMethod(Invocation.method(#snapshotsInSync, []),
-          returnValue: Stream<void>.empty()) as _i7.Stream<void>);
+          returnValue: Stream<void>.empty()) as _i9.Stream<void>);
   @override
-  _i7.Future<T> runTransaction<T>(_i4.TransactionHandler<T>? transactionHandler,
+  _i9.Future<T> runTransaction<T>(_i4.TransactionHandler<T>? transactionHandler,
           {Duration? timeout = const Duration(seconds: 30)}) =>
       (super.noSuchMethod(
           Invocation.method(
               #runTransaction, [transactionHandler], {#timeout: timeout}),
-          returnValue: Future<T>.value(null)) as _i7.Future<T>);
+          returnValue: Future<T>.value(null)) as _i9.Future<T>);
   @override
-  _i7.Future<void> terminate() =>
+  _i9.Future<void> terminate() =>
       (super.noSuchMethod(Invocation.method(#terminate, []),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
-  _i7.Future<void> waitForPendingWrites() =>
+  _i9.Future<void> waitForPendingWrites() =>
       (super.noSuchMethod(Invocation.method(#waitForPendingWrites, []),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
+}
+
+/// A class which mocks [FirebaseFunctions].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFirebaseFunctions extends _i1.Mock implements _i6.FirebaseFunctions {
+  MockFirebaseFunctions() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.FirebaseApp get app => (super.noSuchMethod(Invocation.getter(#app),
+      returnValue: _FakeFirebaseApp_0()) as _i2.FirebaseApp);
+  @override
+  _i5.FirebaseFunctionsPlatform get delegate =>
+      (super.noSuchMethod(Invocation.getter(#delegate),
+              returnValue: _FakeFirebaseFunctionsPlatform_8())
+          as _i5.FirebaseFunctionsPlatform);
+  @override
+  Map<dynamic, dynamic> get pluginConstants =>
+      (super.noSuchMethod(Invocation.getter(#pluginConstants),
+          returnValue: <dynamic, dynamic>{}) as Map<dynamic, dynamic>);
+  @override
+  _i6.HttpsCallable httpsCallable(String? name,
+          {_i5.HttpsCallableOptions? options}) =>
+      (super.noSuchMethod(
+          Invocation.method(#httpsCallable, [name], {#options: options}),
+          returnValue: _FakeHttpsCallable_9()) as _i6.HttpsCallable);
+  @override
+  void useFunctionsEmulator(String? host, int? port) =>
+      super.noSuchMethod(Invocation.method(#useFunctionsEmulator, [host, port]),
+          returnValueForMissingStub: null);
 }
 
 /// A class which mocks [CollectionReference].
@@ -194,17 +233,17 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
   @override
   _i4.FirebaseFirestore get firestore =>
       (super.noSuchMethod(Invocation.getter(#firestore),
-          returnValue: _FakeFirebaseFirestore_8()) as _i4.FirebaseFirestore);
+          returnValue: _FakeFirebaseFirestore_10()) as _i4.FirebaseFirestore);
   @override
   Map<String, dynamic> get parameters =>
       (super.noSuchMethod(Invocation.getter(#parameters),
           returnValue: <String, dynamic>{}) as Map<String, dynamic>);
   @override
-  _i7.Future<_i4.DocumentReference<T>> add(T? data) =>
+  _i9.Future<_i4.DocumentReference<T>> add(T? data) =>
       (super.noSuchMethod(Invocation.method(#add, [data]),
               returnValue: Future<_i4.DocumentReference<T>>.value(
                   _FakeDocumentReference_7<T>()))
-          as _i7.Future<_i4.DocumentReference<T>>);
+          as _i9.Future<_i4.DocumentReference<T>>);
   @override
   _i4.DocumentReference<T> doc([String? path]) => (super.noSuchMethod(
       Invocation.method(#doc, [path]),
@@ -237,11 +276,11 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
       (super.noSuchMethod(Invocation.method(#endBefore, [values]),
           returnValue: _FakeQuery_6<T>()) as _i4.Query<T>);
   @override
-  _i7.Future<_i4.QuerySnapshot<T>> get([_i3.GetOptions? options]) =>
+  _i9.Future<_i4.QuerySnapshot<T>> get([_i3.GetOptions? options]) =>
       (super.noSuchMethod(Invocation.method(#get, [options]),
               returnValue:
                   Future<_i4.QuerySnapshot<T>>.value(_FakeQuerySnapshot_5<T>()))
-          as _i7.Future<_i4.QuerySnapshot<T>>);
+          as _i9.Future<_i4.QuerySnapshot<T>>);
   @override
   _i4.Query<T> limit(int? limit) =>
       (super.noSuchMethod(Invocation.method(#limit, [limit]),
@@ -251,13 +290,13 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
       (super.noSuchMethod(Invocation.method(#limitToLast, [limit]),
           returnValue: _FakeQuery_6<T>()) as _i4.Query<T>);
   @override
-  _i7.Stream<_i4.QuerySnapshot<T>> snapshots(
+  _i9.Stream<_i4.QuerySnapshot<T>> snapshots(
           {bool? includeMetadataChanges = false}) =>
       (super.noSuchMethod(
               Invocation.method(#snapshots, [],
                   {#includeMetadataChanges: includeMetadataChanges}),
               returnValue: Stream<_i4.QuerySnapshot<T>>.empty())
-          as _i7.Stream<_i4.QuerySnapshot<T>>);
+          as _i9.Stream<_i4.QuerySnapshot<T>>);
   @override
   _i4.Query<T> orderBy(Object? field, {bool? descending = false}) =>
       (super.noSuchMethod(
@@ -336,7 +375,7 @@ class MockQuerySnapshot<T extends Object?> extends _i1.Mock
   @override
   _i4.SnapshotMetadata get metadata =>
       (super.noSuchMethod(Invocation.getter(#metadata),
-          returnValue: _FakeSnapshotMetadata_9()) as _i4.SnapshotMetadata);
+          returnValue: _FakeSnapshotMetadata_11()) as _i4.SnapshotMetadata);
   @override
   int get size =>
       (super.noSuchMethod(Invocation.getter(#size), returnValue: 0) as int);
@@ -355,7 +394,7 @@ class MockDocumentReference<T extends Object?> extends _i1.Mock
   @override
   _i4.FirebaseFirestore get firestore =>
       (super.noSuchMethod(Invocation.getter(#firestore),
-          returnValue: _FakeFirebaseFirestore_8()) as _i4.FirebaseFirestore);
+          returnValue: _FakeFirebaseFirestore_10()) as _i4.FirebaseFirestore);
   @override
   String get id =>
       (super.noSuchMethod(Invocation.getter(#id), returnValue: '') as String);
@@ -374,34 +413,34 @@ class MockDocumentReference<T extends Object?> extends _i1.Mock
               returnValue: _FakeCollectionReference_2<Map<String, dynamic>>())
           as _i4.CollectionReference<Map<String, dynamic>>);
   @override
-  _i7.Future<void> delete() =>
+  _i9.Future<void> delete() =>
       (super.noSuchMethod(Invocation.method(#delete, []),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
-  _i7.Future<void> update(Map<String, Object?>? data) =>
+  _i9.Future<void> update(Map<String, Object?>? data) =>
       (super.noSuchMethod(Invocation.method(#update, [data]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
-  _i7.Future<_i4.DocumentSnapshot<T>> get([_i3.GetOptions? options]) =>
+  _i9.Future<_i4.DocumentSnapshot<T>> get([_i3.GetOptions? options]) =>
       (super.noSuchMethod(Invocation.method(#get, [options]),
               returnValue: Future<_i4.DocumentSnapshot<T>>.value(
-                  _FakeDocumentSnapshot_10<T>()))
-          as _i7.Future<_i4.DocumentSnapshot<T>>);
+                  _FakeDocumentSnapshot_12<T>()))
+          as _i9.Future<_i4.DocumentSnapshot<T>>);
   @override
-  _i7.Stream<_i4.DocumentSnapshot<T>> snapshots(
+  _i9.Stream<_i4.DocumentSnapshot<T>> snapshots(
           {bool? includeMetadataChanges = false}) =>
       (super.noSuchMethod(
               Invocation.method(#snapshots, [],
                   {#includeMetadataChanges: includeMetadataChanges}),
               returnValue: Stream<_i4.DocumentSnapshot<T>>.empty())
-          as _i7.Stream<_i4.DocumentSnapshot<T>>);
+          as _i9.Stream<_i4.DocumentSnapshot<T>>);
   @override
-  _i7.Future<void> set(T? data, [_i3.SetOptions? options]) =>
+  _i9.Future<void> set(T? data, [_i3.SetOptions? options]) =>
       (super.noSuchMethod(Invocation.method(#set, [data, options]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
   _i4.DocumentReference<R> withConverter<R>(
           {_i4.FromFirestore<R>? fromFirestore,
@@ -432,7 +471,7 @@ class MockDocumentSnapshot<T extends Object?> extends _i1.Mock
   @override
   _i4.SnapshotMetadata get metadata =>
       (super.noSuchMethod(Invocation.getter(#metadata),
-          returnValue: _FakeSnapshotMetadata_9()) as _i4.SnapshotMetadata);
+          returnValue: _FakeSnapshotMetadata_11()) as _i4.SnapshotMetadata);
   @override
   bool get exists =>
       (super.noSuchMethod(Invocation.getter(#exists), returnValue: false)
@@ -448,7 +487,7 @@ class MockDocumentSnapshot<T extends Object?> extends _i1.Mock
 /// A class which mocks [User].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUser extends _i1.Mock implements _i6.User {
+class MockUser extends _i1.Mock implements _i8.User {
   MockUser() {
     _i1.throwOnMissingStub(this);
   }
@@ -462,118 +501,118 @@ class MockUser extends _i1.Mock implements _i6.User {
       (super.noSuchMethod(Invocation.getter(#isAnonymous), returnValue: false)
           as bool);
   @override
-  _i5.UserMetadata get metadata =>
+  _i7.UserMetadata get metadata =>
       (super.noSuchMethod(Invocation.getter(#metadata),
-          returnValue: _FakeUserMetadata_11()) as _i5.UserMetadata);
+          returnValue: _FakeUserMetadata_13()) as _i7.UserMetadata);
   @override
-  List<_i5.UserInfo> get providerData =>
+  List<_i7.UserInfo> get providerData =>
       (super.noSuchMethod(Invocation.getter(#providerData),
-          returnValue: <_i5.UserInfo>[]) as List<_i5.UserInfo>);
+          returnValue: <_i7.UserInfo>[]) as List<_i7.UserInfo>);
   @override
   String get uid =>
       (super.noSuchMethod(Invocation.getter(#uid), returnValue: '') as String);
   @override
-  _i7.Future<void> delete() =>
+  _i9.Future<void> delete() =>
       (super.noSuchMethod(Invocation.method(#delete, []),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
-  _i7.Future<String> getIdToken([bool? forceRefresh = false]) =>
+  _i9.Future<String> getIdToken([bool? forceRefresh = false]) =>
       (super.noSuchMethod(Invocation.method(#getIdToken, [forceRefresh]),
-          returnValue: Future<String>.value('')) as _i7.Future<String>);
+          returnValue: Future<String>.value('')) as _i9.Future<String>);
   @override
-  _i7.Future<_i5.IdTokenResult> getIdTokenResult(
+  _i9.Future<_i7.IdTokenResult> getIdTokenResult(
           [bool? forceRefresh = false]) =>
       (super.noSuchMethod(Invocation.method(#getIdTokenResult, [forceRefresh]),
               returnValue:
-                  Future<_i5.IdTokenResult>.value(_FakeIdTokenResult_12()))
-          as _i7.Future<_i5.IdTokenResult>);
+                  Future<_i7.IdTokenResult>.value(_FakeIdTokenResult_14()))
+          as _i9.Future<_i7.IdTokenResult>);
   @override
-  _i7.Future<_i6.UserCredential> linkWithCredential(
-          _i5.AuthCredential? credential) =>
+  _i9.Future<_i8.UserCredential> linkWithCredential(
+          _i7.AuthCredential? credential) =>
       (super.noSuchMethod(Invocation.method(#linkWithCredential, [credential]),
               returnValue:
-                  Future<_i6.UserCredential>.value(_FakeUserCredential_13()))
-          as _i7.Future<_i6.UserCredential>);
+                  Future<_i8.UserCredential>.value(_FakeUserCredential_15()))
+          as _i9.Future<_i8.UserCredential>);
   @override
-  _i7.Future<_i6.UserCredential> linkWithPopup(_i5.AuthProvider? provider) =>
+  _i9.Future<_i8.UserCredential> linkWithPopup(_i7.AuthProvider? provider) =>
       (super.noSuchMethod(Invocation.method(#linkWithPopup, [provider]),
               returnValue:
-                  Future<_i6.UserCredential>.value(_FakeUserCredential_13()))
-          as _i7.Future<_i6.UserCredential>);
+                  Future<_i8.UserCredential>.value(_FakeUserCredential_15()))
+          as _i9.Future<_i8.UserCredential>);
   @override
-  _i7.Future<_i6.ConfirmationResult> linkWithPhoneNumber(String? phoneNumber,
-          [_i6.RecaptchaVerifier? verifier]) =>
+  _i9.Future<_i8.ConfirmationResult> linkWithPhoneNumber(String? phoneNumber,
+          [_i8.RecaptchaVerifier? verifier]) =>
       (super.noSuchMethod(
               Invocation.method(#linkWithPhoneNumber, [phoneNumber, verifier]),
-              returnValue: Future<_i6.ConfirmationResult>.value(
-                  _FakeConfirmationResult_14()))
-          as _i7.Future<_i6.ConfirmationResult>);
+              returnValue: Future<_i8.ConfirmationResult>.value(
+                  _FakeConfirmationResult_16()))
+          as _i9.Future<_i8.ConfirmationResult>);
   @override
-  _i7.Future<_i6.UserCredential> reauthenticateWithCredential(
-          _i5.AuthCredential? credential) =>
+  _i9.Future<_i8.UserCredential> reauthenticateWithCredential(
+          _i7.AuthCredential? credential) =>
       (super.noSuchMethod(
               Invocation.method(#reauthenticateWithCredential, [credential]),
               returnValue:
-                  Future<_i6.UserCredential>.value(_FakeUserCredential_13()))
-          as _i7.Future<_i6.UserCredential>);
+                  Future<_i8.UserCredential>.value(_FakeUserCredential_15()))
+          as _i9.Future<_i8.UserCredential>);
   @override
-  _i7.Future<void> reload() =>
+  _i9.Future<void> reload() =>
       (super.noSuchMethod(Invocation.method(#reload, []),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
-  _i7.Future<void> sendEmailVerification(
-          [_i5.ActionCodeSettings? actionCodeSettings]) =>
+  _i9.Future<void> sendEmailVerification(
+          [_i7.ActionCodeSettings? actionCodeSettings]) =>
       (super.noSuchMethod(
           Invocation.method(#sendEmailVerification, [actionCodeSettings]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
-  _i7.Future<_i6.User> unlink(String? providerId) =>
+  _i9.Future<_i8.User> unlink(String? providerId) =>
       (super.noSuchMethod(Invocation.method(#unlink, [providerId]),
-              returnValue: Future<_i6.User>.value(_FakeUser_15()))
-          as _i7.Future<_i6.User>);
+              returnValue: Future<_i8.User>.value(_FakeUser_17()))
+          as _i9.Future<_i8.User>);
   @override
-  _i7.Future<void> updateEmail(String? newEmail) =>
+  _i9.Future<void> updateEmail(String? newEmail) =>
       (super.noSuchMethod(Invocation.method(#updateEmail, [newEmail]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
-  _i7.Future<void> updatePassword(String? newPassword) =>
+  _i9.Future<void> updatePassword(String? newPassword) =>
       (super.noSuchMethod(Invocation.method(#updatePassword, [newPassword]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
-  _i7.Future<void> updatePhoneNumber(
-          _i5.PhoneAuthCredential? phoneCredential) =>
+  _i9.Future<void> updatePhoneNumber(
+          _i7.PhoneAuthCredential? phoneCredential) =>
       (super.noSuchMethod(
           Invocation.method(#updatePhoneNumber, [phoneCredential]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
-  _i7.Future<void> updateDisplayName(String? displayName) =>
+  _i9.Future<void> updateDisplayName(String? displayName) =>
       (super.noSuchMethod(Invocation.method(#updateDisplayName, [displayName]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
-  _i7.Future<void> updatePhotoURL(String? photoURL) =>
+  _i9.Future<void> updatePhotoURL(String? photoURL) =>
       (super.noSuchMethod(Invocation.method(#updatePhotoURL, [photoURL]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
-  _i7.Future<void> updateProfile({String? displayName, String? photoURL}) =>
+  _i9.Future<void> updateProfile({String? displayName, String? photoURL}) =>
       (super.noSuchMethod(
           Invocation.method(#updateProfile, [],
               {#displayName: displayName, #photoURL: photoURL}),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
-  _i7.Future<void> verifyBeforeUpdateEmail(String? newEmail,
-          [_i5.ActionCodeSettings? actionCodeSettings]) =>
+  _i9.Future<void> verifyBeforeUpdateEmail(String? newEmail,
+          [_i7.ActionCodeSettings? actionCodeSettings]) =>
       (super.noSuchMethod(
           Invocation.method(
               #verifyBeforeUpdateEmail, [newEmail, actionCodeSettings]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
 }
