@@ -10,13 +10,11 @@ dependencies:
   flutter:
     sdk: flutter
   path_provider: ^2.0.9
+  get: ^4.6.5
   pdf_text: ^0.5.0
   file_picker: ^4.5.0
   cloud_firestore: ^3.1.10
-  # As firebase cache data and work in offline (which will mess up this app) and
-  # doesn't throw any errors.. we need to check connectivity using another plugin
   connectivity_plus: ^2.3.0
-  ################################## Change when PR merged
   firebase_auth: ^3.3.9
   firebase_core: ^1.13.1
   firebase_messaging: ^11.2.15
