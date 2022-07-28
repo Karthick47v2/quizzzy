@@ -1,14 +1,32 @@
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:quizzzy/src/service/fs_database.dart';
 
 class Auth {
-  final FirebaseAuth _auth;
+  late FirebaseAuth _auth;
+  static Auth? _instance;
 
-  Auth({required auth}) : _auth = auth;
+  /// Private named constructor for creating singleton.
+  Auth._internal() {
+    _auth = FirebaseAuth.instance;
+  }
 
-  // ignore: unnecessary_getters_setters
+  Auth.test(FirebaseAuth testAuth) {
+    _auth = testAuth;
+  }
+
+  /// Returns an object of [Auth] type without making a new one.
+  factory Auth() {
+    _instance ??= Auth._internal();
+    return _instance!;
+  }
+
+  /// The [FirebaseAuth] instance.
   FirebaseAuth get auth => _auth;
 
+  /// User authentication - Login
+  ///
+  /// Throws error if [FirebaseAuthException] occurs. Returns verification status.
   Future<String> userLogin(String email, String password) async {
     late String res;
     try {
@@ -17,7 +35,7 @@ class Auth {
           .then((_) {
         if (_auth.currentUser!.emailVerified) {
           res = "Verified";
-          fs.user = _auth.currentUser;
+          FirestoreService().user = _auth.currentUser;
         } else {
           res = "Not Verified";
         }
@@ -28,6 +46,9 @@ class Auth {
     return res;
   }
 
+  /// User authentication - Signup
+  ///
+  /// Throws error if [FirebaseAuthException] occurs. Signs out when account is created.
   Future<String> userSignup(String email, String password) async {
     late String res;
     try {
@@ -42,6 +63,9 @@ class Auth {
     return res;
   }
 
+  /// User authentication - Signout
+  ///
+  /// Throws error if [FirebaseAuthException] occurs.
   Future<String> userSignout() async {
     late String res;
     try {
@@ -52,5 +76,3 @@ class Auth {
     return res;
   }
 }
-
-late Auth auth;

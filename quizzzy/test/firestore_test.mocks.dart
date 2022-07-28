@@ -2,6 +2,8 @@
 // in quizzzy/test/firestore_test.dart.
 // Do not manually edit this file.
 
+// ignore_for_file: subtype_of_sealed_class
+
 import 'dart:async' as _i9;
 import 'dart:typed_data' as _i10;
 
@@ -26,7 +28,6 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
-// ignore_for_file: subtype_of_sealed_class
 
 class _FakeFirebaseApp_0 extends _i1.Fake implements _i2.FirebaseApp {}
 
@@ -166,10 +167,11 @@ class MockFirebaseFirestore extends _i1.Mock implements _i4.FirebaseFirestore {
           returnValue: Stream<void>.empty()) as _i9.Stream<void>);
   @override
   _i9.Future<T> runTransaction<T>(_i4.TransactionHandler<T>? transactionHandler,
-          {Duration? timeout = const Duration(seconds: 30)}) =>
+          {Duration? timeout = const Duration(seconds: 30),
+          int? maxAttempts = 5}) =>
       (super.noSuchMethod(
-          Invocation.method(
-              #runTransaction, [transactionHandler], {#timeout: timeout}),
+          Invocation.method(#runTransaction, [transactionHandler],
+              {#timeout: timeout, #maxAttempts: maxAttempts}),
           returnValue: Future<T>.value(null)) as _i9.Future<T>);
   @override
   _i9.Future<void> terminate() =>

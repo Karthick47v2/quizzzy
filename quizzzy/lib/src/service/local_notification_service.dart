@@ -1,6 +1,6 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class LocalNotificationService {
   late FlutterLocalNotificationsPlugin _notificationPlugin;
@@ -14,6 +14,7 @@ class LocalNotificationService {
     _notificationPlugin.initialize(initializationSettings);
   }
 
+  /// Push notification to mobile with [msg]
   display(RemoteMessage msg) async {
     try {
       final id = DateTime.now().millisecondsSinceEpoch ~/ 1000;
@@ -25,9 +26,10 @@ class LocalNotificationService {
       await _notificationPlugin.show(id, msg.notification!.title,
           msg.notification!.body, notificationDetails,
           payload: msg.notification!.body);
-      // ignore: unused_catch_clause, empty_catches
+      // ignore: empty_catches, unused_catch_clause
     } on Exception catch (e) {}
   }
 }
 
 late LocalNotificationService localNotificationService;
+late FirebaseMessaging fm;

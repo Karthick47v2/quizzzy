@@ -5,7 +5,6 @@ import 'package:mockito/mockito.dart';
 import 'package:quizzzy/src/service/fbase_auth.dart';
 
 import 'auth_test.mocks.dart';
-///////////////////////////////////////////////////////////////////////////////  || DELETING QUESTIONNAIRE
 
 @GenerateMocks([User, UserCredential, FirebaseAuth])
 main() {
@@ -15,7 +14,7 @@ main() {
   setUp(() {
     mockUser = MockUser();
     mockFirebaseAuth = MockFirebaseAuth();
-    auth = Auth(auth: mockFirebaseAuth);
+    auth = Auth.test(mockFirebaseAuth);
     when(mockFirebaseAuth.currentUser).thenAnswer((_) => mockUser);
   });
 

@@ -347,6 +347,14 @@ class MockFirebaseAuth extends _i1.Mock implements _i3.FirebaseAuth {
               Future<_i3.UserCredential>.value(_FakeUserCredential_2())) as _i5
           .Future<_i3.UserCredential>);
   @override
+  _i5.Future<_i3.UserCredential> signInWithAuthProvider(
+          _i2.AuthProvider? provider) =>
+      (super.noSuchMethod(
+              Invocation.method(#signInWithAuthProvider, [provider]),
+              returnValue:
+                  Future<_i3.UserCredential>.value(_FakeUserCredential_2()))
+          as _i5.Future<_i3.UserCredential>);
+  @override
   _i5.Future<_i3.ConfirmationResult> signInWithPhoneNumber(String? phoneNumber,
           [_i3.RecaptchaVerifier? verifier]) =>
       (super.noSuchMethod(

@@ -2,37 +2,50 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'db_model/question_set.dart';
-
-late String? userType;
+import 'package:quizzzy/src/service/fbase_auth.dart';
+import 'package:quizzzy/src/service/db_model/question_set.dart';
 
 class FirestoreService {
-  User? _user;
-  CollectionReference _users;
+  late User? _user;
+  late CollectionReference _users;
   late FirebaseFunctions fFunc;
 
-  FirestoreService({inst, user, fbFunc})
-      : _user = user,
-        _users = inst.collection("users") {
-    inst.settings = const Settings(persistenceEnabled: false);
-    fFunc = fbFunc;
+  static FirestoreService? _instance;
+
+  /// Private named constructor for creating singleton.
+  FirestoreService._internal() {
+    _user = Auth().auth.currentUser;
+    _users = FirebaseFirestore.instance.collection("users");
+    fFunc = FirebaseFunctions.instance;
   }
 
-  set user(User? user) => _user = user;
-  // ignore: unnecessary_getters_setters
+  FirestoreService.test(
+      User user, CollectionReference users, FirebaseFunctions func) {
+    _user = user;
+    _users = users;
+    fFunc = func;
+  }
+
+  /// Returns an object of [FirestoreService] type without making a new one.
+  factory FirestoreService() {
+    _instance ??= FirestoreService._internal();
+    return _instance!;
+  }
+
+  /// The [User] object.
+  set user(User? user) => _user = user!;
   User? get user => _user;
 
+  /// The [CollectionReference]object.
   set users(CollectionReference users) => _users = users;
-  // ignore: unnecessary_getters_setters
-  CollectionReference get users =>
-      _users; ///////////////////////////////////////////////////////
 
-  // get user type from firestore (teacher / student)
+  /// Get user type
+  ///
+  /// Returns user's user type from [Firestore]. Throws error if any unexpected error occurs.
   Future<String?> getUserType() async {
-    return await _users.doc(_user?.uid).get().then((docSnap) {
+    return await _users.doc(_user!.uid).get().then((docSnap) {
       if (docSnap.exists) {
         Map<String, dynamic> data = docSnap.data() as Map<String, dynamic>;
-        userType = data['userType'];
         return data['userType'];
       } else {
         return "None";
@@ -40,8 +53,12 @@ class FirestoreService {
     }).onError((error, stackTrace) => error.toString());
   }
 
+  /// Get question generation status.
+  ///
+  /// Returns wheter previous request is processed or not from [Firestore]. Throws error if any
+  /// unexpected error occurs.
   Future<String> getGeneratorStatus() async {
-    return await _users.doc(_user?.uid).get().then((docSnap) {
+    return await _users.doc(_user!.uid).get().then((docSnap) {
       if (docSnap.exists) {
         Map<String, dynamic> data = docSnap.data() as Map<String, dynamic>;
         return data['isGenerated'] == true
@@ -53,6 +70,9 @@ class FirestoreService {
     }).onError((error, stackTrace) => error.toString());
   }
 
+  /// Saves Firebase Cloud Messaging (FCM) token to [Firestore].
+  ///
+  /// Returns whether operation is success or not.
   Future<bool> saveTokenToDatabase(String token) async {
     HttpsCallable callable = fFunc.httpsCallable('storeUserInfo');
     return await callable.call(<String, dynamic>{
@@ -60,37 +80,52 @@ class FirestoreService {
     }).then((value) => value.data['status'] == 200);
   }
 
+  /// Get user document from [Firestore].
   Future<DocumentSnapshot?> getUserDoc(String colID) async =>
-      _users.doc(_user?.uid).collection(colID).doc('0').get();
+      _users.doc(_user!.uid).collection(colID).doc('0').get();
 
+  /// Get all questionnaire label list from [Firestore].
   Future<List<dynamic>> getQuestionnaireNameList() async {
     HttpsCallable callable = fFunc.httpsCallable('sendSubCollectionIDs');
     return await callable.call().then((value) => value.data['ids']);
   }
 
+  /// Get a questionnaire from [Firestore].
   Future<List<Map<String, dynamic>>> getQuestionnaire(String colID) async {
     return await _users
-        .doc(_user?.uid)
+        .doc(_user!.uid)
         .collection(colID)
         .get()
         .then((value) => value.docs.map((doc) => doc.data()).toList());
   }
 
-  Future<bool> saveUser(String name, String type) async {
-    HttpsCallable callable = fFunc.httpsCallable('storeUserInfo');
-    return await callable.call(<String, dynamic>{
-      'name': name,
-      'userType': type,
-    }).then((value) => value.data['status'] == 200);
+  Future<List<Map<String, dynamic>>> dummyGetQuestionnaire() async {
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////
+    return await _users
+        .doc('9jm4YIN90kej4Ryh4GVz8ejdxp02')
+        .collection('nlp_1')
+        .get()
+        .then((value) => value.docs.map((doc) => doc.data()).toList());
   }
 
-  Future<bool> setWaiting(bool state) async {
+  /// Store user info to [Firestore].
+  ///
+  /// If [isFirstTime] then store initial user details, else stores waiting status for question
+  /// generation. Returns whether operation is success or not.
+  Future<bool> saveUser(bool isFirstTime,
+      {String name = "", String type = "", bool state = false}) async {
+    Map<String, dynamic> dict =
+        isFirstTime ? {'name': name, 'userType': type} : {'isWaiting': state};
     HttpsCallable callable = fFunc.httpsCallable('storeUserInfo');
-    return await callable.call(<String, dynamic>{
-      'isWaiting': state,
-    }).then((value) => value.data['status'] == 200);
+    return await callable
+        .call(dict)
+        .then((value) => value.data['status'] == 200);
   }
 
+  /// Delete questionnaire from [Firestore].
+  ///
+  /// Returns whether operation is success or not.
   Future<bool> deleteQuestionnaire(String colPath) async {
     HttpsCallable callable = fFunc.httpsCallable('dltSubCollection');
     return await callable.call(<String, dynamic>{
@@ -98,6 +133,9 @@ class FirestoreService {
     }).then((value) => value.data['status'] == 200);
   }
 
+  /// Store modified quiz to [Firestore].
+  ///
+  /// Returns whether operation is success or not.
   Future<bool> saveModifiedQuiz(List<QuestionSet> qSet) async {
     HttpsCallable callable = fFunc.httpsCallable('storeQuiz');
     return await callable.call(<String, dynamic>{
@@ -105,5 +143,3 @@ class FirestoreService {
     }).then((value) => value.data['status'] == 200);
   }
 }
-
-late FirestoreService fs;

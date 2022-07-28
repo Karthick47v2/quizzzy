@@ -38,10 +38,8 @@ main() {
     when(mockFirebaseFirestore.collection('users'))
         .thenAnswer((_) => MockCollectionReference());
 
-    fs = FirestoreService(
-        inst: mockFirebaseFirestore,
-        user: mockUser,
-        fbFunc: MockFirebaseFunctions());
+    fs = FirestoreService.test(
+        mockUser, mockCollectionRef, MockFirebaseFunctions());
     studentDict = {
       'userType': 'Student',
       'isGenerated': false,
@@ -55,7 +53,7 @@ main() {
     when(mockDocumentSnapshot.data()).thenAnswer((_) => studentDict);
     when(mockDocumentRef.get())
         .thenAnswer((_) => Future.value(mockDocumentSnapshot));
-    when(fs.users.doc(any)).thenAnswer(((_) => (mockDocumentRef)));
+    when(mockCollectionRef.doc(any)).thenAnswer(((_) => (mockDocumentRef)));
   });
 
   group("User type check", () {

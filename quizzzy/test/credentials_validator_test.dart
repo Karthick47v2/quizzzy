@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:quizzzy/src/auth/signup.dart';
+import 'package:quizzzy/src/auth/validation.dart';
 
 main() {
   group("Email validation", (() {
