@@ -1,9 +1,15 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:quizzzy/src/home_page.dart';
-import '../../libs/custom_widgets.dart';
-import '../service/fs_database.dart';
+import 'package:get/get.dart';
 
+import 'package:quizzzy/src/home_page.dart';
+import 'package:quizzzy/src/service/fs_database.dart';
+import 'package:quizzzy/libs/custom_widgets.dart';
+
+/// Renders [VerifyEmail] screen
+///
+/// Invokes [checkEmailVerification()] every 3 seconds. Sends email verification when
+/// [QuizzzyNavigatorBtn] pressed. Once users gets verified navigates to [HomePage]
 class VerifyEmail extends StatefulWidget {
   const VerifyEmail({Key? key}) : super(key: key);
 
@@ -35,7 +41,8 @@ class _VerifyEmailState extends State<VerifyEmail> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Text(
-          "You need to verify your account before going further. A verification email has been already sent to your email.",
+          '''You need to verify your account before going further. A verification email has been 
+          already sent to your email.''',
           style: TextStyle(
             fontFamily: 'Heebo',
             fontSize: 18,
@@ -46,20 +53,22 @@ class _VerifyEmailState extends State<VerifyEmail> {
         ),
         QuizzzyNavigatorBtn(
           text: "Resend Email",
-          onTap: () => fs.user!.sendEmailVerification(),
+          onTap: () => FirestoreService().user!.sendEmailVerification(),
           clr: Colors.green[400],
         ),
       ],
     ));
   }
 
+  /// Verify email
+  ///
+  /// Navigate to [HomePage] only, if email got verified
   Future<void> checkEmailVerification() async {
-    await fs.user!.reload();
+    await FirestoreService().user!.reload();
 
-    if (fs.user!.emailVerified) {
+    if (FirestoreService().user!.emailVerified) {
       timer?.cancel();
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const HomePage()));
+      Get.to(() => const HomePage());
     }
   }
 }

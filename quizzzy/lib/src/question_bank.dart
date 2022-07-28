@@ -1,74 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:quizzzy/controllers/question_list_controller.dart';
+import 'package:quizzzy/controllers/questionnaire_controller.dart';
+import 'package:quizzzy/controllers/user_type_controller.dart';
+
 import 'package:quizzzy/libs/custom_widgets.dart';
 import 'package:quizzzy/src/questionnaire.dart';
 import 'package:quizzzy/src/service/db_model/question_set.dart';
 import 'package:quizzzy/src/service/fs_database.dart';
 import 'package:quizzzy/src/service/local_database.dart';
 
+/// Renders list of questionnaire naems on [QuestionBank] screen
+///
+/// OnClick functions of [QuizzzyNavigatorBtn] will depend on [userType].
 class QuestionBank extends StatefulWidget {
-  final List<String> data;
-  final String status;
-  QuestionBank({Key? key, required objData, required this.status})
-      : data = objData.map((val) => val.toString()).toList().cast<String>(),
-        super(key: key);
+  const QuestionBank({Key? key}) : super(key: key);
 
   @override
   State<QuestionBank> createState() => _QuestionBankState();
 }
 
 class _QuestionBankState extends State<QuestionBank> {
-  late List<String>? popList;
-  late List<QuestionSet> qSet;
+  List<String> questionList = Get.find<QuestionListController>().questionList;
 
-  filterList() async {
-    popList = await sharedPref.getPoppedItems();
-    if (popList != null) {
-      List<String> newList = [];
-      for (int i = 0; i < popList!.length; i++) {
-        if (widget.data.contains(popList![i])) {
-          widget.data.remove(popList![i]);
-          newList.add(popList![i]);
-        }
-      }
-      popList = newList;
-      sharedPref.setPoppedItems(popList!);
-    } else {
-      popList = [];
-    }
-  }
-
-  Future<bool> getQuestions(int idx) async {
-    var questionnaire = questionSetBox.get(widget.data[idx]);
-    // ignore: unnecessary_null_comparison
-    if (questionnaire == null) {
-      questionnaire = (await fs.getQuestionnaire(widget.data[idx]))
-          .map((e) => (QuestionSet.fromJson(e)))
-          .toList();
-      questionSetBox.put(widget.data[idx], questionnaire);
-    } else {
-      questionnaire = questionnaire..cast<QuestionSet>();
-      // fake waiting for future builder to work without break
-      await Future.delayed(Duration.zero);
-    }
-    qSet = questionnaire;
-    return true;
-  }
-
+  /// Initialize Hive box
   @override
   initState() {
     super.initState();
     setBox();
-    if (widget.status == "Waiting") {
-      snackBar(context, "Your last request is being processed.",
-          (Colors.amber.shade400));
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return QuizzzyTemplate(
-        body: FutureBuilder(
-            future: filterList(),
+    return QuizzzyTemplate(body: GetBuilder<QuestionListController>(
+      builder: (controller) {
+        return (FutureBuilder(
+            future: controller.filterList(),
             builder: (context, snapshot) {
               Widget ret = Container();
               if (snapshot.connectionState == ConnectionState.done) {
@@ -90,12 +57,11 @@ class _QuestionBankState extends State<QuestionBank> {
                     ),
                     Expanded(
                       child: ListView.builder(
-                        itemCount: widget.data.length,
+                        itemCount: questionList.length,
                         itemBuilder: (context, idx) {
                           return QuizzzyCard(
-                              title: widget.data[idx],
+                              title: questionList[idx],
                               onLongPress: () {
-                                // dlt from local if... and also from cloud
                                 showDialog(
                                     context: context,
                                     builder: (BuildContext cntxt) {
@@ -119,19 +85,22 @@ class _QuestionBankState extends State<QuestionBank> {
                                               text: "Yes",
                                               onTap: () async {
                                                 questionSetBox
-                                                    .delete(widget.data[idx]);
-                                                if (!await fs.deleteQuestionnaire(
-                                                    'users/${fs.user!.uid}/${widget.data[idx]}')) {
+                                                    .delete(questionList[idx]);
+                                                if (!await FirestoreService()
+                                                    .deleteQuestionnaire(
+                                                        '''users/${FirestoreService().user!.uid}/
+                                                          ${questionList[idx]}''')) {
                                                   snackBar(
-                                                      context,
-                                                      "Error: Please try again",
+                                                      "Error",
+                                                      "Please try again",
                                                       Colors.red.shade800);
                                                 } else {
-                                                  popList!
-                                                      .add(widget.data[idx]);
-                                                  sharedPref
-                                                      .setPoppedItems(popList!);
-                                                  setState(() {});
+                                                  controller.poppedList!
+                                                      .add(questionList[idx]);
+                                                  UserSharedPreferences()
+                                                      .setPoppedItems(controller
+                                                          .poppedList!);
+                                                  // setState(() {});
                                                 }
                                                 Navigator.of(cntxt).pop();
                                               },
@@ -147,7 +116,8 @@ class _QuestionBankState extends State<QuestionBank> {
                                     });
                               },
                               onTap: () async {
-                                var res = getQuestions(idx);
+                                var res = Get.find<QuestionnaireController>()
+                                    .overwriteList(questionList[idx]);
                                 showDialog(
                                     context: context,
                                     builder: (BuildContext cntxt) {
@@ -161,7 +131,7 @@ class _QuestionBankState extends State<QuestionBank> {
                                                   size: 150.0,
                                                   wids: [
                                                     Text(
-                                                      "Questionnaire: ${widget.data[idx]}",
+                                                      "Questionnaire: ${questionList[idx]}",
                                                       style: const TextStyle(
                                                         fontFamily: 'Heebo',
                                                         fontSize: 22,
@@ -173,37 +143,39 @@ class _QuestionBankState extends State<QuestionBank> {
                                                       textAlign:
                                                           TextAlign.center,
                                                     ),
-                                                    Text(
-                                                      userType == 'Student'
-                                                          ? "Time: ${qSet.length} mins"
-                                                          : "Questions: ${qSet.length}",
-                                                      style: const TextStyle(
-                                                        fontFamily: 'Heebo',
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        color: Color.fromARGB(
-                                                            255, 255, 255, 255),
-                                                      ),
-                                                    ),
+                                                    GetBuilder<
+                                                            QuestionnaireController>(
+                                                        builder: (qController) {
+                                                      return Text(
+                                                        Get.find<UserTypeController>()
+                                                                    .userType ==
+                                                                'Student'
+                                                            ? "Time: ${qController.questionnaire.length} mins"
+                                                            : "Questions: ${qController.questionnaire.length}",
+                                                        style: const TextStyle(
+                                                          fontFamily: 'Heebo',
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          color: Color.fromARGB(
+                                                              255,
+                                                              255,
+                                                              255,
+                                                              255),
+                                                        ),
+                                                      );
+                                                    }),
                                                     QuizzzyNavigatorBtn(
-                                                      text:
-                                                          userType == 'Student'
-                                                              ? "Start"
-                                                              : "View",
-                                                      cont: context,
+                                                      text: Get.find<UserTypeController>()
+                                                                  .userType ==
+                                                              'Student'
+                                                          ? "Start"
+                                                          : "View",
                                                       onTap: () {
                                                         Navigator.of(cntxt)
                                                             .pop();
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: ((context) => Questionnaire(
-                                                                    questionnaire:
-                                                                        qSet,
-                                                                    name: widget
-                                                                            .data[
-                                                                        idx]))));
+                                                        Get.to(() =>
+                                                            const Questionnaire());
                                                       },
                                                     ),
                                                   ]);
@@ -224,5 +196,7 @@ class _QuestionBankState extends State<QuestionBank> {
               }
               return ret;
             }));
+      },
+    ));
   }
 }

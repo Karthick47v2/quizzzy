@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import 'package:quizzzy/libs/custom_widgets.dart';
 import 'package:quizzzy/src/auth/signup.dart';
+import 'package:quizzzy/src/auth/validation.dart';
 import 'package:quizzzy/src/auth/verify.dart';
 import 'package:quizzzy/src/home_page.dart';
 import 'package:quizzzy/src/service/fbase_auth.dart';
-import '../../libs/custom_widgets.dart';
 
+/// Renders [Login] screen
+///
+/// Verify user credentials once [QuizzzyNavigatorBtn] pressed and navigates to [HomePage] if
+/// verified account else navigates to [VerifyEmail] screen. If credentials are not valid then,
+/// throws error
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -37,7 +45,6 @@ class _LoginState extends State<Login> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  // ignore: prefer_const_literals_to_create_immutables
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(
@@ -72,24 +79,14 @@ class _LoginState extends State<Login> {
               child: QuizzzyNavigatorBtn(
                 text: "Log In",
                 onTap: () async => {
-                  res = await auth.userLogin(
-                      emailController.text, passwordController.text),
+                  res = await Auth()
+                      .userLogin(emailController.text, passwordController.text),
                   if (res == "Verified")
-                    {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomePage()))
-                    }
+                    {Get.to(() => const HomePage())}
                   else if (res == "Not Verified")
-                    {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const VerifyEmail()))
-                    }
+                    {Get.to(() => const VerifyEmail())}
                   else
-                    {snackBar(context, res, (Colors.red.shade800))}
+                    {snackBar("Error", res, (Colors.red.shade800))}
                 },
               ),
             ),

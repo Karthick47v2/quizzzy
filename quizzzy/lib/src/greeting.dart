@@ -1,9 +1,12 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:quizzzy/libs/custom_widgets.dart';
-import 'package:quizzzy/src/service/local_notification_service.dart';
-import 'home_page.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:get/get.dart';
 
+import 'package:quizzzy/libs/custom_widgets.dart';
+import 'package:quizzzy/src/home_page.dart';
+import 'package:quizzzy/src/service/local_notification_service.dart';
+
+/// Renders [Greetings] screen
 class Greetings extends StatefulWidget {
   const Greetings({Key? key}) : super(key: key);
 
@@ -15,31 +18,25 @@ class _GreetingsState extends State<Greetings> {
   @override
   initState() {
     super.initState();
-
-    // initialze local notification handler (when in foreground)
     localNotificationService = LocalNotificationService(context);
 
-    // always go to home when notification is pressed (bg / terminated state only)
-    FirebaseMessaging.instance.getInitialMessage().then((msg) {
+    /// Notification handler - App on background state / terminated state.
+    fm.getInitialMessage().then((msg) {
       if (msg != null) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const HomePage()));
+        Get.to(() => const HomePage());
       }
     });
 
-    // foreground msg handler
+    /// Notification handler - App on foreground state.
     FirebaseMessaging.onMessage.listen((msg) {
-      if (msg.notification != null) {
-        //TODO: LATER
-      }
+      if (msg.notification != null) {}
 
       localNotificationService.display(msg);
     });
 
-    // onTap
+    /// onTap - foreground state
     FirebaseMessaging.onMessageOpenedApp.listen((msg) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const HomePage()));
+      Get.to(() => const HomePage());
     });
   }
 

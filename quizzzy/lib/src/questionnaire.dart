@@ -1,5 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:quizzzy/controllers/questionnaire_controller.dart';
+import 'package:quizzzy/controllers/user_type_controller.dart';
+
 import 'package:quizzzy/libs/custom_widgets.dart';
 import 'package:quizzzy/src/home_page.dart';
 import 'package:quizzzy/src/score.dart';
@@ -7,35 +11,40 @@ import 'package:quizzzy/src/service/db_model/question_set.dart';
 import 'package:quizzzy/src/service/fs_database.dart';
 import 'package:quizzzy/src/service/local_database.dart';
 
+/// Renders [Questionnaire] screen which consists of all questions.
+///
+/// UI and functions will defer according to [userType].
 class Questionnaire extends StatefulWidget {
-  final List<QuestionSet> questionnaire;
-  final String name;
-
-  const Questionnaire(
-      {Key? key, required this.questionnaire, required this.name})
-      : super(key: key);
+  const Questionnaire({Key? key}) : super(key: key);
 
   @override
   State<Questionnaire> createState() => _QuestionnaireState();
 }
 
 class _QuestionnaireState extends State<Questionnaire> {
-  int currentQ = 0, score = 0, time = 0;
+  int currentIdx = 0, time = 0;
   late List<bool> qState = List.filled(4, false);
   late List<QuestionSet> quesPrep;
-
+  String userType = Get.find<UserTypeController>().userType;
+  List<QuestionSet> questionnaire =
+      Get.find<QuestionnaireController>().questionnaire;
+  String name = Get.find<QuestionnaireController>().questionnaireName;
   late Timer timer;
 
+  /// Initialize timer if [userType] is Student.
   @override
   initState() {
     super.initState();
     if (userType == 'Student') {
-      widget.questionnaire.shuffle();
-      time = widget.questionnaire.length * 60;
+      questionnaire.shuffle();
+      time = questionnaire.length * 60;
       startTimer();
     }
   }
 
+  /// Start count down.
+  ///
+  /// Alert if time's up.
   startTimer() {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (time <= 0) {
@@ -59,12 +68,7 @@ class _QuestionnaireState extends State<Questionnaire> {
                     text: "Finish",
                     onTap: () {
                       Navigator.of(cntxt).pop();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: ((context) => Score(
-                                  score: score,
-                                  questionnaire: widget.questionnaire))));
+                      Get.to(() => Score());
                     },
                   )
                 ]);
@@ -78,6 +82,7 @@ class _QuestionnaireState extends State<Questionnaire> {
     });
   }
 
+  /// Stop timer function when navigating to other screen.
   @override
   dispose() {
     if (userType == 'Student') {
@@ -154,7 +159,7 @@ class _QuestionnaireState extends State<Questionnaire> {
                   ),
                   child: Center(
                     child: Text(
-                      widget.questionnaire[currentQ].question,
+                      questionnaire[currentIdx].question,
                       style: const TextStyle(
                           fontFamily: 'Heebo',
                           fontSize: 22,
@@ -165,19 +170,19 @@ class _QuestionnaireState extends State<Questionnaire> {
                   ),
                 ),
               ),
-              for (var i in widget.questionnaire[currentQ].allAns)
+              for (var i in questionnaire[currentIdx].allAns)
                 QuizzzyAns(
                   ans: i,
                   isPicked: userType == 'Student'
-                      ? qState[widget.questionnaire[currentQ].allAns.indexOf(i)]
+                      ? qState[questionnaire[currentIdx].allAns.indexOf(i)]
                       : i.toLowerCase() ==
-                          widget.questionnaire[currentQ].crctAns.toLowerCase(),
+                          questionnaire[currentIdx].crctAns.toLowerCase(),
                   onTap: () {
                     if (userType == 'Student') {
                       setState(() {
                         refreshAns();
-                        qState[widget.questionnaire[currentQ].allAns
-                            .indexOf(i)] = true;
+                        qState[questionnaire[currentIdx].allAns.indexOf(i)] =
+                            true;
                       });
                     }
                   },
@@ -193,7 +198,7 @@ class _QuestionnaireState extends State<Questionnaire> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "${currentQ + 1} / ${widget.questionnaire.length}",
+                "${currentIdx + 1} / ${questionnaire.length}",
                 style: const TextStyle(
                     fontFamily: 'Heebo',
                     fontSize: 18,
@@ -227,30 +232,73 @@ class _QuestionnaireState extends State<Questionnaire> {
     ));
   }
 
+  /// Move to next question when [QuizzzyNavigatorBtn] pressed.
+  ///
+  /// If [userType] is Teacher then they can keep/drop current question.
   updateQuestion({bool isRemove = false}) {
     if (userType == 'Student') {
       // atleast 1 ans should be selected inorder to go to next question
       if (qState.any((e) => e)) {
         setState(() {
-          if (currentQ < widget.questionnaire.length - 1) {
+          if (currentIdx < questionnaire.length - 1) {
             if (checkAns()) {
-              score++;
+              Get.find<QuestionnaireController>().scoreInc();
             }
             refreshAns();
-            currentQ++;
+            currentIdx++;
           } else {
-            // ignore: avoid_print
-            print(score);
+            if (checkAns()) {
+              Get.find<QuestionnaireController>().scoreInc();
+            }
+            timer.cancel();
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext cntxt) {
+                  return PopupModal(size: 150.0, wids: [
+                    const Text(
+                      // "You got ${100 * score / questionnaire.length}",
+                      "Press continue to finish the quiz",
+                      style: TextStyle(
+                          fontFamily: 'Heebo',
+                          fontSize: 22,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white),
+                      textAlign: TextAlign.center,
+                    ),
+                    const Text(
+                      "You can always review quizzes from main menu",
+                      style: TextStyle(
+                          fontFamily: 'Heebo',
+                          fontSize: 19,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white),
+                      textAlign: TextAlign.center,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        QuizzzyNavigatorBtn(
+                          text: "Continue",
+                          onTap: () async {
+                            Navigator.pop(cntxt); ///////////////////////
+                            Get.to(() => const HomePage());
+                          },
+                        )
+                      ],
+                    ),
+                  ]);
+                });
           }
         });
       }
     } else {
       setState(() {
-        if (currentQ < widget.questionnaire.length - 1) {
+        if (currentIdx < questionnaire.length - 1) {
           if (isRemove) {
-            widget.questionnaire.removeAt(currentQ);
+            questionnaire.removeAt(currentIdx);
           } else {
-            currentQ++;
+            currentIdx++;
           }
         } else {
           showDialog(
@@ -272,27 +320,24 @@ class _QuestionnaireState extends State<Questionnaire> {
                     children: [
                       QuizzzyNavigatorBtn(
                         text: "Cancel",
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: ((context) => const HomePage())));
-                        },
+                        onTap: () => Get.to(() => const HomePage()),
                       ),
                       QuizzzyNavigatorBtn(
                         text: "Continue",
                         onTap: () async {
-                          if (isRemove) {
-                            if (widget.questionnaire.length == 1) {
-                              // removeQuestionnaire();
-                            } else {
-                              modifyQuestionSet(
-                                  widget.name, widget.questionnaire, true);
-                            }
-                          } else {
-                            modifyQuestionSet(
-                                widget.name, widget.questionnaire, false);
-                          }
+                          // if (isRemove) {
+                          //   if (questionnaire.length == 1) {
+                          //     // removeQuestionnaire();
+                          //   } else {
+                          //     modifyQuestionSet(
+                          //         name, questionnaire, true);
+                          //   }
+                          // } else {
+                          //   modifyQuestionSet(
+                          //       name, questionnaire, false);
+                          // }
+                          Navigator.pop(cntxt); ///////////////////////
+                          Get.to(() => const HomePage());
                         },
                       )
                     ],
@@ -304,28 +349,36 @@ class _QuestionnaireState extends State<Questionnaire> {
     }
   }
 
+  /// If [userType] is teacher and they have modified initial questionnaire, then store it to
+  /// local database.
   modifyQuestionSet(String name, List<QuestionSet> q, bool removeLast) {
-    fs.saveModifiedQuiz(q);
+    FirestoreService().saveModifiedQuiz(
+        q); /////////////////////////////////////////////////////////////////////
   }
 
+  /// Remove [name] from both local and online database once it got modified.
   removeQuestionnaire() async {
-    questionSetBox.delete(widget.name);
-    if (!await fs.deleteQuestionnaire('users/${fs.user!.uid}/${widget.name}')) {
-      snackBar(context, "Error: Please try again", Colors.red.shade800);
+    questionSetBox.delete(name);
+    if (!await FirestoreService()
+        .deleteQuestionnaire('users/${FirestoreService().user!.uid}/$name')) {
+      snackBar("Error", "Please try again", Colors.red.shade800);
     } else {
-      var popList = await sharedPref.getPoppedItems();
+      var popList = await UserSharedPreferences().getPoppedItems();
       popList ??= [];
-      popList.add(widget.name);
-      sharedPref.setPoppedItems(popList);
+      popList.add(name);
+      UserSharedPreferences().setPoppedItems(popList);
     }
   }
 
+  /// Validate answer when next [QuizzzyNavigatorBtn] pressed.
   bool checkAns() {
-    return widget.questionnaire[currentQ].allAns[qState.indexOf(true)]
+    return questionnaire[currentIdx]
+            .allAns[qState.indexOf(true)]
             .toLowerCase() ==
-        widget.questionnaire[currentQ].crctAns.toLowerCase();
+        questionnaire[currentIdx].crctAns.toLowerCase();
   }
 
+  /// Refresh [QuizzzyNavigatorBtn] pressed state.
   refreshAns() {
     qState.setAll(0, [false, false, false, false]);
   }

@@ -1,13 +1,16 @@
+import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:pdf_text/pdf_text.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 import 'package:quizzzy/libs/custom_widgets.dart';
 import 'package:quizzzy/src/service/fs_database.dart';
 
+/// Renders [ImportFile] screen
+///
+/// Opens file browser with [QuizzzyNavigatorBtn] pressed via [PopupModal]
 class ImportFile extends StatefulWidget {
   const ImportFile({Key? key}) : super(key: key);
 
@@ -36,7 +39,8 @@ class _ImportFileState extends State<ImportFile> {
               ),
               child: const Center(
                 child: Text(
-                  "Upload materials (PDF) to generate questions. Please make sure there are only texts in uploaded content to get improved results.",
+                  '''Upload materials (PDF) to generate questions. Please make sure there are only
+                  texts in uploaded content to get improved results.''',
                   style: TextStyle(
                       fontFamily: 'Heebo',
                       fontSize: 17,
@@ -88,7 +92,7 @@ class _ImportFileState extends State<ImportFile> {
                                             isLoading = true;
                                           });
                                         } else {
-                                          snackBar(cntxt, "No network access",
+                                          snackBar("Error", "No network access",
                                               (Colors.red.shade800));
                                           Navigator.pop(cntxt);
                                         }
@@ -107,10 +111,17 @@ class _ImportFileState extends State<ImportFile> {
     );
   }
 
+  /// Send extracted text ([cont]) to server along with [qName].
+  ///
+  /// Throw error [SnackBar] if anything goes wrong. Pop the [PopupModal] at last.
   Future getQuestions(String cont, BuildContext context, String qName) async {
     var url =
         Uri.parse("https://mcq-gen-nzbm4e7jxa-el.a.run.app/get-questions");
-    Map body = {'context': cont, 'uid': fs.user!.uid, 'name': qName};
+    Map body = {
+      'context': cont,
+      'uid': FirestoreService().user!.uid,
+      'name': qName
+    };
 
     var res = await http
         .post(url,
@@ -123,21 +134,24 @@ class _ImportFileState extends State<ImportFile> {
 
     if (res.statusCode == 200) {
       snackBar(
-          context,
+          "Success",
           "Generating question may take a while. It will be available under 'Question Bank' once process is finished.",
           Colors.green.shade700);
-      if (!await fs.setWaiting(true)) {
-        snackBar(context, "Connection error", (Colors.red.shade800));
+      if (!await FirestoreService().saveUser(false, state: true)) {
+        snackBar("Error", "Connection error", (Colors.red.shade800));
       }
     } else {
-      snackBar(context, res.body.toString(), (Colors.red.shade800));
+      snackBar("Error", res.body.toString(), (Colors.red.shade800));
     }
     Navigator.pop(context);
   }
 
+  /// Load and saved extracted text from user selected file into memory
+  ///
+  /// Send [docText] to server if correct file format selected or else do nothing.
   getFile(BuildContext context, String fileName) async {
-    if (await fs.getGeneratorStatus() == "Waiting") {
-      snackBar(context, "Please wait for previous document to get processed.",
+    if (await FirestoreService().getGeneratorStatus() == "Waiting") {
+      snackBar("...", "Please wait for previous document to get processed.",
           (Colors.amber.shade400));
       return;
     }
@@ -147,12 +161,12 @@ class _ImportFileState extends State<ImportFile> {
       allowedExtensions: ['pdf'],
     );
 
-    // check if name is already taken
+    /// check if [fileName] is taken.
     bool docExists = true;
     int i = 0;
     String tempName = fileName;
     while (docExists) {
-      if ((await fs.getUserDoc(tempName))!.exists) {
+      if ((await FirestoreService().getUserDoc(tempName))!.exists) {
         tempName = fileName + "(" + (++i).toString() + ")";
       } else {
         docExists = false;

@@ -1,17 +1,24 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
+import 'package:quizzzy/controllers/question_list_controller.dart';
+import 'package:quizzzy/controllers/user_type_controller.dart';
+
+import 'package:quizzzy/libs/custom_widgets.dart';
 import 'package:quizzzy/src/auth/login.dart';
 import 'package:quizzzy/src/import.dart';
+import 'package:quizzzy/src/questionnaire.dart';
 import 'package:quizzzy/src/service/db_model/question_set.dart';
 import 'package:quizzzy/src/service/fbase_auth.dart';
 import 'package:quizzzy/src/service/fs_database.dart';
 import 'package:quizzzy/src/service/local_database.dart';
-import 'package:quizzzy/src/service/dynamic_links.dart';
 import 'package:quizzzy/src/question_bank.dart';
-import '../libs/custom_widgets.dart';
+import 'package:quizzzy/src/service/local_notification_service.dart';
 
+/// Renders [HomePage] screen
+/// If [firstTime] render user details form, or else show menu. Navigates to appropiate screens
+/// repective to [QuizzzyNavigatorBtn] click.
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -23,23 +30,24 @@ class _HomePageState extends State<HomePage> {
   late Future<String?> userFuture;
   bool firstTime = true;
   final nameController = TextEditingController();
+  final codeController = TextEditingController();
 
   Future<void> pushToken() async {
     questionSetBox = await setBox();
-    String? token = await FirebaseMessaging.instance.getToken();
-    String? oldToken = await sharedPref.getToken();
+    String? token = await fm.getToken();
+    String? oldToken = await UserSharedPreferences().getToken();
     if (oldToken != token) {
-      await sharedPref.setToken(token!);
-      await fs.saveTokenToDatabase(token);
+      await UserSharedPreferences().setToken(token!);
+      await FirestoreService().saveTokenToDatabase(token);
     }
-    FirebaseMessaging.instance.onTokenRefresh.listen(fs.saveTokenToDatabase);
+    fm.onTokenRefresh.listen(FirestoreService().saveTokenToDatabase);
   }
 
   @override
   initState() {
     super.initState();
     pushToken();
-    userFuture = fs.getUserType();
+    userFuture = FirestoreService().getUserType();
   }
 
   @override
@@ -102,6 +110,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ));
           } else {
+            Get.find<UserTypeController>().setUserType(snapshot.data as String);
             ret = (Builder(
               builder: (context) => Column(
                 children: [
@@ -121,8 +130,7 @@ class _HomePageState extends State<HomePage> {
                         width: double.maxFinite - 20,
                         child: QuizzzyNavigatorBtn(
                           text: "Import PDF",
-                          cont: context,
-                          page: const ImportFile(),
+                          onTap: () => Get.to(() => const ImportFile()),
                         ),
                       ),
                       SizedBox(
@@ -145,27 +153,64 @@ class _HomePageState extends State<HomePage> {
                           ? SizedBox(
                               width: double.maxFinite - 20,
                               child: QuizzzyNavigatorBtn(
-                                text: "Saved questionnaire",
+                                text: "Attempt quiz",
                                 onTap: () async {
-                                  await dlink.generateDynamicLink(
-                                      "teacherID", "quizID");
+                                  showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (BuildContext cntxt) {
+                                        return StatefulBuilder(
+                                            builder: (cntxt, setState) {
+                                          return PopupModal(size: 200.0, wids: [
+                                            Column(
+                                              children: [
+                                                QuizzzyTextInput(
+                                                  text: "Enter code",
+                                                  controller: codeController,
+                                                ),
+                                                QuizzzyNavigatorBtn(
+                                                  text: "Confirm",
+                                                  onTap: () async {
+                                                    // var questionnaire =
+                                                    //     (await FirestoreService()
+                                                    //             .dummyGetQuestionnaire())
+                                                    //         .map((e) =>
+                                                    //             (QuestionSet
+                                                    //                 .fromJson(
+                                                    //                     e)))
+                                                    //         .toList();
+                                                    Navigator.pop(cntxt);
+                                                    Get.to(() =>
+                                                        const Questionnaire());
+                                                  },
+                                                )
+                                              ],
+                                            ),
+                                          ]);
+                                        });
+                                      });
                                 },
                               ),
                             )
                           : SizedBox(
                               width: double.maxFinite - 20,
                               child: QuizzzyNavigatorBtn(
-                                text: "Saved quiz",
-                                cont: context,
-                                page: const HomePage(),
-                              ),
+                                  text: "Saved quiz",
+                                  onTap: () {
+                                    showDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (BuildContext cntxt) {
+                                          checkQuesGenerated(cntxt);
+                                          return const Loading();
+                                        });
+                                  }),
                             ),
                       SizedBox(
                         width: double.maxFinite - 20,
                         child: QuizzzyNavigatorBtn(
                           text: "Review quizzes",
-                          cont: context,
-                          page: const HomePage(),
+                          onTap: () => Get.to(() => const HomePage()),
                         ),
                       ),
                       SizedBox(
@@ -194,16 +239,12 @@ class _HomePageState extends State<HomePage> {
                                           text: "Yes",
                                           onTap: () async {
                                             String res =
-                                                await auth.userSignout();
+                                                await Auth().userSignout();
                                             if (res == "Success") {
                                               Navigator.of(cntxt).pop();
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: ((context) =>
-                                                          const Login())));
+                                              Get.to(() => const Login());
                                             } else {
-                                              snackBar(context, res,
+                                              snackBar("Error", res,
                                                   Colors.red.shade800);
                                             }
                                           },
@@ -273,18 +314,20 @@ class _HomePageState extends State<HomePage> {
     ));
   }
 
+  /// Check if prevoius request got served.
+  ///
+  /// Returns wheter previous request state is finished or not.
   Future<void> checkQuesGenerated(BuildContext context) async {
-    List<Object?> data = await fs.getQuestionnaireNameList();
-    String? str = await fs.getGeneratorStatus();
+    List<Object?> data = await FirestoreService().getQuestionnaireNameList();
+    Get.find<QuestionListController>().overwriteList(data);
+
+    String? str = await FirestoreService().getGeneratorStatus();
     if (str == "Generated" || data.isNotEmpty) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => QuestionBank(objData: data, status: str)));
+      Get.to(() => const QuestionBank());
     } else {
       Navigator.pop(context);
       snackBar(
-          context,
+          "...",
           str == "Waiting"
               ? "Please wait for questions to get generated"
               : "Please upload a document to generate questions",
@@ -293,20 +336,24 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+/// Store user type on database
+///
+/// Throws error if any server error occurs
 Future sendUserType(
   BuildContext context,
   String str,
   bool isTeacher,
 ) async {
   // explicitly initialize inorder to reload
-  User? user = FirebaseAuth.instance.currentUser;
+  User? user = Auth().auth.currentUser;
 
   await user!.reload();
   await user.updateDisplayName(str);
   await user.reload();
-  user = FirebaseAuth.instance.currentUser;
+  user = Auth().auth.currentUser;
 
-  if (!await fs.saveUser(str, isTeacher ? 'Teacher' : 'Student')) {
-    snackBar(context, "Internal server error", (Colors.red.shade800));
+  if (!await FirestoreService()
+      .saveUser(true, name: str, type: isTeacher ? 'Teacher' : 'Student')) {
+    snackBar("Error", "Internal server error", (Colors.red.shade800));
   }
 }

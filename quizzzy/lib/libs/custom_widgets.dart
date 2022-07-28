@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class QuizzzyTemplate extends StatefulWidget {
   final Widget body;
@@ -12,45 +13,27 @@ class QuizzzyTemplate extends StatefulWidget {
 class _QuizzzyTemplateState extends State<QuizzzyTemplate> {
   @override
   Widget build(context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return true; ///////////////////// TODO: CHECK IF SCREENS NEEDS TO BE LOCKED
-      },
-      child: MaterialApp(
-        home: Scaffold(
-            resizeToAvoidBottomInset: false,
-            backgroundColor: const Color.fromARGB(255, 19, 19, 19),
-            body: widget.body),
-      ),
-    );
+    return Scaffold(
+        resizeToAvoidBottomInset: true,
+        backgroundColor: const Color.fromARGB(255, 19, 19, 19),
+        body: widget.body);
   }
 }
 
 class QuizzzyNavigatorBtn extends StatelessWidget {
   final String text;
-  final BuildContext? cont;
-  final dynamic page;
   final VoidCallback? onTap;
   final Color? clr;
   final Color? txtClr;
 
   const QuizzzyNavigatorBtn(
-      {Key? key,
-      required this.text,
-      this.cont,
-      this.page,
-      this.onTap,
-      this.clr,
-      this.txtClr})
+      {Key? key, required this.text, this.onTap, this.clr, this.txtClr})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
-        onPressed: (onTap != null)
-            ? onTap
-            : () => Navigator.push(
-                cont!, MaterialPageRoute(builder: ((context) => page))),
+        onPressed: onTap,
         style: OutlinedButton.styleFrom(
           side: BorderSide(
             color:
@@ -151,18 +134,9 @@ class Loading extends StatelessWidget {
   }
 }
 
-void snackBar(BuildContext context, String str, Color clr) {
-  final snackBar = SnackBar(
-    content: Text(
-      str,
-      textAlign: TextAlign.center,
-    ),
-    backgroundColor: clr,
-    behavior: SnackBarBehavior.floating,
-  );
-
-  ScaffoldMessenger.of(context).removeCurrentSnackBar();
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+void snackBar(String title, String msg, Color clr) {
+  Get.snackbar(title, msg,
+      snackPosition: SnackPosition.BOTTOM, backgroundColor: clr);
 }
 
 class QuizzzyCard extends StatelessWidget {

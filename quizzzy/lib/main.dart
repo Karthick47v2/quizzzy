@@ -1,53 +1,43 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:quizzzy/src/greeting.dart';
-import 'package:quizzzy/src/service/db_model/question_set.dart';
-import 'package:quizzzy/src/service/dynamic_links.dart';
-import 'package:quizzzy/src/service/fbase_auth.dart';
-import 'package:quizzzy/src/service/fs_database.dart';
-import 'package:quizzzy/src/service/local_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'src/auth/signup.dart';
-import 'src/auth/verify.dart';
-import 'src/home_page.dart';
+import 'package:quizzzy/libs/custom_widgets.dart';
+import 'package:quizzzy/src/greeting.dart';
+import 'package:quizzzy/src/service/db_model/question_set.dart';
+import 'package:quizzzy/src/service/local_database.dart';
+import 'package:quizzzy/src/service/local_notification_service.dart';
+import 'package:quizzzy/src/auth/signup.dart';
+import 'package:quizzzy/src/auth/verify.dart';
+import 'package:quizzzy/src/home_page.dart';
+import 'package:quizzzy/src/service/fs_database.dart';
+import 'package:quizzzy/init_controllers.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await Hive.initFlutter();
-  Hive.registerAdapter(QuestionSetAdapter());
-  sharedPref =
-      UserSharedPreferences(prefs: await SharedPreferences.getInstance());
-  FirebaseMessaging.onBackgroundMessage(bgNotificationHandler);
-  auth = Auth(auth: FirebaseAuth.instance);
-  dlink = DynamicLinks(dLink: FirebaseDynamicLinks.instance);
-
-  fs = FirestoreService(
-      inst: FirebaseFirestore.instance, user: auth.auth.currentUser, fbFunc: FirebaseFunctions.instance);
+  await initServices();
+  await initControllers();
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
   ));
 
-  // // store box to mem
-  // await Hive.openBox('user');
-
   runApp(const Root());
 }
 
-// bg notification handler
-Future bgNotificationHandler(RemoteMessage msg) async {
-  //TODO: LATER
-}
+/// Handle notification while app is on background
+Future bgNotificationHandler(RemoteMessage msg) async {}
 
+/// Renders [Root] widget.
+///
+/// Returns [HomePage] or [SignUp] page according to user auth status. If user signed up and not
+/// verified their email address, then [VerifyEmail] page will be rendered
 class Root extends StatefulWidget {
   const Root({Key? key}) : super(key: key);
 
@@ -60,11 +50,8 @@ class _RootState extends State<Root> {
 
   @override
   Widget build(BuildContext context) {
-    //initialize dynamic links
-    dlink.initDynamicLink(context);
-    // if user email is verified show homepage or else show login page
-    return MaterialApp(
-        home: Scaffold(
+    return GetMaterialApp(
+        home: QuizzzyTemplate(
       body: PageView(
         scrollDirection: Axis.vertical,
         physics: canScroll
@@ -72,10 +59,9 @@ class _RootState extends State<Root> {
             : const NeverScrollableScrollPhysics(),
         children: [
           const Greetings(),
-          // ignore: unnecessary_null_comparison
-          (fs.user == null)
+          (FirestoreService().user == null)
               ? const SignUp()
-              : (fs.user!.emailVerified)
+              : (FirestoreService().user!.emailVerified)
                   ? const HomePage()
                   : const VerifyEmail(),
         ],
@@ -83,4 +69,12 @@ class _RootState extends State<Root> {
       ),
     ));
   }
+}
+
+/// Initialize and setup all database management services
+initServices() async {
+  Hive.registerAdapter(QuestionSetAdapter());
+  UserSharedPreferences(prefs: await SharedPreferences.getInstance());
+  fm = FirebaseMessaging.instance;
+  // FirebaseMessaging.onBackgroundMessage(bgNotificationHandler);
 }

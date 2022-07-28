@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
 import 'package:quizzzy/libs/custom_widgets.dart';
 import 'package:quizzzy/src/home_page.dart';
 import 'package:quizzzy/src/service/db_model/question_set.dart';
+import 'package:quizzzy/controllers/questionnaire_controller.dart';
 
 class Score extends StatelessWidget {
-  final int score;
-  final List<QuestionSet> questionnaire;
+  Score({Key? key}) : super(key: key);
 
-  const Score({Key? key, required this.score, required this.questionnaire})
-      : super(key: key);
+  final List<QuestionSet> questionnaire =
+      Get.find<QuestionnaireController>().questionnaire;
+  final int score = Get.find<QuestionnaireController>().score;
 
   @override
   Widget build(BuildContext context) {
     var avg = score / questionnaire.length;
-    // ignore: avoid_print
-    print(avg);
     return QuizzzyTemplate(
         body: Center(
       child: Column(
@@ -47,16 +48,11 @@ class Score extends StatelessWidget {
           ),
           QuizzzyNavigatorBtn(
             text: "Continue",
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const HomePage())),
+            onTap: () => Get.to(() => const HomePage()),
           ),
           // QuizzzyNavigatorBtn(
           //   text: "Retake",
-          //   onTap: () => Navigator.push(
-          //       context,
-          //       MaterialPageRoute(
-          //           builder: (context) =>
-          //               Questionnaire(questionnaire: questionnaire))),
+          //   onTap: () => Get.to(() => const Questionnaire());
           // ),
         ],
       ),
