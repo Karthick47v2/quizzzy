@@ -8,7 +8,7 @@ import random
 from pydantic import BaseModel
 from fastapi import FastAPI, BackgroundTasks
 
-from src.models.question_gen_model import QuestionGenModel
+from src.models.question_gen_model import SummarizeModel, QuestionGenModel
 from src.firebase_service import FirebaseService
 from src.models.ans_gen_model import AnsGenModel
 from src.preprocess import split_text
@@ -19,7 +19,7 @@ fs = FirebaseService()
 
 # initialize question and ans models
 ans_model = AnsGenModel()
-# sum_model = SummarizeModel()
+sum_model = SummarizeModel()
 que_model = QuestionGenModel()
 
 
@@ -43,7 +43,7 @@ def generate_que_n_ans(context):
 
     # summarize and find keywords for each splitted text
     for idx, txt in enumerate(splitted_text):
-        # summary.append(sum_model.summarize(txt))
+        summary.append(sum_model.summarize(txt))
         filtered_kw.append(ans_model.filter_keywords(txt, summary[idx]))
 
     # generate questions and false answers for each keywords

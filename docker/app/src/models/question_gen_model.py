@@ -1,6 +1,7 @@
 """question generation from given context and keyword"""
 
 import os
+import gdown
 
 from fastT5 import get_onnx_runtime_sessions, OnnxT5
 from transformers import AutoTokenizer
@@ -23,10 +24,10 @@ class SummarizeModel:
         """
         model_path = './resources/t5-summarize'
 
+        print(os.getcwd())
+
         if not os.path.isdir(os.getcwd() + '/resources/t5-summarize'):
-            # pylint: disable=import-outside-toplevel
-            import gdown
-            gdown.download_folder(id='1ZN6h157mvqRxnGXpH7P20aUBwCtcikX',
+            gdown.download_folder(id='1-50SZ_WIHX4A6mkpsz-t0EAF_VhtHb-9',
                                   output='resources/t5-summarize',
                                   quiet=True, use_cookies=False)
 
@@ -97,10 +98,7 @@ class QuestionGenModel:
         """
         model_path = './resources/t5-question'
 
-        # for CI/CD
         if not os.path.isdir(os.getcwd() + '/resources/t5-question'):
-            # pylint: disable=import-outside-toplevel
-            import gdown
             gdown.download_folder(id='1mYnRMBk5-_3x5SX_8KW2G71zq8ohbJI5',
                                   output='resources/t5-question', quiet=True, use_cookies=False)
 
