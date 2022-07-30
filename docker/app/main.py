@@ -43,7 +43,7 @@ def generate_que_n_ans(context):
 
     # summarize and find keywords for each splitted text
     for idx, txt in enumerate(splitted_text):
-        summary.append(sum_model.summarize(txt))
+        # summary.append(sum_model.summarize(txt))
         filtered_kw.append(ans_model.filter_keywords(txt, summary[idx]))
 
     # generate questions and false answers for each keywords
