@@ -24,7 +24,7 @@ exports.dltUser = functions.auth.user().onDelete((user) => {
 // firestore trigger => send notification when question get generated
 exports.notifyUser = functions.firestore
   .document("users/{userID}/{qCol}/0")
-  .onCreate(async (data, context) => {
+  .onCreate(async (_data, context) => {
     // get fcm token
     const user = await db
       .collection("users")
@@ -58,7 +58,7 @@ exports.storeUserInfo = functions.https.onCall(async (data, context) => {
   await db
     .doc(`users/${context.auth.uid}`)
     .set(data, { merge: true })
-    .catch((err) => (res["status"] = 401));
+    .catch(() => (res["status"] = 401));
 
   return res;
 });
@@ -79,29 +79,31 @@ exports.storeQuiz = functions.https.onCall(async (data, context) => {
   await db
     .doc(`users/${context.auth.uid}`)
     .set(data, { merge: true })
-    .catch((err) => (res["status"] = 401));
+    .catch(() => (res["status"] = 401));
 
   return res;
 });
 
 // callable func => send subscol list to device
-exports.sendSubCollectionIDs = functions.https.onCall(async (data, context) => {
-  if (!context.auth) {
-    throw new functions.https.HttpsError(
-      "unauthenticated",
-      unauthenticatedErrorMsg
-    );
-  }
+exports.sendSubCollectionIDs = functions.https.onCall(
+  async (_data, context) => {
+    if (!context.auth) {
+      throw new functions.https.HttpsError(
+        "unauthenticated",
+        unauthenticatedErrorMsg
+      );
+    }
 
-  let res = { status: 200 };
-  await db
-    .doc(`users/${context.auth.uid}`)
-    .listCollections()
-    .then((val) => val.map((col) => col.id))
-    .then((val) => (res["ids"] = val))
-    .catch((res["status"] = 401));
-  return res;
-});
+    let res = { status: 200 };
+    await db
+      .doc(`users/${context.auth.uid}`)
+      .listCollections()
+      .then((val) => val.map((col) => col.id))
+      .then((val) => (res["ids"] = val))
+      .catch(() => (res["status"] = 401));
+    return res;
+  }
+);
 
 // callable func => delete subcollection
 exports.dltSubCollection = functions.https.onCall(async (data, context) => {
