@@ -19,7 +19,7 @@ fs = FirebaseService()
 
 # initialize question and ans models
 ans_model = AnsGenModel()
-sum_model = SummarizeModel()
+# sum_model = SummarizeModel()
 que_model = QuestionGenModel()
 
 
