@@ -1,7 +1,7 @@
 """unit tests for postprocess.py"""
 
 import pytest
-from src import postprocess
+from src.textprocessor import postprocess
 
 
 class TestPostProcessQuestion:

@@ -1,51 +1,44 @@
-"""extract keywords from context and find similar words
-    with diversity for those keywords.
+"""This module generates false answers within same context.
+
+@Author: Karthick T. Sharma
 """
 
 import os
+import random
+import urllib.request
+import tarfile
+
 import numpy as np
 
-
 from sklearn.metrics.pairwise import cosine_similarity
-from keyphrase_vectorizers import KeyphraseCountVectorizer
 from sentence_transformers import SentenceTransformer
 from sense2vec import Sense2Vec
-from keybert import KeyBERT
+
+from ..textprocessor import preprocess
 
 
-from src.preprocess import change_format
-
-
-class AnsGenModel:
-    """class holding all operations related to mcq answer
-    generation"""
-    _SENTENCE_TRANSFORMER_MODEL = 'all-MiniLM-L12-v2'
+class FalseAnswerGenerator:
+    """Generate false answers within same context."""
 
     def __init__(self):
-        """initialize false answer generation models.
-        """
-        self._init_sentence_transformer()
-        self._init_sense2vec()
-        self._init_keybert()
+        """Initialize false answer generation models."""
+        self.__init_sentence_transformer()
+        self.__init_sense2vec()
 
-    def _init_sentence_transformer(self):
-        """initialize sentence embedding .
+    def __init_sentence_transformer(self):
+        """Initialize sentence embedding.
 
            https://www.sbert.net/
         """
-        self._sentence_model = SentenceTransformer(
-            AnsGenModel._SENTENCE_TRANSFORMER_MODEL)
+        self._sentence_model = SentenceTransformer('all-MiniLM-L12-v2')
 
-    def _init_sense2vec(self):
-        """initialize word vectors to get similar words.
+    def __init_sense2vec(self):
+        """Initialize word vectors to get similar words.
 
            https://github.com/explosion/sense2vec
         """
 
         if not os.path.isdir(os.getcwd() + '/s2v_old'):
-            # pylint: disable=import-outside-toplevel
-            import urllib.request
-            import tarfile
             s2v_url = "https://github.com/explosion/sense2vec/releases/download/"
             s2v_ver_url = s2v_url + "v1.0.0/s2v_reddit_2015_md.tar.gz"
             with urllib.request.urlopen(s2v_ver_url) as req:
@@ -54,51 +47,8 @@ class AnsGenModel:
 
         self._s2v = Sense2Vec().from_disk("s2v_old")
 
-    def _init_keybert(self):
-        """initialize keyword extration model (KeyBERT) and keypharse
-           vectorizer for meaningful keywords.
-
-           https://github.com/MaartenGr/KeyBERT
-           https://github.com/TimSchopf/KeyphraseVectorizers
-        """
-        self._kw_model = KeyBERT()
-        self._vectorizer = KeyphraseCountVectorizer()
-
-    def _extract_keywords(self, text):
-        """extract keywords from corpus using KeyBERT.
-
-        Args:
-            text (str): corpus used to extract keywords.
-
-        Returns:
-            list[str]: list of keywords extracted from input corpus.
-        """
-        kwx = self._kw_model.extract_keywords(
-            text, vectorizer=self._vectorizer)
-
-        kw_ls = []
-        for i in kwx:
-            # 0 -> keyword, 1-> confidence / probability
-            kw_ls.append(i[0])
-        return kw_ls
-
-    def filter_keywords(self, original, summarized):
-        """extract keywords from both summary and original text and only return keywords.
-           which are common.
-
-        Args:
-            original (str): original corpus.
-            summarized (str): summarized corpus.
-
-        Returns:
-            list[str]: list of keywords common for both corpus.
-        """
-        orig_ls = set(self._extract_keywords(original))
-        sum_ls = self._extract_keywords(summarized)
-        return list(orig_ls.intersection(sum_ls))
-
-    def _get_embedding(self, answer, distractors):
-        """return sentence model embedding of answer and distractors.
+    def __get_embedding(self, answer, distractors):
+        """Returns sentence model embedding of answer and distractors.
 
         Args:
             answer (str): correct answer.
@@ -109,8 +59,8 @@ class AnsGenModel:
         """
         return self._sentence_model.encode([answer]), self._sentence_model.encode(distractors)
 
-    def _filter_output(self, orig, dummies):
-        """filter out final answers.
+    def filter_output(self, orig, dummies):
+        """Filter out final answers.
 
         Args:
             orig (str): correct answer.
@@ -119,9 +69,9 @@ class AnsGenModel:
         Returns:
             list[str]: list of final answer which has low similarity.
         """
-        ans_embedded, dis_embedded = self._get_embedding(orig, dummies)
+        ans_embedded, dis_embedded = self.__get_embedding(orig, dummies)
         # filter using MMMR
-        dist = self._mmr(ans_embedded, dis_embedded, dummies)
+        dist = self.__mmr(ans_embedded, dis_embedded, dummies)
 
         filtered_dist = []
         for dis in dist:
@@ -130,8 +80,8 @@ class AnsGenModel:
 
         return filtered_dist
 
-    def _mmr(self, doc_embedding, word_embedding, words, diversity=0.9):
-        """word diversity using MMR - Maximal Marginal Relevence.
+    def __mmr(self, doc_embedding, word_embedding, words, diversity=0.9):
+        """Word diversity using MMR - Maximal Marginal Relevence.
 
         Args:
             doc_embedding (list[str]): sentence embedding of correct answer.
@@ -149,7 +99,7 @@ class AnsGenModel:
         kw_idx = [np.argmax(word_doc_similarity)]
         dist_idx = [i for i in range(len(words)) if i != kw_idx[0]]
 
-        for i in range(3):
+        for _ in range(3):
             dist_similarities = word_doc_similarity[dist_idx, :]
             target_similarities = np.max(
                 word_similarity[dist_idx][:, kw_idx], axis=1)
@@ -166,20 +116,17 @@ class AnsGenModel:
         return [(words[idx], round(float(word_doc_similarity.reshape(1, -1)[0][idx]), 4))
                 for idx in kw_idx]
 
-    def false_answers(self, query):
-        """generate false anwers from correct answer.
+    def __generate_answer(self, query):
+        """Generate false answers from correct answer.
 
         Args:
             query (str): correct answer.
 
         Returns:
-            list[str]: list of final answers if input is valid, else None.
+            list(str): list of final answers if input is valid, else None.
         """
         # get the best sense for given word (like NOUN, PRONOUN, VERB...)
         query_al = self._s2v.get_best_sense(query.lower().replace(' ', '_'))
-        # pylint: disable=fixme
-        # sometimes word won't be in sense2vec in that case we can't produce any
-        # output -- ##### TODO DO: DROP THAT QUESTION
 
         if query_al is None:
             return None
@@ -188,13 +135,38 @@ class AnsGenModel:
             assert query_al in self._s2v
             # get most similar 20 words (if any)
             temp = self._s2v.most_similar(query_al, n=20)
-            formatted_string = change_format(temp)
+            formatted_string = preprocess.change_format(temp)
             formatted_string.insert(0, query)
             # if answers are numbers then we don't need to filter
             if query_al.split('|')[1] == 'CARDINAL':
                 return formatted_string[:4]
             # else filter because sometimes similar words will be US, U.S, USA, AMERICA..
             #  bt all are same no?
-            return self._filter_output(query, formatted_string)
+            return self.filter_output(query, formatted_string)
         except AssertionError:
             return None
+
+    def get_output(self, filtered_kws):
+        """Generate false answers for whole context.
+
+        Filter out keywords that doesn't generate 3 false answers.
+
+        Args:
+            filtered_kws (list(str)): list of keywords
+
+        Returns:
+            tuple(list(str), list(list(str))): tuple of, list of correct answers and list of
+            list of all answers.
+        """
+        crct_ans = []
+        all_answers = []
+
+        for kws in filtered_kws:
+            for kwx in kws:
+                results = self.__generate_answer(kwx)
+                if results is not None:
+                    crct_ans.append(kwx)
+                    random.shuffle(results)
+                    all_answers.append(results)
+
+        return crct_ans, all_answers

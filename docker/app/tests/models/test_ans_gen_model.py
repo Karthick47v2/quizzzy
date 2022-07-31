@@ -3,16 +3,15 @@
 import pytest
 # import spacy
 
-
-from src.models import ans_gen_model
-from tests.test_main import CORPUS
+from src.ansgenerator.false_answer_generator import FalseAnswerGenerator
+from ..test_main import CORPUS
 
 
 # pylint: disable=redefined-outer-name
 @pytest.fixture(scope='class')
 def model():
     """fixture for loading class obj"""
-    return ans_gen_model.AnsGenModel()
+    return FalseAnswerGenerator()
 
 
 # @pytest.fixture(scope='function')

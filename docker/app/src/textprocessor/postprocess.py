@@ -1,4 +1,7 @@
-"""process output of models to readable form"""
+"""This module handles all textual postprocessing tasks.
+
+@Author: Karthick T. Sharma
+"""
 
 import nltk
 from nltk.tokenize import sent_tokenize
@@ -6,8 +9,9 @@ nltk.download('punkt')
 
 
 def postprocess_summary(text):
-    """postprocess the output of summarizer model for fair readable output.
-       capitalize firt word of sentence. put spaces in required place.
+    """Postprocess the output of summarizer model for fair readable output.
+
+       Capitalize firt word of sentence. Put spaces in required place.
 
     Args:
         text (str): summarized text to processed.
@@ -24,8 +28,7 @@ def postprocess_summary(text):
 
 
 def postprocess_question(text):
-    """postprocess the output of question generation model for fair readable.
-       output.
+    """Postprocess the output of question generation model for fair readable.
 
     Args:
         text (text): generated question to be processed.

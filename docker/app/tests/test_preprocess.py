@@ -1,11 +1,11 @@
 """unit tests for preprocess.py"""
 
 import pytest
-from src import preprocess
+from src.textprocessor import preprocess
 
 
 class TestPreprocessBulkText:
-    """class holding test cases for preprocess_bulk_text function"""
+    """class holding test cases for filter_text function"""
 
     @pytest.mark.parametrize('text, result', [
         ("""
@@ -34,7 +34,7 @@ class TestPreprocessBulkText:
             text (str): test input
             result (str): test result
         """
-        assert preprocess.preprocess_bulk_text(
+        assert preprocess.filter_text(
             text) == result, "Check whitespaces"
 
     @pytest.mark.parametrize('text, result', [(
@@ -49,7 +49,7 @@ class TestPreprocessBulkText:
             text (str): test input
             result (str): test result
         """
-        assert preprocess.preprocess_bulk_text(
+        assert preprocess.filter_text(
             text) == result, "Unwanted punctuation marks"
 
 
