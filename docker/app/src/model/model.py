@@ -19,6 +19,8 @@ class Model:
            https://github.com/Ki6an/fastT5
         """
 
+        os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
         model_path = f"./resources/{model_name}"  # put dot
         if not os.path.isdir(os.getcwd() + model_path[1:]):
             gdown.download_folder(
