@@ -21,22 +21,22 @@ class Model:
            https://github.com/Ki6an/fastT5
         """
 
-        model_path = f"/resources/{model_name}"  # put dot
-        if not os.path.isdir(os.getcwd() + model_path):
+        model_path = f"./resources/{model_name}"  # put dot
+        if not os.path.isdir(os.getcwd() + model_path[1:]):
             gdown.download_folder(
-                id=path_id, output=model_path, quiet=True, use_cookies=False)
+                id=path_id, output=model_path[2:], quiet=True, use_cookies=False)
 
         encoder_path = os.path.join(
-            f".{model_path}", f"{model_name}-encoder-quantized.onnx")
+            model_path, f"{model_name}-encoder-quantized.onnx")
         decoder_path = os.path.join(
-            f".{model_path}", f"{model_name}-decoder-quantized.onnx")
+            model_path, f"{model_name}-decoder-quantized.onnx")
         init_decoder_path = os.path.join(
-            f".{model_path}", f"{model_name}-init-decoder-quantized.onnx")
+            model_path, f"{model_name}-init-decoder-quantized.onnx")
 
         model_sessions = get_onnx_runtime_sessions(
             (encoder_path, decoder_path, init_decoder_path))
-        self.__model = OnnxT5(f".{model_path}", model_sessions)
-        self.__tokenizer = AutoTokenizer.from_pretrained(f".{model_path}")
+        self.__model = OnnxT5(model_path, model_sessions)
+        self.__tokenizer = AutoTokenizer.from_pretrained(model_path)
 
     def tokenize_corpus(self, input_dict, max_length):
         """Tokeninze model input.
