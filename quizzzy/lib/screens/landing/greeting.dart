@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 
-import 'package:quizzzy/libs/custom_widgets.dart';
-import 'package:quizzzy/src/home_page.dart';
-import 'package:quizzzy/src/service/local_notification_service.dart';
+import 'package:quizzzy/custom_widgets/custom_template.dart';
+import 'package:quizzzy/custom_widgets/quizzzy_logo.dart';
+import 'package:quizzzy/screens/home/home_page.dart';
+import 'package:quizzzy/service/local_notification_service.dart';
 
 /// Renders [Greetings] screen
 class Greetings extends StatefulWidget {
@@ -42,18 +43,11 @@ class _GreetingsState extends State<Greetings> {
 
   @override
   Widget build(BuildContext context) {
-    return QuizzzyTemplate(
+    return CustomTemplate(
         body: Builder(
       builder: (context) => Column(
         children: [
-          Expanded(
-            child: Container(
-              alignment: Alignment.center,
-              child: Image.asset(
-                'assets/images/Quizzzy.png',
-              ),
-            ),
-          ),
+          const QuizzzyLogo(),
           Container(
             width: double.maxFinite - 20,
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 0),

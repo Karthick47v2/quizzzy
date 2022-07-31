@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:quizzzy/src/service/fbase_auth.dart';
+import 'package:quizzzy/service/fbase_auth.dart';
 
 import 'auth_test.mocks.dart';
 

@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:quizzzy/src/service/fbase_auth.dart';
-import 'package:quizzzy/src/service/db_model/question_set.dart';
+import 'package:quizzzy/service/fbase_auth.dart';
+import 'package:quizzzy/service/db_model/question_set.dart';
 
 class FirestoreService {
   late User? _user;
@@ -141,5 +141,24 @@ class FirestoreService {
     return await callable.call(<String, dynamic>{
       'qSet': qSet,
     }).then((value) => value.data['status'] == 200);
+  }
+
+  /// Store user type on database
+  ///
+  /// Throws error if any server error occurs
+  Future<bool> sendUserType(
+    String str,
+    bool isTeacher,
+  ) async {
+    // explicitly initialize inorder to reload
+    User? user = Auth().auth.currentUser;
+
+    await user!.reload();
+    await user.updateDisplayName(str);
+    await user.reload();
+    user = Auth().auth.currentUser;
+
+    return await saveUser(true,
+        name: str, type: isTeacher ? 'Teacher' : 'Student');
   }
 }

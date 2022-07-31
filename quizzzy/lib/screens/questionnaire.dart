@@ -1,15 +1,19 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:quizzzy/controllers/questionnaire_controller.dart';
 import 'package:quizzzy/controllers/user_type_controller.dart';
-
-import 'package:quizzzy/libs/custom_widgets.dart';
-import 'package:quizzzy/src/home_page.dart';
-import 'package:quizzzy/src/score.dart';
-import 'package:quizzzy/src/service/db_model/question_set.dart';
-import 'package:quizzzy/src/service/fs_database.dart';
-import 'package:quizzzy/src/service/local_database.dart';
+import 'package:quizzzy/custom_widgets/custom_button.dart';
+import 'package:quizzzy/custom_widgets/custom_popup.dart';
+import 'package:quizzzy/custom_widgets/custom_snackbar.dart';
+import 'package:quizzzy/custom_widgets/custom_template.dart';
+import 'package:quizzzy/custom_widgets/answer_container.dart';
+import 'package:quizzzy/screens/home/home_page.dart';
+import 'package:quizzzy/screens/score.dart';
+import 'package:quizzzy/service/db_model/question_set.dart';
+import 'package:quizzzy/service/fs_database.dart';
+import 'package:quizzzy/service/local_database.dart';
 
 /// Renders [Questionnaire] screen which consists of all questions.
 ///
@@ -54,7 +58,7 @@ class _QuestionnaireState extends State<Questionnaire> {
               context: context,
               barrierDismissible: false,
               builder: (BuildContext cntxt) {
-                return PopupModal(size: 100.0, wids: [
+                return CustomPopup(size: 100.0, wids: [
                   const Text(
                     "Time's up",
                     style: TextStyle(
@@ -64,7 +68,7 @@ class _QuestionnaireState extends State<Questionnaire> {
                         color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
-                  QuizzzyNavigatorBtn(
+                  CustomButton(
                     text: "Finish",
                     onTap: () {
                       Navigator.of(cntxt).pop();
@@ -93,7 +97,7 @@ class _QuestionnaireState extends State<Questionnaire> {
 
   @override
   Widget build(BuildContext context) {
-    return QuizzzyTemplate(
+    return CustomTemplate(
         body: Column(
       children: [
         Expanded(
@@ -171,7 +175,7 @@ class _QuestionnaireState extends State<Questionnaire> {
                 ),
               ),
               for (var i in questionnaire[currentIdx].allAns)
-                QuizzzyAns(
+                AnswerContainer(
                   ans: i,
                   isPicked: userType == 'Student'
                       ? qState[questionnaire[currentIdx].allAns.indexOf(i)]
@@ -206,20 +210,20 @@ class _QuestionnaireState extends State<Questionnaire> {
                     color: Colors.white),
               ),
               userType == "Student"
-                  ? QuizzzyNavigatorBtn(
+                  ? CustomButton(
                       text: "Next",
                       onTap: () => updateQuestion(),
                     )
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        QuizzzyNavigatorBtn(
+                        CustomButton(
                           text: "Drop",
                           onTap: () {
                             updateQuestion(isRemove: true);
                           },
                         ),
-                        QuizzzyNavigatorBtn(
+                        CustomButton(
                           text: "Keep",
                           onTap: () => updateQuestion(),
                         )
@@ -232,7 +236,7 @@ class _QuestionnaireState extends State<Questionnaire> {
     ));
   }
 
-  /// Move to next question when [QuizzzyNavigatorBtn] pressed.
+  /// Move to next question when [CustomButton] pressed.
   ///
   /// If [userType] is Teacher then they can keep/drop current question.
   updateQuestion({bool isRemove = false}) {
@@ -255,7 +259,7 @@ class _QuestionnaireState extends State<Questionnaire> {
                 context: context,
                 barrierDismissible: false,
                 builder: (BuildContext cntxt) {
-                  return PopupModal(size: 150.0, wids: [
+                  return CustomPopup(size: 150.0, wids: [
                     const Text(
                       // "You got ${100 * score / questionnaire.length}",
                       "Press continue to finish the quiz",
@@ -278,7 +282,7 @@ class _QuestionnaireState extends State<Questionnaire> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        QuizzzyNavigatorBtn(
+                        CustomButton(
                           text: "Continue",
                           onTap: () async {
                             Navigator.pop(cntxt); ///////////////////////
@@ -305,7 +309,7 @@ class _QuestionnaireState extends State<Questionnaire> {
               context: context,
               barrierDismissible: false,
               builder: (BuildContext cntxt) {
-                return PopupModal(size: 150.0, wids: [
+                return CustomPopup(size: 150.0, wids: [
                   const Text(
                     "Press continue to modify changes, cancel to revert",
                     style: TextStyle(
@@ -318,11 +322,11 @@ class _QuestionnaireState extends State<Questionnaire> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      QuizzzyNavigatorBtn(
+                      CustomButton(
                         text: "Cancel",
                         onTap: () => Get.to(() => const HomePage()),
                       ),
-                      QuizzzyNavigatorBtn(
+                      CustomButton(
                         text: "Continue",
                         onTap: () async {
                           // if (isRemove) {
@@ -361,7 +365,7 @@ class _QuestionnaireState extends State<Questionnaire> {
     questionSetBox.delete(name);
     if (!await FirestoreService()
         .deleteQuestionnaire('users/${FirestoreService().user!.uid}/$name')) {
-      snackBar("Error", "Please try again", Colors.red.shade800);
+      customSnackBar("Error", "Please try again", Colors.red.shade800);
     } else {
       var popList = await UserSharedPreferences().getPoppedItems();
       popList ??= [];
@@ -370,7 +374,7 @@ class _QuestionnaireState extends State<Questionnaire> {
     }
   }
 
-  /// Validate answer when next [QuizzzyNavigatorBtn] pressed.
+  /// Validate answer when next [CustomButton] pressed.
   bool checkAns() {
     return questionnaire[currentIdx]
             .allAns[qState.indexOf(true)]
@@ -378,7 +382,7 @@ class _QuestionnaireState extends State<Questionnaire> {
         questionnaire[currentIdx].crctAns.toLowerCase();
   }
 
-  /// Refresh [QuizzzyNavigatorBtn] pressed state.
+  /// Refresh [CustomButton] pressed state.
   refreshAns() {
     qState.setAll(0, [false, false, false, false]);
   }

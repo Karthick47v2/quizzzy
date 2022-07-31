@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 
-import 'package:quizzzy/src/service/fs_database.dart';
+import 'package:quizzzy/service/fs_database.dart';
 
 part 'question_set.g.dart';
 

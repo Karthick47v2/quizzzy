@@ -73,7 +73,7 @@
 
 //   @override
 //   Widget build(BuildContext context) {
-//     return QuizzzyTemplate(
+//     return CustomTemplate(
 //         body: FutureBuilder(
 //             future: filterList(),
 //             builder: (context, snapshot) {
@@ -81,20 +81,7 @@
 //               if (snapshot.connectionState == ConnectionState.done) {
 //                 ret = Column(
 //                   children: [
-//                     Container(
-//                       height: 100,
-//                       alignment: Alignment.bottomCenter,
-//                       width: double.maxFinite,
-//                       child: const Text(
-//                         "Select Questionnaire",
-//                         style: TextStyle(
-//                           fontFamily: 'Heebo',
-//                           fontSize: 22,
-//                           fontWeight: FontWeight.w500,
-//                           color: Color.fromARGB(255, 255, 255, 255),
-//                         ),
-//                       ),
-//                     ),
+                    // TopBar(txt: "Select Questionnaire"),
 //                     Expanded(
 //                       child: ListView.builder(
 //                         itemCount: widget.data.length,
@@ -177,7 +164,7 @@
 //                                                             255, 255, 255, 255),
 //                                                       ),
 //                                                     ),
-//                                                     QuizzzyNavigatorBtn(
+//                                                     CustomButton(
 //                                                       text: Get.find<UserTypeController>()
 //                                                                   .userType ==
 //                                                               'Student'

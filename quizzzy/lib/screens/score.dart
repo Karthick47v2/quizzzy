@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:quizzzy/libs/custom_widgets.dart';
-import 'package:quizzzy/src/home_page.dart';
-import 'package:quizzzy/src/service/db_model/question_set.dart';
+import 'package:quizzzy/custom_widgets/custom_button.dart';
+import 'package:quizzzy/custom_widgets/custom_template.dart';
+import 'package:quizzzy/screens/home/home_page.dart';
+import 'package:quizzzy/service/db_model/question_set.dart';
 import 'package:quizzzy/controllers/questionnaire_controller.dart';
 
 class Score extends StatelessWidget {
@@ -16,7 +17,7 @@ class Score extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var avg = score / questionnaire.length;
-    return QuizzzyTemplate(
+    return CustomTemplate(
         body: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -46,11 +47,11 @@ class Score extends StatelessWidget {
                 color: Colors.white),
             textAlign: TextAlign.center,
           ),
-          QuizzzyNavigatorBtn(
+          CustomButton(
             text: "Continue",
             onTap: () => Get.to(() => const HomePage()),
           ),
-          // QuizzzyNavigatorBtn(
+          // CustomButton(
           //   text: "Retake",
           //   onTap: () => Get.to(() => const Questionnaire());
           // ),

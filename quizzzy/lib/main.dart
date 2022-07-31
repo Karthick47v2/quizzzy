@@ -6,15 +6,15 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:quizzzy/libs/custom_widgets.dart';
-import 'package:quizzzy/src/greeting.dart';
-import 'package:quizzzy/src/service/db_model/question_set.dart';
-import 'package:quizzzy/src/service/local_database.dart';
-import 'package:quizzzy/src/service/local_notification_service.dart';
-import 'package:quizzzy/src/auth/signup.dart';
-import 'package:quizzzy/src/auth/verify.dart';
-import 'package:quizzzy/src/home_page.dart';
-import 'package:quizzzy/src/service/fs_database.dart';
+import 'package:quizzzy/custom_widgets/custom_template.dart';
+import 'package:quizzzy/screens/landing/greeting.dart';
+import 'package:quizzzy/screens/auth/signup.dart';
+import 'package:quizzzy/screens/auth/verify.dart';
+import 'package:quizzzy/screens/home/home_page.dart';
+import 'package:quizzzy/service/db_model/question_set.dart';
+import 'package:quizzzy/service/local_database.dart';
+import 'package:quizzzy/service/local_notification_service.dart';
+import 'package:quizzzy/service/fs_database.dart';
 import 'package:quizzzy/init_controllers.dart';
 
 Future main() async {
@@ -51,7 +51,7 @@ class _RootState extends State<Root> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        home: QuizzzyTemplate(
+        home: CustomTemplate(
       body: PageView(
         scrollDirection: Axis.vertical,
         physics: canScroll

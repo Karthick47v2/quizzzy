@@ -33,7 +33,7 @@
 
 //   @override
 //   Widget build(BuildContext context) {
-//     return QuizzzyTemplate(
+//     return CustomTemplate(
 //         body: Column(
 //       children: [
 //         Expanded(
@@ -87,7 +87,7 @@
 //                     fontWeight: FontWeight.w400,
 //                     color: Colors.white),
 //               ),
-//               QuizzzyNavigatorBtn(
+//               CustomButton(
 //                 text: "Next",
 //                 onTap: () => updateQuestion(),
 //               ),
@@ -141,7 +141,7 @@
 //                     Row(
 //                       mainAxisAlignment: MainAxisAlignment.center,
 //                       children: [
-//                         QuizzzyNavigatorBtn(
+//                         CustomButton(
 //                           text: "Continue",
 //                           onTap: () async {
 //                             Navigator.pop(cntxt); ///////////////////////
@@ -181,13 +181,13 @@
 //                   Row(
 //                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 //                     children: [
-//                       QuizzzyNavigatorBtn(
+//                       CustomButton(
 //                         text: "Cancel",
 //                         onTap: () 
 //                           Get.to(() => const HomePage())
 //                         ,
 //                       ),
-//                       QuizzzyNavigatorBtn(
+//                       CustomButton(
 //                         text: "Continue",
 //                         onTap: () async {
 //                           // if (isRemove) {

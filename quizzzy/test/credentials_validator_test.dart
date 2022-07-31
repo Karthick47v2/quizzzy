@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:quizzzy/src/auth/validation.dart';
+import 'package:quizzzy/screens/auth/validation.dart';
 
 main() {
   group("Email validation", (() {
@@ -25,32 +25,27 @@ main() {
     });
 
     test('Password length less than 8 characters returns error', () {
-      expect(
-          "Password must be at least 8 characters & contain an uppercase letter, number and symbol.",
+      expect("Password must be at least 8 characters.",
           validatePassword("abcdef"));
     });
 
     test('Password without an uppercase letter returns error', () {
-      expect(
-          "Password must be at least 8 characters & contain an uppercase letter, number and symbol.",
+      expect("Passwrod must contain an uppercase letter, number and symbol.",
           validatePassword("abcdefghij"));
     });
 
     test('Password without a lower letter returns error', () {
-      expect(
-          "Password must be at least 8 characters & contain an uppercase letter, number and symbol.",
+      expect("Passwrod must contain an uppercase letter, number and symbol.",
           validatePassword("ABCDEFGIJ"));
     });
 
     test('Password without a number returns error', () {
-      expect(
-          "Password must be at least 8 characters & contain an uppercase letter, number and symbol.",
+      expect("Passwrod must contain an uppercase letter, number and symbol.",
           validatePassword("abcdeASDfghij"));
     });
 
     test('Password without a symbol returns error', () {
-      expect(
-          "Password must be at least 8 characters & contain an uppercase letter, number and symbol.",
+      expect("Passwrod must contain an uppercase letter, number and symbol.",
           validatePassword("abcdeAS231Dfghij"));
     });
 

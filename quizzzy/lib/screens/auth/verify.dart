@@ -2,14 +2,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:quizzzy/src/home_page.dart';
-import 'package:quizzzy/src/service/fs_database.dart';
-import 'package:quizzzy/libs/custom_widgets.dart';
+import 'package:quizzzy/custom_widgets/custom_button.dart';
+import 'package:quizzzy/custom_widgets/custom_template.dart';
+import 'package:quizzzy/screens/home/home_page.dart';
+import 'package:quizzzy/service/fs_database.dart';
 
 /// Renders [VerifyEmail] screen
 ///
 /// Invokes [checkEmailVerification()] every 3 seconds. Sends email verification when
-/// [QuizzzyNavigatorBtn] pressed. Once users gets verified navigates to [HomePage]
+/// [CustomButton] pressed. Once users gets verified navigates to [HomePage]
 class VerifyEmail extends StatefulWidget {
   const VerifyEmail({Key? key}) : super(key: key);
 
@@ -36,7 +37,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
   @override
   Widget build(BuildContext context) {
-    return QuizzzyTemplate(
+    return CustomTemplate(
         body: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -51,7 +52,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
           ),
           textAlign: TextAlign.center,
         ),
-        QuizzzyNavigatorBtn(
+        CustomButton(
           text: "Resend Email",
           onTap: () => FirestoreService().user!.sendEmailVerification(),
           clr: Colors.green[400],

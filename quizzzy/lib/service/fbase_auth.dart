@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:quizzzy/src/service/fs_database.dart';
+import 'package:quizzzy/service/fs_database.dart';
 
 class Auth {
   late FirebaseAuth _auth;
