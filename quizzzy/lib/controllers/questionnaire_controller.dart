@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
-import 'package:quizzzy/src/service/db_model/question_set.dart';
-import 'package:quizzzy/src/service/fs_database.dart';
+
+import 'package:quizzzy/service/db_model/question_set.dart';
+import 'package:quizzzy/service/fs_database.dart';
 
 class QuestionnaireController extends GetxController {
   String _questionnaireName = "";

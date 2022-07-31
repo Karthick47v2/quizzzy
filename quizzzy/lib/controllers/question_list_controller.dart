@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import 'package:quizzzy/src/service/local_database.dart';
+import 'package:quizzzy/service/local_database.dart';
 
 class QuestionListController extends GetxController {
   List<String> _questionList = [];
@@ -16,7 +16,7 @@ class QuestionListController extends GetxController {
 
   /// As Firestore takes few minutes to delete documents, Manully altering [questionList] when user
   /// deletes a questionniare.
-  filterList() async {
+  Future<bool> filterList() async {
     _poppedList = await UserSharedPreferences().getPoppedItems();
     if (_poppedList != null) {
       List<String> newList = [];
@@ -32,5 +32,6 @@ class QuestionListController extends GetxController {
       _poppedList = [];
     }
     update();
+    return true;
   }
 }
