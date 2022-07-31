@@ -39,4 +39,3 @@ def test_model_inference():
     """test wheter post req is working"""
     res = client.post('/get-questions', json=REQUEST)
     assert res.status_code == 200
-    assert res.json() == {'context': 'received'}
