@@ -169,4 +169,4 @@ class FalseAnswerGenerator:
                     random.shuffle(results)
                     all_answers.append(results)
 
-        return crct_ans, all_answers
+        return crct_ans, sum(all_answers, [])

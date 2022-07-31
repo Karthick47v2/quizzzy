@@ -39,4 +39,4 @@ def get_all_questions(model, context, answer):
         questions.append(model.generate(cont, ans))
 
     # squeezing the 2d list to 1d
-    return sum(questions, [])
+    return questions
