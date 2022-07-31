@@ -38,23 +38,36 @@ class Model:
         self.__model = OnnxT5(model_path, model_sessions)
         self.__tokenizer = AutoTokenizer.from_pretrained(model_path)
 
-    def tokenize_corpus(self, input_dict, max_length):
+    def tokenize_corpus(self, text, max_length):
         """Tokeninze model input.
 
         Args:
-            input_dict (dict of str: str): preprocessed corpus.
+            text (str): preprocessed corpus.
             max_length (int, optional): limits length of returned sequence.
 
         Returns:
             tupe[str, str]: tuple of tokens and attention masks.
         """
-        text = extract_dict(input_dict)
 
         encode = self.__tokenizer.encode_plus(
             text, return_tensors='pt', max_length=max_length,
             pad_to_max_length=False, truncation=True)
 
         return encode["input_ids"], encode["attention_mask"]
+
+    def __extract_dict(self, input_dict):
+        """Extract key and value from dictionary into string.
+
+        Args:
+            dict (dict(str: str)): key value pairs of input args.
+
+        Returns:
+            str: parsed dictionary
+        """
+        output = ""
+        for key, value in input_dict.items():
+            output += f"{key}: {value} "
+        return output[:-1]
 
     # pylint: disable=too-many-arguments
     def inference(self, num_beams, no_repeat_ngram_size, model_max_length,
@@ -73,7 +86,8 @@ class Model:
             str: unprocessed model output.
         """
 
-        text = extract_dict(kwargs)
+        text = self.__extract_dict(kwargs)
+
         input_tokens_ids, attention_mask = self.tokenize_corpus(
             text, token_max_length)
 
