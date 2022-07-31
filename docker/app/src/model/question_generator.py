@@ -13,7 +13,7 @@ class QuestionGenerator(Model):
     def __init__(self):
         """Initialize question generator."""
         super().__init__(model_name='t5-question',
-                         path_id='1mYnRMBk5-_3x5SX_8KW2G71zq8ohbJI5')
+                         path_id='1_0dPLdv8WNtSYQdKEWxFc03IR-szs0kB')
 
     def generate(self, context, answer):
         """Generate abstrative summary of given context.
