@@ -8,14 +8,6 @@ from main import ModelInput, fs
 from tests.test_main import REQUEST
 
 
-# pylint: disable=redefined-outer-name
-# @pytest.fixture(scope='class')
-# def fsx():
-#     """fixture for loading class obj"""
-#     return firebase_service.FirebaseService("fs_tst")
-
-
-# @pytest.mark.usefixtures('fsx')
 class TestFirebaseService:
     """class holding test cases for AnsGenModel class"""
 
