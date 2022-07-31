@@ -3,7 +3,7 @@
 import pytest
 # import spacy
 
-from src.ansgenerator.false_answer_generator import FalseAnswerGenerator
+from src.model.keyword_extractor import KeywordExtractor
 from ..test_main import CORPUS
 
 
@@ -11,7 +11,7 @@ from ..test_main import CORPUS
 @pytest.fixture(scope='class')
 def model():
     """fixture for loading class obj"""
-    return FalseAnswerGenerator()
+    return KeywordExtractor()
 
 
 # @pytest.fixture(scope='function')
