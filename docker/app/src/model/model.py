@@ -9,8 +9,6 @@ import gdown
 from fastT5 import get_onnx_runtime_sessions, OnnxT5
 from transformers import AutoTokenizer
 
-from ..helper.utils import extract_dict
-
 
 class Model:
     """Abstract class for model predictions."""
