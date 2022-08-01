@@ -10,7 +10,7 @@ import 'package:quizzzy/custom_widgets/custom_snackbar.dart';
 import 'package:quizzzy/custom_widgets/custom_template.dart';
 import 'package:quizzzy/custom_widgets/answer_container.dart';
 import 'package:quizzzy/screens/home/home_page.dart';
-import 'package:quizzzy/screens/score.dart';
+import 'package:quizzzy/screens/score/score.dart';
 import 'package:quizzzy/service/db_model/question_set.dart';
 import 'package:quizzzy/service/fs_database.dart';
 import 'package:quizzzy/service/local_database.dart';

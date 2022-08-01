@@ -57,13 +57,14 @@ class _QuestionBankState extends State<QuestionBank> {
                                   });
                             },
                             onTap: () async {
-                              var res = Get.find<QuestionnaireController>()
-                                  .overwriteList(questionList[idx]);
                               showDialog(
                                   context: context,
                                   builder: (BuildContext cntxt) {
                                     return FutureBuilder(
-                                        future: res,
+                                        future:
+                                            Get.find<QuestionnaireController>()
+                                                .overwriteList(
+                                                    questionList[idx]),
                                         builder: (cntxt, snapshot) {
                                           Widget ret = Container();
                                           if (snapshot.connectionState ==

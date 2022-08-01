@@ -7,6 +7,7 @@ import 'package:quizzzy/screens/auth/signup.dart';
 import 'package:quizzzy/screens/auth/verify.dart';
 import 'package:quizzzy/screens/home/home_page.dart';
 import 'package:quizzzy/service/fbase_auth.dart';
+import 'package:quizzzy/service/fs_database.dart';
 import 'package:quizzzy/theme/palette.dart';
 
 /// Renders [Login] screen

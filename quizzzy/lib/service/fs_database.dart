@@ -46,10 +46,11 @@ class FirestoreService {
     return await _users.doc(_user!.uid).get().then((docSnap) {
       if (docSnap.exists) {
         Map<String, dynamic> data = docSnap.data() as Map<String, dynamic>;
-        return data['userType'];
-      } else {
-        return "None";
+        if (data['userType'] != null) {
+          return data['userType'];
+        }
       }
+      return "None";
     }).onError((error, stackTrace) => error.toString());
   }
 
@@ -156,7 +157,7 @@ class FirestoreService {
     await user!.reload();
     await user.updateDisplayName(str);
     await user.reload();
-    user = Auth().auth.currentUser;
+    FirestoreService().user = Auth().auth.currentUser;
 
     return await saveUser(true,
         name: str, type: isTeacher ? 'Teacher' : 'Student');

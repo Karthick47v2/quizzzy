@@ -42,8 +42,7 @@ class DeletePopup extends StatelessWidget {
                 onTap: () async {
                   questionSetBox.delete(questionList[idx]);
                   if (!await FirestoreService().deleteQuestionnaire(
-                      '''users/${FirestoreService().user!.uid}/
-                                                            ${questionList[idx]}''')) {
+                      "users/${FirestoreService().user!.uid}/${questionList[idx]}")) {
                     customSnackBar("Error", "Please try again", Palette.error);
                   } else {
                     controller.poppedList!.add(questionList[idx]);
@@ -54,7 +53,7 @@ class DeletePopup extends StatelessWidget {
                         "This may take some time... Will be deleted on your next visit.",
                         Palette.sucess);
                   }
-                  Get.back();
+                  Navigator.of(cntxt).pop();
                 },
               ),
               CustomButton(

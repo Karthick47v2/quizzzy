@@ -13,12 +13,40 @@ import 'package:quizzzy/screens/import/import.dart';
 import 'package:quizzzy/screens/home/logout_popup.dart';
 import 'package:quizzzy/screens/question_bank/question_bank.dart';
 import 'package:quizzzy/screens/home/quiz_code_popup.dart';
+import 'package:quizzzy/service/db_model/question_set.dart';
 import 'package:quizzzy/service/fs_database.dart';
+import 'package:quizzzy/service/local_database.dart';
+import 'package:quizzzy/service/local_notification_service.dart';
 import 'package:quizzzy/theme/palette.dart';
 
-class Home extends StatelessWidget {
-  final TextEditingController codeController;
-  const Home({Key? key, required this.codeController}) : super(key: key);
+class Home extends StatefulWidget {
+  const Home({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  final codeController = TextEditingController();
+
+  Future<void> pushToken() async {
+    questionSetBox = await setBox();
+    String? token = await fm.getToken();
+    String? oldToken = await UserSharedPreferences().getToken();
+    if (oldToken != token) {
+      await UserSharedPreferences().setToken(token!);
+      await FirestoreService().saveTokenToDatabase(token);
+    }
+    fm.onTokenRefresh.listen(FirestoreService().saveTokenToDatabase);
+  }
+
+  @override
+  initState() {
+    super.initState();
+    pushToken();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +142,7 @@ class Home extends StatelessWidget {
       Get.to(() => const QuestionBank());
     } else {
       customSnackBar(
-          "...",
+          "No questionnaire found",
           str == "Waiting"
               ? "Please wait for questions to get generated"
               : "Please upload a document to generate questions",
