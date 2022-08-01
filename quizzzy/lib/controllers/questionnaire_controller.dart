@@ -24,7 +24,7 @@ class QuestionnaireController extends GetxController {
           .toList();
       questionSetBox.put(qName, dummy);
     } else {
-      dummy = dummy..cast<QuestionSet>();
+      dummy = dummy.cast<QuestionSet>();
 
       /// Fake delay for future builder to work without break
       await Future.delayed(Duration.zero);
