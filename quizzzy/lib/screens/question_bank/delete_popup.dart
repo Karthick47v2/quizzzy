@@ -8,6 +8,8 @@ import 'package:quizzzy/custom_widgets/custom_snackbar.dart';
 import 'package:quizzzy/service/db_model/question_set.dart';
 import 'package:quizzzy/service/fs_database.dart';
 import 'package:quizzzy/service/local_database.dart';
+import 'package:quizzzy/theme/font.dart';
+import 'package:quizzzy/theme/palette.dart';
 
 class DeletePopup extends StatelessWidget {
   final BuildContext cntxt;
@@ -22,13 +24,13 @@ class DeletePopup extends StatelessWidget {
     return GetBuilder<QuestionListController>(
       builder: (controller) {
         return CustomPopup(size: 150.0, wids: [
-          const Text(
+          Text(
             "Do you want to delete this questionnaire?",
             style: TextStyle(
-              fontFamily: 'Heebo',
+              fontFamily: fontFamily,
               fontSize: 19,
-              fontWeight: FontWeight.w400,
-              color: Color.fromARGB(255, 255, 255, 255),
+              fontWeight: Font.regular,
+              color: Palette.font,
             ),
             textAlign: TextAlign.center,
           ),
@@ -42,15 +44,17 @@ class DeletePopup extends StatelessWidget {
                   if (!await FirestoreService().deleteQuestionnaire(
                       '''users/${FirestoreService().user!.uid}/
                                                             ${questionList[idx]}''')) {
-                    customSnackBar(
-                        "Error", "Please try again", Colors.red.shade800);
+                    customSnackBar("Error", "Please try again", Palette.error);
                   } else {
                     controller.poppedList!.add(questionList[idx]);
                     UserSharedPreferences()
                         .setPoppedItems(controller.poppedList!);
-                    // setState(() {});
+                    customSnackBar(
+                        "...",
+                        "This may take some time... Will be deleted on your next visit.",
+                        Palette.sucess);
                   }
-                  Navigator.of(cntxt).pop();
+                  Get.back();
                 },
               ),
               CustomButton(

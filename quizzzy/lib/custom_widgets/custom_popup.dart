@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quizzzy/theme/palette.dart';
 
 class CustomPopup extends StatelessWidget {
   final double size;
@@ -10,7 +11,7 @@ class CustomPopup extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       child: Container(
-        color: const Color.fromARGB(255, 13, 13, 15),
+        color: Palette.popupBg,
         height: size,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

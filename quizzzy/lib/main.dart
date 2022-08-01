@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:quizzzy/theme/palette.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:quizzzy/custom_widgets/custom_template.dart';
@@ -24,8 +25,8 @@ Future main() async {
   await initServices();
   await initControllers();
 
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Palette.transparent,
   ));
 
   runApp(const Root());

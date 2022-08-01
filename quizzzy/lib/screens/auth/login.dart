@@ -7,6 +7,7 @@ import 'package:quizzzy/screens/auth/signup.dart';
 import 'package:quizzzy/screens/auth/verify.dart';
 import 'package:quizzzy/screens/home/home_page.dart';
 import 'package:quizzzy/service/fbase_auth.dart';
+import 'package:quizzzy/theme/palette.dart';
 
 /// Renders [Login] screen
 ///
@@ -37,7 +38,7 @@ class _LoginState extends State<Login> {
         } else if (res == "Not Verified") {
           Get.to(() => const VerifyEmail());
         } else {
-          customSnackBar("Error", res, (Colors.red.shade800));
+          customSnackBar("Error", res, Palette.error);
         }
       },
       bottomBtnTxt: "Sign up",

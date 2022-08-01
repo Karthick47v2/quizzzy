@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:quizzzy/theme/font.dart';
+import 'package:quizzzy/theme/palette.dart';
 
 class AnswerContainer extends StatefulWidget {
   final String ans;
@@ -24,19 +26,18 @@ class _AnswerContainerState extends State<AnswerContainer> {
         child: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: widget.isPicked
-                ? const Color.fromARGB(255, 93, 0, 155)
-                : const Color.fromARGB(94, 104, 104, 104),
+            color:
+                widget.isPicked ? Palette.ansBtnClicked : Palette.ansBtnNoClick,
             borderRadius: const BorderRadius.all(Radius.circular(24)),
           ),
           child: Center(
             child: Text(
               widget.ans,
-              style: const TextStyle(
-                  fontFamily: 'Heebo',
+              style: TextStyle(
+                  fontFamily: fontFamily,
                   fontSize: 22,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.white),
+                  fontWeight: Font.regular,
+                  color: Palette.font),
               textAlign: TextAlign.center,
             ),
           ),

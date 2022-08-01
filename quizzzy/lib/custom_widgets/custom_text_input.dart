@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:quizzzy/theme/palette.dart';
 
 class CustomTextInput extends StatelessWidget {
   final String text;
   final TextEditingController controller;
   final String? Function(String?)? validator;
   final bool isPass;
-  final Color cursorClr = const Color.fromARGB(255, 168, 168, 168);
   const CustomTextInput(
       {Key? key,
       required this.text,
@@ -20,23 +20,22 @@ class CustomTextInput extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
       child: TextFormField(
         obscureText: isPass,
-        cursorColor: cursorClr,
+        cursorColor: Palette.cursor,
         decoration: InputDecoration(
             filled: true,
             labelText: text,
-            labelStyle:
-                const TextStyle(color: Color.fromARGB(255, 212, 212, 212)),
-            enabledBorder: const OutlineInputBorder(
+            labelStyle: TextStyle(color: Palette.txtInput),
+            enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-              color: Color.fromARGB(255, 122, 122, 122),
+              color: Palette.txtInputBorder,
             )),
             focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-              color: cursorClr,
+              color: Palette.cursor,
             ))),
         controller: controller,
         validator: validator,
-        style: const TextStyle(color: Colors.white),
+        style: TextStyle(color: Palette.font),
       ),
     );
   }

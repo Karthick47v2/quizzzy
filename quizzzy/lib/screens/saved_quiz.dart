@@ -1,13 +1,20 @@
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
 // import 'package:quizzzy/controllers/user_type_controller.dart';
+// import 'package:quizzzy/custom_widgets/custom_button.dart';
+// import 'package:quizzzy/custom_widgets/custom_card.dart';
+// import 'package:quizzzy/custom_widgets/custom_loading.dart';
+// import 'package:quizzzy/custom_widgets/custom_popup.dart';
+// import 'package:quizzzy/custom_widgets/custom_snackbar.dart';
+// import 'package:quizzzy/custom_widgets/custom_template.dart';
+// import 'package:quizzzy/custom_widgets/top_bar.dart';
+// import 'package:quizzzy/screens/questionnaire.dart';
+// import 'package:quizzzy/service/db_model/question_set.dart';
+// import 'package:quizzzy/service/fs_database.dart';
+// import 'package:quizzzy/service/local_database.dart';
+// import 'package:quizzzy/theme/font.dart';
+// import 'package:quizzzy/theme/palette.dart';
 // import 'package:share_plus/share_plus.dart';
-
-// import 'package:quizzzy/libs/custom_widgets.dart';
-// import 'package:quizzzy/src/questionnaire.dart';
-// import 'package:quizzzy/src/service/db_model/question_set.dart';
-// import 'package:quizzzy/src/service/fs_database.dart';
-// import 'package:quizzzy/src/service/local_database.dart';
 
 // class SavedQuiz extends StatefulWidget {
 //   final List<String> data;
@@ -66,8 +73,8 @@
 //     super.initState();
 //     setBox();
 //     if (widget.status == "Waiting") {
-//       snackBar(context, "Your last request is being processed.",
-//           (Colors.amber.shade400));
+//       customSnackBar(
+//           "Wait", "Your last request is being processed.", Palette.warning);
 //     }
 //   }
 
@@ -81,44 +88,40 @@
 //               if (snapshot.connectionState == ConnectionState.done) {
 //                 ret = Column(
 //                   children: [
-                    // TopBar(txt: "Select Questionnaire"),
+//                     const TopBar(txt: "Select Questionnaire"),
 //                     Expanded(
 //                       child: ListView.builder(
 //                         itemCount: widget.data.length,
 //                         itemBuilder: (context, idx) {
-//                           return QuizzzyCard(
+//                           return CustomCard(
 //                               title: widget.data[idx],
 //                               onLongPress: () {
 //                                 // dlt from local if... and also from cloud
 //                                 showDialog(
 //                                     context: context,
 //                                     builder: (BuildContext cntxt) {
-//                                       return const PopupModal(
-//                                           size: 150.0,
-//                                           wids: [
-//                                             Text(
-//                                               "Share quiz",
-//                                               style: TextStyle(
-//                                                 fontFamily: 'Heebo',
-//                                                 fontSize: 19,
-//                                                 fontWeight: FontWeight.w400,
-//                                                 color: Color.fromARGB(
-//                                                     255, 255, 255, 255),
-//                                               ),
-//                                               textAlign: TextAlign.center,
-//                                             ),
-//                                             Text(
-//                                               "Code: de2022628104234nlp_1",
-//                                               style: TextStyle(
-//                                                 fontFamily: 'Heebo',
-//                                                 fontSize: 19,
-//                                                 fontWeight: FontWeight.w400,
-//                                                 color: Color.fromARGB(
-//                                                     255, 255, 255, 255),
-//                                               ),
-//                                               textAlign: TextAlign.center,
-//                                             ),
-//                                           ]);
+//                                       return CustomPopup(size: 150.0, wids: [
+//                                         Text(
+//                                           "Share quiz",
+//                                           style: TextStyle(
+//                                             fontFamily: fontFamily,
+//                                             fontSize: 19,
+//                                             fontWeight: Font.regular,
+//                                             color: Palette.font,
+//                                           ),
+//                                           textAlign: TextAlign.center,
+//                                         ),
+//                                         Text(
+//                                           "Code: de2022628104234nlp_1",
+//                                           style: TextStyle(
+//                                             fontFamily: fontFamily,
+//                                             fontSize: 19,
+//                                             fontWeight: Font.regular,
+//                                             color: Palette.font,
+//                                           ),
+//                                           textAlign: TextAlign.center,
+//                                         ),
+//                                       ]);
 //                                     });
 //                                 Share.share('de2022628104234nlp_1');
 //                               },
@@ -133,18 +136,17 @@
 //                                             Widget ret = Container();
 //                                             if (snapshot.connectionState ==
 //                                                 ConnectionState.done) {
-//                                               ret = PopupModal(
+//                                               ret = CustomPopup(
 //                                                   size: 150.0,
 //                                                   wids: [
 //                                                     Text(
 //                                                       "Questionnaire: ${widget.data[idx]}",
-//                                                       style: const TextStyle(
-//                                                         fontFamily: 'Heebo',
+//                                                       style: TextStyle(
+//                                                         fontFamily: fontFamily,
 //                                                         fontSize: 22,
 //                                                         fontWeight:
-//                                                             FontWeight.w500,
-//                                                         color: Color.fromARGB(
-//                                                             255, 255, 255, 255),
+//                                                             Font.medium,
+//                                                         color: Palette.font,
 //                                                       ),
 //                                                       textAlign:
 //                                                           TextAlign.center,
@@ -155,13 +157,12 @@
 //                                                               'Student'
 //                                                           ? "Time: ${qSet.length} mins"
 //                                                           : "Questions: ${qSet.length}",
-//                                                       style: const TextStyle(
-//                                                         fontFamily: 'Heebo',
+//                                                       style: TextStyle(
+//                                                         fontFamily: fontFamily,
 //                                                         fontSize: 20,
 //                                                         fontWeight:
-//                                                             FontWeight.w400,
-//                                                         color: Color.fromARGB(
-//                                                             255, 255, 255, 255),
+//                                                             Font.regular,
+//                                                         color: Palette.font,
 //                                                       ),
 //                                                     ),
 //                                                     CustomButton(
@@ -170,16 +171,16 @@
 //                                                               'Student'
 //                                                           ? "Start"
 //                                                           : "View",
-//                                                       cont: context,
 //                                                       onTap: () {
 //                                                         Navigator.of(cntxt)
 //                                                             .pop();
-//                                                         Get.to(() => const Questionnaire());
+//                                                         Get.to(() =>
+//                                                             const Questionnaire());
 //                                                       },
 //                                                     ),
 //                                                   ]);
 //                                             } else {
-//                                               ret = const Loading();
+//                                               ret = const CustomLoading();
 //                                             }
 //                                             return ret;
 //                                           });
@@ -191,7 +192,7 @@
 //                   ],
 //                 );
 //               } else {
-//                 ret = const Loading();
+//                 ret = const CustomLoading();
 //               }
 //               return ret;
 //             }));

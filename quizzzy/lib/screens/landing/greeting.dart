@@ -6,6 +6,8 @@ import 'package:quizzzy/custom_widgets/custom_template.dart';
 import 'package:quizzzy/custom_widgets/quizzzy_logo.dart';
 import 'package:quizzzy/screens/home/home_page.dart';
 import 'package:quizzzy/service/local_notification_service.dart';
+import 'package:quizzzy/theme/font.dart';
+import 'package:quizzzy/theme/palette.dart';
 
 /// Renders [Greetings] screen
 class Greetings extends StatefulWidget {
@@ -52,26 +54,26 @@ class _GreetingsState extends State<Greetings> {
             width: double.maxFinite - 20,
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 0),
             alignment: Alignment.bottomCenter,
-            child: Column(children: const [
+            child: Column(children: [
               Text(
                 "WELCOME",
                 style: TextStyle(
-                    fontFamily: 'Heebo',
+                    fontFamily: fontFamily,
                     fontSize: 47,
-                    fontWeight: FontWeight.w800,
-                    color: Color.fromARGB(255, 93, 0, 155)),
+                    fontWeight: Font.extraBold,
+                    color: Palette.theme),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Text(
                 "Scroll up to continue",
                 style: TextStyle(
-                    fontFamily: 'Heebo',
+                    fontFamily: fontFamily,
                     fontSize: 17,
-                    fontWeight: FontWeight.w400,
-                    color: Color.fromARGB(255, 209, 209, 209)),
+                    fontWeight: Font.regular,
+                    color: Palette.txtInput),
                 textAlign: TextAlign.center,
               ),
             ]),

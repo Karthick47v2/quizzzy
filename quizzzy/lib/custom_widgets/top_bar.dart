@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:quizzzy/theme/font.dart';
+import 'package:quizzzy/theme/palette.dart';
 
 class TopBar extends StatelessWidget {
   final String txt;
@@ -12,11 +14,11 @@ class TopBar extends StatelessWidget {
       width: double.maxFinite,
       child: Text(
         txt,
-        style: const TextStyle(
-          fontFamily: 'Heebo',
+        style: TextStyle(
+          fontFamily: fontFamily,
           fontSize: 22,
-          fontWeight: FontWeight.w500,
-          color: Color.fromARGB(255, 255, 255, 255),
+          fontWeight: Font.medium,
+          color: Palette.font,
         ),
       ),
     );

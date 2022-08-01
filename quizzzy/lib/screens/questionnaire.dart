@@ -14,6 +14,8 @@ import 'package:quizzzy/screens/score.dart';
 import 'package:quizzzy/service/db_model/question_set.dart';
 import 'package:quizzzy/service/fs_database.dart';
 import 'package:quizzzy/service/local_database.dart';
+import 'package:quizzzy/theme/font.dart';
+import 'package:quizzzy/theme/palette.dart';
 
 /// Renders [Questionnaire] screen which consists of all questions.
 ///
@@ -59,13 +61,13 @@ class _QuestionnaireState extends State<Questionnaire> {
               barrierDismissible: false,
               builder: (BuildContext cntxt) {
                 return CustomPopup(size: 100.0, wids: [
-                  const Text(
+                  Text(
                     "Time's up",
                     style: TextStyle(
-                        fontFamily: 'Heebo',
+                        fontFamily: fontFamily,
                         fontSize: 22,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white),
+                        fontWeight: Font.regular,
+                        color: Palette.font),
                     textAlign: TextAlign.center,
                   ),
                   CustomButton(
@@ -111,9 +113,8 @@ class _QuestionnaireState extends State<Questionnaire> {
                       child: Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: time > 30
-                              ? const Color.fromARGB(94, 0, 255, 34)
-                              : const Color.fromARGB(94, 255, 0, 0),
+                          color:
+                              time > 30 ? Palette.timerGreen : Palette.timerRed,
                           borderRadius:
                               const BorderRadius.all(Radius.circular(10)),
                         ),
@@ -122,11 +123,11 @@ class _QuestionnaireState extends State<Questionnaire> {
                             "${(time ~/ 60)}".padLeft(2, '0') +
                                 " : " +
                                 "${time % 60}".padLeft(2, '0'),
-                            style: const TextStyle(
-                                fontFamily: 'Heebo',
+                            style: TextStyle(
+                                fontFamily: fontFamily,
                                 fontSize: 19,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.white),
+                                fontWeight: Font.extraBold,
+                                color: Palette.font),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -136,18 +137,19 @@ class _QuestionnaireState extends State<Questionnaire> {
                       padding: const EdgeInsets.fromLTRB(120, 70, 120, 10),
                       child: Container(
                         padding: const EdgeInsets.all(10),
-                        decoration: const BoxDecoration(
-                          color: Color.fromARGB(255, 93, 0, 155),
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        decoration: BoxDecoration(
+                          color: Palette.theme,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
                         ),
-                        child: const Center(
+                        child: Center(
                           child: Text(
                             "Keep / Drop",
                             style: TextStyle(
-                                fontFamily: 'Heebo',
+                                fontFamily: fontFamily,
                                 fontSize: 19,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.white),
+                                fontWeight: Font.extraBold,
+                                color: Palette.font),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -157,18 +159,18 @@ class _QuestionnaireState extends State<Questionnaire> {
                 padding: const EdgeInsets.fromLTRB(10, 30, 10, 50),
                 child: Container(
                   padding: const EdgeInsets.all(8),
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(94, 155, 155, 155),
-                    borderRadius: BorderRadius.all(Radius.circular(24)),
+                  decoration: BoxDecoration(
+                    color: Palette.questionBg,
+                    borderRadius: const BorderRadius.all(Radius.circular(24)),
                   ),
                   child: Center(
                     child: Text(
                       questionnaire[currentIdx].question,
-                      style: const TextStyle(
-                          fontFamily: 'Heebo',
+                      style: TextStyle(
+                          fontFamily: fontFamily,
                           fontSize: 22,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white),
+                          fontWeight: Font.regular,
+                          color: Palette.font),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -203,11 +205,11 @@ class _QuestionnaireState extends State<Questionnaire> {
             children: [
               Text(
                 "${currentIdx + 1} / ${questionnaire.length}",
-                style: const TextStyle(
-                    fontFamily: 'Heebo',
+                style: TextStyle(
+                    fontFamily: fontFamily,
                     fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white),
+                    fontWeight: Font.regular,
+                    color: Palette.font),
               ),
               userType == "Student"
                   ? CustomButton(
@@ -260,23 +262,23 @@ class _QuestionnaireState extends State<Questionnaire> {
                 barrierDismissible: false,
                 builder: (BuildContext cntxt) {
                   return CustomPopup(size: 150.0, wids: [
-                    const Text(
+                    Text(
                       // "You got ${100 * score / questionnaire.length}",
                       "Press continue to finish the quiz",
                       style: TextStyle(
-                          fontFamily: 'Heebo',
+                          fontFamily: fontFamily,
                           fontSize: 22,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white),
+                          fontWeight: Font.regular,
+                          color: Palette.font),
                       textAlign: TextAlign.center,
                     ),
-                    const Text(
+                    Text(
                       "You can always review quizzes from main menu",
                       style: TextStyle(
-                          fontFamily: 'Heebo',
+                          fontFamily: fontFamily,
                           fontSize: 19,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white),
+                          fontWeight: Font.regular,
+                          color: Palette.font),
                       textAlign: TextAlign.center,
                     ),
                     Row(
@@ -310,13 +312,13 @@ class _QuestionnaireState extends State<Questionnaire> {
               barrierDismissible: false,
               builder: (BuildContext cntxt) {
                 return CustomPopup(size: 150.0, wids: [
-                  const Text(
+                  Text(
                     "Press continue to modify changes, cancel to revert",
                     style: TextStyle(
-                        fontFamily: 'Heebo',
+                        fontFamily: fontFamily,
                         fontSize: 22,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white),
+                        fontWeight: Font.regular,
+                        color: Palette.font),
                     textAlign: TextAlign.center,
                   ),
                   Row(
@@ -365,7 +367,7 @@ class _QuestionnaireState extends State<Questionnaire> {
     questionSetBox.delete(name);
     if (!await FirestoreService()
         .deleteQuestionnaire('users/${FirestoreService().user!.uid}/$name')) {
-      customSnackBar("Error", "Please try again", Colors.red.shade800);
+      customSnackBar("Error", "Please try again", Palette.error);
     } else {
       var popList = await UserSharedPreferences().getPoppedItems();
       popList ??= [];

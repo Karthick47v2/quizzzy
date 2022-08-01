@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quizzzy/theme/palette.dart';
 
 class CustomTemplate extends StatefulWidget {
   final Widget body;
@@ -14,7 +15,7 @@ class _CustomTemplateState extends State<CustomTemplate> {
   Widget build(context) {
     return Scaffold(
         resizeToAvoidBottomInset: true,
-        backgroundColor: const Color.fromARGB(255, 19, 19, 19),
+        backgroundColor: Palette.bg,
         body: widget.body);
   }
 }

@@ -12,6 +12,7 @@ import 'package:quizzzy/custom_widgets/custom_popup.dart';
 import 'package:quizzzy/custom_widgets/custom_snackbar.dart';
 import 'package:quizzzy/custom_widgets/custom_text_input.dart';
 import 'package:quizzzy/service/fs_database.dart';
+import 'package:quizzzy/theme/palette.dart';
 
 class FileBrowserPopup extends StatefulWidget {
   const FileBrowserPopup({Key? key}) : super(key: key);
@@ -48,7 +49,7 @@ class _FileBrowserPopupState extends State<FileBrowserPopup> {
                       });
                     } else {
                       customSnackBar(
-                          "Error", "No network access", (Colors.red.shade800));
+                          "Error", "No network access", Palette.error);
                     }
                     Navigator.pop(context);
                   },
@@ -83,12 +84,12 @@ Future getQuestions(String cont, String qName) async {
     customSnackBar(
         "Success",
         "Generating question may take a while. It will be available under 'Question Bank' once process is finished.",
-        Colors.green.shade700);
+        Palette.sucess);
     if (!await FirestoreService().saveUser(false, state: true)) {
-      customSnackBar("Error", "Connection error", (Colors.red.shade800));
+      customSnackBar("Error", "Connection error", Palette.error);
     }
   } else {
-    customSnackBar("Error", res.body.toString(), (Colors.red.shade800));
+    customSnackBar("Error", res.body.toString(), Palette.error);
   }
 }
 
@@ -98,7 +99,7 @@ Future getQuestions(String cont, String qName) async {
 getFile(String fileName) async {
   if (await FirestoreService().getGeneratorStatus() == "Waiting") {
     customSnackBar("...", "Please wait for previous document to get processed.",
-        (Colors.amber.shade400));
+        Palette.warning);
     return;
   }
 

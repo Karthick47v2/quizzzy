@@ -5,6 +5,8 @@ import 'package:quizzzy/custom_widgets/custom_template.dart';
 import 'package:quizzzy/custom_widgets/custom_text_input.dart';
 import 'package:quizzzy/custom_widgets/quizzzy_logo.dart';
 import 'package:quizzzy/screens/auth/validation.dart';
+import 'package:quizzzy/theme/font.dart';
+import 'package:quizzzy/theme/palette.dart';
 
 class AuthWidget extends StatefulWidget {
   final String pageTitle;
@@ -53,11 +55,11 @@ class _AuthWidgetState extends State<AuthWidget> {
                       child: Text(
                         widget.pageTitle,
                         textAlign: TextAlign.left,
-                        style: const TextStyle(
-                            fontFamily: 'Heebo',
+                        style: TextStyle(
+                            fontFamily: fontFamily,
                             fontSize: 48,
-                            fontWeight: FontWeight.w800,
-                            color: Color.fromARGB(204, 79, 0, 170)),
+                            fontWeight: Font.extraBold,
+                            color: Palette.authTitle),
                       ),
                     ),
                   ],
@@ -91,21 +93,21 @@ class _AuthWidgetState extends State<AuthWidget> {
                 children: [
                   Text(
                     widget.bottomText,
-                    style: const TextStyle(
-                        fontFamily: 'Heebo',
+                    style: TextStyle(
+                        fontFamily: fontFamily,
                         fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white),
+                        fontWeight: Font.regular,
+                        color: Palette.font),
                   ),
                   const SizedBox(width: 18),
                   TextButton(
                       child: Text(
                         widget.bottomBtnTxt,
-                        style: const TextStyle(
-                            fontFamily: 'Heebo',
+                        style: TextStyle(
+                            fontFamily: fontFamily,
                             fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: Color.fromARGB(255, 114, 0, 190)),
+                            fontWeight: Font.medium,
+                            color: Palette.hyperBtn),
                       ),
                       onPressed: widget.hyperLinkFunc),
                 ],

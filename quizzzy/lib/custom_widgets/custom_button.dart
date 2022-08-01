@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:quizzzy/theme/font.dart';
+import 'package:quizzzy/theme/palette.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback? onTap;
-  final Color? clr;
-  final Color? txtClr;
 
-  const CustomButton(
-      {Key? key, required this.text, this.onTap, this.clr, this.txtClr})
+  const CustomButton({Key? key, required this.text, this.onTap})
       : super(key: key);
 
   @override
@@ -16,8 +15,7 @@ class CustomButton extends StatelessWidget {
         onPressed: onTap,
         style: OutlinedButton.styleFrom(
           side: BorderSide(
-            color:
-                (clr != null) ? clr! : const Color.fromARGB(255, 85, 46, 110),
+            color: Palette.btnOutline,
             width: 2.0,
             style: BorderStyle.solid,
           ),
@@ -25,12 +23,10 @@ class CustomButton extends StatelessWidget {
         child: Text(
           text,
           style: TextStyle(
-            fontFamily: 'Heebo',
+            fontFamily: fontFamily,
             fontSize: 24,
-            fontWeight: FontWeight.w500,
-            color: (txtClr != null)
-                ? txtClr!
-                : const Color.fromARGB(255, 255, 255, 255),
+            fontWeight: Font.medium,
+            color: Palette.font,
           ),
         ));
   }

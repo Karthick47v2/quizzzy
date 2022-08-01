@@ -7,6 +7,7 @@ import 'package:quizzzy/custom_widgets/custom_snackbar.dart';
 import 'package:quizzzy/custom_widgets/custom_text_input.dart';
 import 'package:quizzzy/custom_widgets/quizzzy_logo.dart';
 import 'package:quizzzy/service/fs_database.dart';
+import 'package:quizzzy/theme/palette.dart';
 
 class UserDetails extends StatefulWidget {
   final TextEditingController nameController;
@@ -24,7 +25,7 @@ class _UserDetailsState extends State<UserDetails> {
           if (!await FirestoreService()
               .sendUserType(widget.nameController.text, isTeacher)) {
             customSnackBar(
-                "Error", "Internal server error", (Colors.red.shade800));
+                "Error", "Internal server error", Palette.error);
           }
           Get.find<UtilsController>().setRegistered();
         });

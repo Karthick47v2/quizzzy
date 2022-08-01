@@ -6,6 +6,8 @@ import 'package:quizzzy/controllers/user_type_controller.dart';
 import 'package:quizzzy/custom_widgets/custom_button.dart';
 import 'package:quizzzy/custom_widgets/custom_popup.dart';
 import 'package:quizzzy/screens/questionnaire.dart';
+import 'package:quizzzy/theme/font.dart';
+import 'package:quizzzy/theme/palette.dart';
 
 class QuizStartPopup extends StatelessWidget {
   final BuildContext cntxt;
@@ -20,11 +22,11 @@ class QuizStartPopup extends StatelessWidget {
     return CustomPopup(size: 150.0, wids: [
       Text(
         "Questionnaire: ${questionList[idx]}",
-        style: const TextStyle(
-          fontFamily: 'Heebo',
+        style: TextStyle(
+          fontFamily: fontFamily,
           fontSize: 22,
-          fontWeight: FontWeight.w500,
-          color: Color.fromARGB(255, 255, 255, 255),
+          fontWeight: Font.medium,
+          color: Palette.font,
         ),
         textAlign: TextAlign.center,
       ),
@@ -33,11 +35,11 @@ class QuizStartPopup extends StatelessWidget {
           Get.find<UserTypeController>().userType == 'Student'
               ? "Time: ${qController.questionnaire.length} mins"
               : "Questions: ${qController.questionnaire.length}",
-          style: const TextStyle(
-            fontFamily: 'Heebo',
+          style: TextStyle(
+            fontFamily: fontFamily,
             fontSize: 20,
-            fontWeight: FontWeight.w400,
-            color: Color.fromARGB(255, 255, 255, 255),
+            fontWeight: Font.regular,
+            color: Palette.font,
           ),
         );
       }),

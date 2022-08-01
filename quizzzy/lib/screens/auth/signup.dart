@@ -6,6 +6,7 @@ import 'package:quizzzy/custom_widgets/custom_button.dart';
 import 'package:quizzzy/custom_widgets/custom_snackbar.dart';
 import 'package:quizzzy/screens/auth/login.dart';
 import 'package:quizzzy/service/fbase_auth.dart';
+import 'package:quizzzy/theme/palette.dart';
 
 /// Renders [SignUp] screen
 ///
@@ -35,9 +36,9 @@ class _SignUpState extends State<SignUp> {
               customSnackBar(
                   "Check mail",
                   "A verification email has been sent to your mail",
-                  (Colors.amber.shade400));
+                  Palette.warning);
             } else {
-              customSnackBar("Error", res, (Colors.red.shade800));
+              customSnackBar("Error", res, Palette.error);
             }
           }
         },

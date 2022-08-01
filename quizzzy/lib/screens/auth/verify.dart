@@ -6,6 +6,8 @@ import 'package:quizzzy/custom_widgets/custom_button.dart';
 import 'package:quizzzy/custom_widgets/custom_template.dart';
 import 'package:quizzzy/screens/home/home_page.dart';
 import 'package:quizzzy/service/fs_database.dart';
+import 'package:quizzzy/theme/font.dart';
+import 'package:quizzzy/theme/palette.dart';
 
 /// Renders [VerifyEmail] screen
 ///
@@ -41,21 +43,20 @@ class _VerifyEmailState extends State<VerifyEmail> {
         body: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text(
+        Text(
           '''You need to verify your account before going further. A verification email has been 
           already sent to your email.''',
           style: TextStyle(
-            fontFamily: 'Heebo',
+            fontFamily: fontFamily,
             fontSize: 18,
-            fontWeight: FontWeight.w400,
-            color: Color.fromARGB(255, 255, 255, 255),
+            fontWeight: Font.regular,
+            color: Palette.font,
           ),
           textAlign: TextAlign.center,
         ),
         CustomButton(
           text: "Resend Email",
           onTap: () => FirestoreService().user!.sendEmailVerification(),
-          clr: Colors.green[400],
         ),
       ],
     ));

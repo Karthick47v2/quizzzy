@@ -14,6 +14,7 @@ import 'package:quizzzy/screens/home/logout_popup.dart';
 import 'package:quizzzy/screens/question_bank/question_bank.dart';
 import 'package:quizzzy/screens/home/quiz_code_popup.dart';
 import 'package:quizzzy/service/fs_database.dart';
+import 'package:quizzzy/theme/palette.dart';
 
 class Home extends StatelessWidget {
   final TextEditingController codeController;
@@ -107,17 +108,17 @@ class Home extends StatelessWidget {
     Get.find<QuestionListController>().overwriteList(data);
 
     String? str = await FirestoreService().getGeneratorStatus();
+    Navigator.pop(context);
 
     if (str == "Generated" || data.isNotEmpty) {
       Get.to(() => const QuestionBank());
     } else {
-      Navigator.pop(context);
       customSnackBar(
           "...",
           str == "Waiting"
               ? "Please wait for questions to get generated"
               : "Please upload a document to generate questions",
-          (Colors.amber.shade400));
+          Palette.warning);
     }
   }
 }

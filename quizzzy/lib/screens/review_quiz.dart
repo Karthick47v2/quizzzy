@@ -2,13 +2,18 @@
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
 // import 'package:quizzzy/controllers/user_type_controller.dart';
+// import 'package:quizzzy/custom_widgets/answer_container.dart';
+// import 'package:quizzzy/custom_widgets/custom_button.dart';
+// import 'package:quizzzy/custom_widgets/custom_popup.dart';
+// import 'package:quizzzy/custom_widgets/custom_snackbar.dart';
+// import 'package:quizzzy/custom_widgets/custom_template.dart';
+// import 'package:quizzzy/screens/home/home_page.dart';
+// import 'package:quizzzy/service/db_model/question_set.dart';
+// import 'package:quizzzy/service/fs_database.dart';
+// import 'package:quizzzy/service/local_database.dart';
+// import 'package:quizzzy/theme/font.dart';
 
-// import 'package:quizzzy/libs/custom_widgets.dart';
-// import 'package:quizzzy/src/home_page.dart';
-// import 'package:quizzzy/src/score.dart';
-// import 'package:quizzzy/src/service/db_model/question_set.dart';
-// import 'package:quizzzy/src/service/fs_database.dart';
-// import 'package:quizzzy/src/service/local_database.dart';
+// import 'package:quizzzy/theme/palette.dart';
 
 // class ReviewQuiz extends StatefulWidget {
 //   const ReviewQuiz({Key? key}) : super(key: key);
@@ -45,25 +50,25 @@
 //                 padding: const EdgeInsets.fromLTRB(130, 30, 10, 50),
 //                 child: Container(
 //                   padding: const EdgeInsets.all(8),
-//                   decoration: const BoxDecoration(
-//                     color: Color.fromARGB(94, 155, 155, 155),
-//                     borderRadius: BorderRadius.all(Radius.circular(24)),
+//                   decoration: BoxDecoration(
+//                     color: Palette.questionBg,
+//                     borderRadius: const BorderRadius.all(Radius.circular(24)),
 //                   ),
 //                   child: Center(
 //                     child: Text(
 //                       widget.questionnaire[currentQ].question,
-//                       style: const TextStyle(
-//                           fontFamily: 'Heebo',
+//                       style: TextStyle(
+//                           fontFamily: fontFamily,
 //                           fontSize: 22,
-//                           fontWeight: FontWeight.w400,
-//                           color: Colors.white),
+//                           fontWeight: Font.regular,
+//                           color: Palette.font),
 //                       textAlign: TextAlign.center,
 //                     ),
 //                   ),
 //                 ),
 //               ),
 //               for (var i in widget.questionnaire[currentQ].allAns)
-//                 QuizzzyAns(
+//                 AnswerContainer(
 //                   ans: i,
 //                   isPicked: i.toLowerCase() ==
 //                       widget.questionnaire[currentQ].crctAns.toLowerCase(),
@@ -81,11 +86,11 @@
 //             children: [
 //               Text(
 //                 "${currentQ + 1} / ${widget.questionnaire.length}",
-//                 style: const TextStyle(
-//                     fontFamily: 'Heebo',
+//                 style: TextStyle(
+//                     fontFamily: fontFamily,
 //                     fontSize: 18,
-//                     fontWeight: FontWeight.w400,
-//                     color: Colors.white),
+//                     fontWeight: Font.regular,
+//                     color: Palette.font),
 //               ),
 //               CustomButton(
 //                 text: "Next",
@@ -119,23 +124,23 @@
 //                 context: context,
 //                 barrierDismissible: false,
 //                 builder: (BuildContext cntxt) {
-//                   return PopupModal(size: 150.0, wids: [
+//                   return CustomPopup(size: 150.0, wids: [
 //                     Text(
 //                       "You got ${100 * score / widget.questionnaire.length}",
-//                       style: const TextStyle(
-//                           fontFamily: 'Heebo',
+//                       style: TextStyle(
+//                           fontFamily: fontFamily,
 //                           fontSize: 22,
-//                           fontWeight: FontWeight.w400,
-//                           color: Colors.white),
+//                           fontWeight: Font.regular,
+//                           color: Palette.font),
 //                       textAlign: TextAlign.center,
 //                     ),
-//                     const Text(
+//                     Text(
 //                       "You can always review quizzes from main menu",
 //                       style: TextStyle(
-//                           fontFamily: 'Heebo',
+//                           fontFamily: fontFamily,
 //                           fontSize: 19,
-//                           fontWeight: FontWeight.w400,
-//                           color: Colors.white),
+//                           fontWeight: Font.regular,
+//                           color: Palette.font),
 //                       textAlign: TextAlign.center,
 //                     ),
 //                     Row(
@@ -168,14 +173,14 @@
 //               context: context,
 //               barrierDismissible: false,
 //               builder: (BuildContext cntxt) {
-//                 return PopupModal(size: 150.0, wids: [
-//                   const Text(
+//                 return CustomPopup(size: 150.0, wids: [
+//                   Text(
 //                     "Press continue to modify changes, cancel to revert",
 //                     style: TextStyle(
-//                         fontFamily: 'Heebo',
+//                         fontFamily: fontFamily,
 //                         fontSize: 22,
-//                         fontWeight: FontWeight.w400,
-//                         color: Colors.white),
+//                         fontWeight: Font.regular,
+//                         color: Palette.font),
 //                     textAlign: TextAlign.center,
 //                   ),
 //                   Row(
@@ -183,9 +188,7 @@
 //                     children: [
 //                       CustomButton(
 //                         text: "Cancel",
-//                         onTap: () 
-//                           Get.to(() => const HomePage())
-//                         ,
+//                         onTap: () => Get.to(() => const HomePage()),
 //                       ),
 //                       CustomButton(
 //                         text: "Continue",
@@ -222,7 +225,7 @@
 //     questionSetBox.delete(widget.name);
 //     if (!await FirestoreService().deleteQuestionnaire(
 //         'users/${FirestoreService().user!.uid}/${widget.name}')) {
-//       snackBar(context, "Error: Please try again", Colors.red.shade800);
+//       customSnackBar("Error", "Please try again", Palette.error);
 //     } else {
 //       var popList = await UserSharedPreferences().getPoppedItems();
 //       popList ??= [];

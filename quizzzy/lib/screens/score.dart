@@ -6,6 +6,8 @@ import 'package:quizzzy/custom_widgets/custom_template.dart';
 import 'package:quizzzy/screens/home/home_page.dart';
 import 'package:quizzzy/service/db_model/question_set.dart';
 import 'package:quizzzy/controllers/questionnaire_controller.dart';
+import 'package:quizzzy/theme/font.dart';
+import 'package:quizzzy/theme/palette.dart';
 
 class Score extends StatelessWidget {
   Score({Key? key}) : super(key: key);
@@ -25,11 +27,11 @@ class Score extends StatelessWidget {
         children: [
           Text(
             "$score / ${questionnaire.length}",
-            style: const TextStyle(
-                fontFamily: 'Heebo',
+            style: TextStyle(
+                fontFamily: fontFamily,
                 fontSize: 17,
-                fontWeight: FontWeight.w400,
-                color: Colors.white),
+                fontWeight: Font.regular,
+                color: Palette.font),
             textAlign: TextAlign.center,
           ),
           Text(
@@ -40,11 +42,11 @@ class Score extends StatelessWidget {
                     : (avg >= 0.5
                         ? "Not bad. You can still try again"
                         : "Try again later, you can do it.")),
-            style: const TextStyle(
-                fontFamily: 'Heebo',
+            style: TextStyle(
+                fontFamily: fontFamily,
                 fontSize: 17,
-                fontWeight: FontWeight.w400,
-                color: Colors.white),
+                fontWeight: Font.regular,
+                color: Palette.font),
             textAlign: TextAlign.center,
           ),
           CustomButton(

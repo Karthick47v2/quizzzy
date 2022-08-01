@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:quizzzy/theme/font.dart';
+import 'package:quizzzy/theme/palette.dart';
 
 class CustomCard extends StatelessWidget {
   final String title;
@@ -14,17 +16,17 @@ class CustomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: const Color.fromARGB(255, 93, 0, 155),
+      color: Palette.theme,
       child: InkWell(
         child: Padding(
             padding: const EdgeInsets.all(20),
             child: Text(
               title,
-              style: const TextStyle(
-                fontFamily: 'Heebo',
+              style: TextStyle(
+                fontFamily: fontFamily,
                 fontSize: 22,
-                fontWeight: FontWeight.w400,
-                color: Color.fromARGB(255, 255, 255, 255),
+                fontWeight: Font.regular,
+                color: Palette.font,
               ),
             )),
         onTap: onTap,

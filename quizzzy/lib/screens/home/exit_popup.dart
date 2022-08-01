@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 
 import 'package:quizzzy/custom_widgets/custom_button.dart';
 import 'package:quizzzy/custom_widgets/custom_popup.dart';
+import 'package:quizzzy/theme/font.dart';
+import 'package:quizzzy/theme/palette.dart';
 
 class ExitPopup extends StatelessWidget {
   final BuildContext context;
@@ -11,13 +13,13 @@ class ExitPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPopup(size: 150.0, wids: [
-      const Text(
+      Text(
         "Are you sure ?",
         style: TextStyle(
-            fontFamily: 'Heebo',
+            fontFamily: fontFamily,
             fontSize: 19,
-            fontWeight: FontWeight.w400,
-            color: Colors.white),
+            fontWeight: Font.regular,
+            color: Palette.font),
         textAlign: TextAlign.center,
       ),
       Row(

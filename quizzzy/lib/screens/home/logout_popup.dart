@@ -6,6 +6,8 @@ import 'package:quizzzy/custom_widgets/custom_popup.dart';
 import 'package:quizzzy/custom_widgets/custom_snackbar.dart';
 import 'package:quizzzy/screens/auth/login.dart';
 import 'package:quizzzy/service/fbase_auth.dart';
+import 'package:quizzzy/theme/font.dart';
+import 'package:quizzzy/theme/palette.dart';
 
 class LogoutPopup extends StatefulWidget {
   final BuildContext context;
@@ -19,13 +21,13 @@ class _LogoutPopupState extends State<LogoutPopup> {
   @override
   Widget build(BuildContext context) {
     return CustomPopup(size: 150.0, wids: [
-      const Text(
+      Text(
         "Are you sure ?",
         style: TextStyle(
-            fontFamily: 'Heebo',
+            fontFamily: fontFamily,
             fontSize: 19,
-            fontWeight: FontWeight.w400,
-            color: Colors.white),
+            fontWeight: Font.regular,
+            color: Palette.font),
         textAlign: TextAlign.center,
       ),
       Row(
@@ -39,7 +41,7 @@ class _LogoutPopupState extends State<LogoutPopup> {
                 Navigator.of(widget.context).pop();
                 Get.to(() => const Login());
               } else {
-                customSnackBar("Error", res, Colors.red.shade800);
+                customSnackBar("Error", res, Palette.error);
               }
             },
           ),
