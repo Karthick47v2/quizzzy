@@ -83,7 +83,6 @@ class _HomeState extends State<Home> {
                                 return StatefulBuilder(
                                     builder: (cntxt, setState) {
                                   return QuizCodePopup(
-                                      context: cntxt,
                                       codeController: codeController);
                                 });
                               });
@@ -107,8 +106,8 @@ class _HomeState extends State<Home> {
                     onTap: () {
                       showDialog(
                           context: context,
-                          builder: (BuildContext cntxt) {
-                            return LogoutPopup(context: cntxt);
+                          builder: (_) {
+                            return const LogoutPopup();
                           });
                     }),
                 CustomButtonWrapper(
@@ -116,8 +115,8 @@ class _HomeState extends State<Home> {
                     onTap: () {
                       showDialog(
                           context: context,
-                          builder: (BuildContext cntxt) {
-                            return ExitPopup(context: cntxt);
+                          builder: (_) {
+                            return const ExitPopup();
                           });
                     }),
               ]),

@@ -47,7 +47,7 @@ class _GreetingsState extends State<Greetings> {
   Widget build(BuildContext context) {
     return CustomTemplate(
         body: Builder(
-      builder: (context) => Column(
+      builder: (_) => Column(
         children: [
           const QuizzzyLogo(),
           Container(

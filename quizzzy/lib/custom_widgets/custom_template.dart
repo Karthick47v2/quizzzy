@@ -12,7 +12,7 @@ class CustomTemplate extends StatefulWidget {
 
 class _CustomTemplateState extends State<CustomTemplate> {
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: Palette.bg,

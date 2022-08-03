@@ -10,8 +10,7 @@ import 'package:quizzzy/theme/font.dart';
 import 'package:quizzzy/theme/palette.dart';
 
 class LogoutPopup extends StatefulWidget {
-  final BuildContext context;
-  const LogoutPopup({Key? key, required this.context}) : super(key: key);
+  const LogoutPopup({Key? key}) : super(key: key);
 
   @override
   State<LogoutPopup> createState() => _LogoutPopupState();
@@ -38,7 +37,7 @@ class _LogoutPopupState extends State<LogoutPopup> {
             onTap: () async {
               String res = await Auth().userSignout();
               if (res == "Success") {
-                Navigator.of(widget.context).pop();
+                Get.back();
                 Get.to(() => const Login());
               } else {
                 customSnackBar("Error", res, Palette.error);
@@ -47,7 +46,7 @@ class _LogoutPopupState extends State<LogoutPopup> {
           ),
           CustomButton(
             text: "No",
-            onTap: () => Navigator.of(widget.context).pop(),
+            onTap: () => Get.back(),
           )
         ],
       )

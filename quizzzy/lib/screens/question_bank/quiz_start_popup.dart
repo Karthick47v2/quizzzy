@@ -5,17 +5,16 @@ import 'package:quizzzy/controllers/questionnaire_controller.dart';
 import 'package:quizzzy/controllers/user_type_controller.dart';
 import 'package:quizzzy/custom_widgets/custom_button.dart';
 import 'package:quizzzy/custom_widgets/custom_popup.dart';
-import 'package:quizzzy/screens/questionnaire.dart';
+import 'package:quizzzy/screens/questionnaire/student_view.dart';
+import 'package:quizzzy/screens/questionnaire/teacher_view.dart';
 import 'package:quizzzy/theme/font.dart';
 import 'package:quizzzy/theme/palette.dart';
 
 class QuizStartPopup extends StatelessWidget {
-  final BuildContext cntxt;
   final List<String> questionList =
       Get.find<QuestionListController>().questionList;
   final int idx;
-  QuizStartPopup({Key? key, required this.cntxt, required this.idx})
-      : super(key: key);
+  QuizStartPopup({Key? key, required this.idx}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +42,21 @@ class QuizStartPopup extends StatelessWidget {
           ),
         );
       }),
-      CustomButton(
-        text: Get.find<UserTypeController>().userType == 'Student'
-            ? "Start"
-            : "View",
-        onTap: () {
-          Navigator.of(cntxt).pop();
-          Get.to(() => const Questionnaire());
-        },
-      ),
+      Get.find<UserTypeController>().userType == 'Student'
+          ? CustomButton(
+              text: "Start",
+              onTap: () {
+                Get.back();
+                Get.to(() => const StudentView());
+              },
+            )
+          : CustomButton(
+              text: "View",
+              onTap: () {
+                Get.back();
+                Get.to(() => const TeacherView());
+              },
+            ),
     ]);
   }
 }

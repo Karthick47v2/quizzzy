@@ -123,7 +123,7 @@
 //             showDialog(
 //                 context: context,
 //                 barrierDismissible: false,
-//                 builder: (BuildContext cntxt) {
+//                 builder: (_) {
 //                   return CustomPopup(size: 150.0, wids: [
 //                     Text(
 //                       "You got ${100 * score / widget.questionnaire.length}",
@@ -149,7 +149,7 @@
 //                         CustomButton(
 //                           text: "Continue",
 //                           onTap: () async {
-//                             Navigator.pop(cntxt); ///////////////////////
+//                             Get.back();
 //                             Get.to(() => const HomePage());
 //                           },
 //                         )
@@ -172,7 +172,7 @@
 //           showDialog(
 //               context: context,
 //               barrierDismissible: false,
-//               builder: (BuildContext cntxt) {
+//               builder: (_) {
 //                 return CustomPopup(size: 150.0, wids: [
 //                   Text(
 //                     "Press continue to modify changes, cancel to revert",
@@ -204,7 +204,7 @@
 //                           //   modifyQuestionSet(
 //                           //       widget.name, widget.questionnaire, false);
 //                           // }
-//                           Navigator.pop(cntxt); ///////////////////////
+//                           Get.back();
 //                           Get.to(() => const HomePage());
 //                         },
 //                       )

@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data == "None") {
             ret = Builder(
-                builder: (context) => Column(
+                builder: (_) => Column(
                       children: [
                         const QuizzzyLogo(),
                         CustomTextInput(

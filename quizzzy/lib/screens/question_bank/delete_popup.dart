@@ -12,12 +12,10 @@ import 'package:quizzzy/theme/font.dart';
 import 'package:quizzzy/theme/palette.dart';
 
 class DeletePopup extends StatelessWidget {
-  final BuildContext cntxt;
   final int idx;
   final List<String> questionList =
       Get.find<QuestionListController>().questionList;
-  DeletePopup({Key? key, required this.cntxt, required this.idx})
-      : super(key: key);
+  DeletePopup({Key? key, required this.idx}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +51,12 @@ class DeletePopup extends StatelessWidget {
                         "This may take some time... Will be deleted on your next visit.",
                         Palette.sucess);
                   }
-                  Navigator.of(cntxt).pop();
+                  Get.back();
                 },
               ),
               CustomButton(
                 text: "No",
-                onTap: () => Navigator.of(cntxt).pop(),
+                onTap: () => Get.back(),
               ),
             ],
           ),

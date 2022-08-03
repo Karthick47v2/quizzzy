@@ -13,6 +13,7 @@ class QuestionnaireController extends GetxController {
   String get questionnaireName => _questionnaireName;
   int get score => _score;
   int get time => _time;
+  double get avg => _score / questionnaire.length;
 
   Future<bool> overwriteList(String qName) async {
     _questionnaireName = qName;

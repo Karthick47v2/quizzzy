@@ -52,14 +52,14 @@ class _QuestionBankState extends State<QuestionBank> {
                             onLongPress: () {
                               showDialog(
                                   context: context,
-                                  builder: (BuildContext cntxt) {
-                                    return DeletePopup(cntxt: cntxt, idx: idx);
+                                  builder: (_) {
+                                    return DeletePopup(idx: idx);
                                   });
                             },
                             onTap: () async {
                               showDialog(
                                   context: context,
-                                  builder: (BuildContext cntxt) {
+                                  builder: (_) {
                                     return FutureBuilder(
                                         future:
                                             Get.find<QuestionnaireController>()
@@ -69,8 +69,7 @@ class _QuestionBankState extends State<QuestionBank> {
                                           Widget ret = Container();
                                           if (snapshot.connectionState ==
                                               ConnectionState.done) {
-                                            ret = QuizStartPopup(
-                                                cntxt: cntxt, idx: idx);
+                                            ret = QuizStartPopup(idx: idx);
                                           } else {
                                             ret = const CustomLoading();
                                           }

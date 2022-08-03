@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pdf_text/pdf_text.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,7 +26,7 @@ class _FileBrowserPopupState extends State<FileBrowserPopup> {
   final fileNameController = TextEditingController();
   bool isLoading = false;
   @override
-  Widget build(BuildContext context) {
+  Widget build(_) {
     return CustomPopup(size: 200.0, wids: [
       isLoading
           ? const CustomLoading()
@@ -51,7 +52,7 @@ class _FileBrowserPopupState extends State<FileBrowserPopup> {
                       customSnackBar(
                           "Error", "No network access", Palette.error);
                     }
-                    Navigator.pop(context);
+                    Get.back();
                   },
                 )
               ],

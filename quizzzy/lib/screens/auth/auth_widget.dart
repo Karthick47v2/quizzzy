@@ -36,7 +36,7 @@ class AuthWidget extends StatefulWidget {
 class _AuthWidgetState extends State<AuthWidget> {
   @override
   Widget build(BuildContext context) {
-    return CustomTemplate(body: Builder(builder: (context) {
+    return CustomTemplate(body: Builder(builder: (_) {
       return Form(
         key: widget.gkey,
         child: Column(

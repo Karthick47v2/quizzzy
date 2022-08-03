@@ -3,13 +3,11 @@ import 'package:get/get.dart';
 import 'package:quizzzy/custom_widgets/custom_button.dart';
 import 'package:quizzzy/custom_widgets/custom_popup.dart';
 import 'package:quizzzy/custom_widgets/custom_text_input.dart';
-import 'package:quizzzy/screens/questionnaire.dart';
+import 'package:quizzzy/screens/questionnaire/student_view.dart';
 
 class QuizCodePopup extends StatefulWidget {
-  final BuildContext context;
   final TextEditingController codeController;
-  const QuizCodePopup(
-      {Key? key, required this.context, required this.codeController})
+  const QuizCodePopup({Key? key, required this.codeController})
       : super(key: key);
 
   @override
@@ -29,16 +27,8 @@ class _QuizCodePopupState extends State<QuizCodePopup> {
           CustomButton(
             text: "Confirm",
             onTap: () async {
-              // var questionnaire =
-              //     (await FirestoreService()
-              //             .dummyGetQuestionnaire())
-              //         .map((e) =>
-              //             (QuestionSet
-              //                 .fromJson(
-              //                     e)))
-              //         .toList();
-              Navigator.pop(widget.context);
-              Get.to(() => const Questionnaire());
+              Get.back();
+              Get.to(() => const StudentView());
             },
           )
         ],

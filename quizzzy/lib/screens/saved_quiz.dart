@@ -99,7 +99,7 @@
 //                                 // dlt from local if... and also from cloud
 //                                 showDialog(
 //                                     context: context,
-//                                     builder: (BuildContext cntxt) {
+//                                     builder: (_) {
 //                                       return CustomPopup(size: 150.0, wids: [
 //                                         Text(
 //                                           "Share quiz",
@@ -132,7 +132,7 @@
 //                                     builder: (BuildContext cntxt) {
 //                                       return FutureBuilder(
 //                                           future: res,
-//                                           builder: (cntxt, snapshot) {
+//                                           builder: (_, snapshot) {
 //                                             Widget ret = Container();
 //                                             if (snapshot.connectionState ==
 //                                                 ConnectionState.done) {
@@ -144,8 +144,7 @@
 //                                                       style: TextStyle(
 //                                                         fontFamily: fontFamily,
 //                                                         fontSize: 22,
-//                                                         fontWeight:
-//                                                             Font.medium,
+//                                                         fontWeight: Font.medium,
 //                                                         color: Palette.font,
 //                                                       ),
 //                                                       textAlign:
@@ -172,8 +171,7 @@
 //                                                           ? "Start"
 //                                                           : "View",
 //                                                       onTap: () {
-//                                                         Navigator.of(cntxt)
-//                                                             .pop();
+//                                                         Get.back();
 //                                                         Get.to(() =>
 //                                                             const Questionnaire());
 //                                                       },
