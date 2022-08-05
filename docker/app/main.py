@@ -58,9 +58,9 @@ def process_request(request):
     Args:
         request (ModelInput): request from flutter.
     """
-    fs.update_generated_status(request, False)
-    questions, crct_ans, all_ans = generate_que_n_ans(request.context)
     fs.update_generated_status(request, True)
+    questions, crct_ans, all_ans = generate_que_n_ans(request.context)
+    fs.update_generated_status(request, False)
     fs.send_results_to_fs(request, questions, crct_ans, all_ans)
 
 

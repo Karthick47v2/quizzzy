@@ -30,7 +30,7 @@ class FirebaseService:
             raise TypeError("'status' must be a bool value")
 
         doc_ref = self._db.collection('users').document(request.uid)
-        doc_ref.update({'isGenerated': status})
+        doc_ref.update({'GeneratorWorking': status})
 
     def __validate(self, questions, crct_ans, all_ans):
         """Validate data
