@@ -11,8 +11,7 @@ const unauthenticatedErrorMsg =
 exports.newUser = functions.auth.user().onCreate((user) => {
   return db.collection("users").doc(user.uid).set({
     userType: null,
-    isGenerated: false,
-    isWaiting: false,
+    GeneratorWorking: false,
   });
 });
 
@@ -25,7 +24,6 @@ exports.dltUser = functions.auth.user().onDelete((user) => {
 exports.notifyUser = functions.firestore
   .document("users/{userID}/{qCol}/0")
   .onCreate(async (_data, context) => {
-    // get fcm token
     const user = await db
       .collection("users")
       .doc(`users/${context.auth.uid}`)
@@ -54,27 +52,6 @@ exports.storeUserInfo = functions.https.onCall(async (data, context) => {
   }
 
   let res = { status: 200 };
-
-  await db
-    .doc(`users/${context.auth.uid}`)
-    .set(data, { merge: true })
-    .catch(() => (res["status"] = 401));
-
-  return res;
-});
-
-// callable func => store questionSET
-exports.storeQuiz = functions.https.onCall(async (data, context) => {
-  if (!context.auth) {
-    throw new functions.https.HttpsError(
-      "unauthenticated",
-      unauthenticatedErrorMsg
-    );
-  }
-
-  let res = { status: 200 };
-
-  console.log(data);
 
   await db
     .doc(`users/${context.auth.uid}`)
