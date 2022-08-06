@@ -19,7 +19,7 @@ class FirebaseService:
         self._db = firestore.client()
 
     def update_generated_status(self, request, status):
-        """Change status of 'isGenerated' is firestore.
+        """Change status of 'GeneratorWorking' is firestore.
 
         Args:
             request (ModelInput): request format from flutter.
