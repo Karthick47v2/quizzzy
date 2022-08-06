@@ -5,7 +5,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:quizzzy/theme/palette.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:quizzzy/custom_widgets/custom_template.dart';
 import 'package:quizzzy/screens/landing/greeting.dart';

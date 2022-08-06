@@ -22,7 +22,6 @@ class _TeacherViewState extends State<TeacherView> {
   int currentIdx = 0;
   List<QuestionSet> questionnaire =
       Get.find<QuestionnaireController>().questionnaire;
-  String name = Get.find<QuestionnaireController>().questionnaireName;
 
   Widget renderAnswer(String i) {
     return AnswerContainer(
@@ -37,7 +36,7 @@ class _TeacherViewState extends State<TeacherView> {
     return CustomButton(
       text: txt,
       onTap: () {
-        updateQuestion(isRemove: isRemove);
+        updateQuestion(isRemove);
       },
     );
   }
@@ -58,7 +57,7 @@ class _TeacherViewState extends State<TeacherView> {
   /// Move to next question when [CustomButton] pressed.
   ///
   /// Teacher they can keep/drop current question.
-  updateQuestion({bool isRemove = false}) {
+  updateQuestion(bool isRemove) {
     setState(() {
       if (isRemove) {
         Get.find<QuestionnaireController>()

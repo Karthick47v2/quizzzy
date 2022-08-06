@@ -18,7 +18,6 @@ class ImportFile extends StatefulWidget {
 }
 
 class _ImportFileState extends State<ImportFile> {
-  final fileNameController = TextEditingController();
   bool isLoading = false;
 
   Widget fileBrowser() {

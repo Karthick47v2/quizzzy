@@ -48,7 +48,7 @@ class _StudentViewState extends State<StudentView> {
               context: context,
               barrierDismissible: false,
               builder: (_) {
-                return const TimesupPopup();
+                return TimesupPopup();
               });
         });
       } else {
@@ -110,7 +110,7 @@ class _StudentViewState extends State<StudentView> {
               context: context,
               barrierDismissible: false,
               builder: (_) {
-                return const StudFinishPopup();
+                return StudFinishPopup();
               });
         } else {
           refreshAns();
