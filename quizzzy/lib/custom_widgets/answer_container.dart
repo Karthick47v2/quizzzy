@@ -23,6 +23,8 @@ class _AnswerContainerState extends State<AnswerContainer> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
       child: InkWell(
+        borderRadius: const BorderRadius.all(Radius.circular(24)),
+        onTap: widget.onTap,
         child: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
@@ -42,8 +44,6 @@ class _AnswerContainerState extends State<AnswerContainer> {
             ),
           ),
         ),
-        borderRadius: const BorderRadius.all(Radius.circular(24)),
-        onTap: widget.onTap,
       ),
     );
   }

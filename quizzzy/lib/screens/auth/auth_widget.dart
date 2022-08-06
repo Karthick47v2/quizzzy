@@ -101,6 +101,7 @@ class _AuthWidgetState extends State<AuthWidget> {
                   ),
                   const SizedBox(width: 18),
                   TextButton(
+                      onPressed: widget.hyperLinkFunc,
                       child: Text(
                         widget.bottomBtnTxt,
                         style: TextStyle(
@@ -108,8 +109,7 @@ class _AuthWidgetState extends State<AuthWidget> {
                             fontSize: 18,
                             fontWeight: Font.medium,
                             color: Palette.hyperBtn),
-                      ),
-                      onPressed: widget.hyperLinkFunc),
+                      )),
                 ],
               ),
             ),

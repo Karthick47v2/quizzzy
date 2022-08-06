@@ -10,7 +10,6 @@ import 'package:quizzzy/screens/home/exit_popup.dart';
 import 'package:quizzzy/screens/home/home_page.dart';
 import 'package:quizzzy/screens/import/import.dart';
 import 'package:quizzzy/screens/home/logout_popup.dart';
-import 'package:quizzzy/screens/question_bank/question_bank.dart';
 import 'package:quizzzy/screens/home/quiz_code_popup.dart';
 import 'package:quizzzy/service/db_model/question_set.dart';
 import 'package:quizzzy/service/fs_database.dart';
@@ -67,11 +66,7 @@ class _HomeState extends State<Home> {
                           context: context,
                           barrierDismissible: false,
                           builder: (_) {
-                            checkQuesGenerated(
-                                getQuestionList,
-                                const QuestionBank(),
-                                "Please wait for questions to get generated",
-                                "Please upload a document to generate questions");
+                            checkQuesGenerated();
                             return const CustomLoading();
                           });
                     }),

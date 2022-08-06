@@ -84,9 +84,8 @@ class _StudentViewState extends State<StudentView> {
     return Questionnaire(
       topBar: TopQBar(
           color: time > 30 ? Palette.timerGreen : Palette.timerRed,
-          txt: "${(time ~/ 60)}".padLeft(2, '0') +
-              " : " +
-              "${time % 60}".padLeft(2, '0')),
+          txt:
+              "${"${(time ~/ 60)}".padLeft(2, '0')} : ${"${time % 60}".padLeft(2, '0')}"),
       renderAnswer: renderAnswer,
       bottomNavBtn: CustomButton(
         text: "Next",

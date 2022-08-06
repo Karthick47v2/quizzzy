@@ -18,6 +18,8 @@ class CustomCard extends StatelessWidget {
     return Card(
       color: Palette.theme,
       child: InkWell(
+        onTap: onTap,
+        onLongPress: onLongPress,
         child: Padding(
             padding: const EdgeInsets.all(20),
             child: Text(
@@ -29,8 +31,6 @@ class CustomCard extends StatelessWidget {
                 color: Palette.font,
               ),
             )),
-        onTap: onTap,
-        onLongPress: onLongPress,
       ),
     );
   }

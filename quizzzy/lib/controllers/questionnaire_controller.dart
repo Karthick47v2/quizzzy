@@ -5,39 +5,53 @@ import 'package:quizzzy/service/fs_database.dart';
 
 class QuestionnaireController extends GetxController {
   String _questionnaireName = "";
+  List<String> _removalList = [];
   List<QuestionSet> _questionnaire = [];
-  int _time = 0;
   int _score = 0;
 
   List<QuestionSet> get questionnaire => _questionnaire;
+  List<String> get removalList => _removalList;
   String get questionnaireName => _questionnaireName;
   int get score => _score;
-  int get time => _time;
   double get avg => _score / questionnaire.length;
 
   Future<bool> overwriteList(String qName) async {
     _questionnaireName = qName;
-    var dummy = questionSetBox.get(qName);
-
+    var dummy = localStorage.get(qName);
     if (dummy == null) {
-      dummy = (await FirestoreService().getQuestionnaire(qName))
-          .map((e) => (QuestionSet.fromJson(e)))
+      _questionnaire = (await FirestoreService().getQuestionnaire(qName))
+          .map((e) => (QuestionSet.fromJson(e.data(), e.id)))
           .toList();
-      questionSetBox.put(qName, dummy);
+      sendToLocal();
     } else {
-      dummy = dummy.cast<QuestionSet>();
+      _questionnaire = dummy.cast<QuestionSet>();
 
       /// Fake delay for future builder to work without break
       await Future.delayed(Duration.zero);
     }
-    _questionnaire = dummy;
     update();
     return true;
   }
 
-  storeTime(int time) {
-    _time = time;
+  addToRemovalList(String n) {
+    _removalList.add(n);
     update();
+  }
+
+  overwriteRemovalList() {
+    _removalList = [
+      for (int i = 0; i < _questionnaire.length; i++) _questionnaire[i].id
+    ];
+    update();
+  }
+
+  resetRemovalList() {
+    _removalList.clear();
+    update();
+  }
+
+  sendToLocal() {
+    localStorage.put(_questionnaireName, _questionnaire);
   }
 
   scoreInc() {

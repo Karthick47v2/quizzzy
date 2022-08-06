@@ -115,7 +115,7 @@ getFile(String fileName) async {
   String tempName = fileName;
   while (docExists) {
     if ((await FirestoreService().getUserDoc(tempName))!.exists) {
-      tempName = fileName + "(" + (++i).toString() + ")";
+      tempName = "$fileName(${++i})";
     } else {
       docExists = false;
       fileName = tempName;
