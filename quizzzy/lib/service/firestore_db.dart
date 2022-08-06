@@ -2,8 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:quizzzy/service/fbase_auth.dart';
+import 'package:quizzzy/service/firebase_auth.dart';
 
+/// Firestore operations
 class FirestoreService {
   late User? _user;
   late CollectionReference _users;
@@ -110,12 +111,18 @@ class FirestoreService {
         .then((value) => value.data['status'] == 200);
   }
 
+  /// Add shared [quizID] to [Firestore]
+  ///
+  /// Initialize a [quizID] map to store all students' score.
   Future<bool> generateQuiz(String quizID) async {
     HttpsCallable callable = fFunc.httpsCallable('addQuiz');
     return await callable.call(<String, dynamic>{'quizID': quizID}).then(
         (value) => value.data['status'] == 200);
   }
 
+  /// Update [score] to relevant [author]'s [quizID].
+  ///
+  /// Send score reports to teacher's [Firestore] document.
   Future<bool> sendScore(String quizID, double score, String author) async {
     HttpsCallable callable = fFunc.httpsCallable('updateScore');
     return await callable.call(<String, dynamic>{
@@ -144,6 +151,9 @@ class FirestoreService {
         name: str, type: isTeacher ? 'Teacher' : 'Student');
   }
 
+  /// Delete questions from questionniare.
+  ///
+  /// Returns whether operation is success or not.
   Future<bool> deleteQuestions(String name, List<String> qID) async {
     HttpsCallable callable = fFunc.httpsCallable('dltQuestions');
     return await callable.call(<String, dynamic>{

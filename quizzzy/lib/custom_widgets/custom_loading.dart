@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:quizzzy/theme/palette.dart';
 
+/// Customized circular loading.
 class CustomLoading extends StatelessWidget {
   const CustomLoading({Key? key}) : super(key: key);
 

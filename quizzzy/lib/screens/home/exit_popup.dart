@@ -7,6 +7,7 @@ import 'package:quizzzy/custom_widgets/custom_popup.dart';
 import 'package:quizzzy/theme/font.dart';
 import 'package:quizzzy/theme/palette.dart';
 
+/// Render [CustomPopup] when [Exit] button pressed.
 class ExitPopup extends StatelessWidget {
   const ExitPopup({Key? key}) : super(key: key);
 

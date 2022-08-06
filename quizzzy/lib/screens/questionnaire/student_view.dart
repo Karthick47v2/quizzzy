@@ -28,6 +28,7 @@ class _StudentViewState extends State<StudentView> {
       Get.find<QuestionnaireController>().questionnaire;
   late Timer timer;
 
+  /// Setup quiz env.
   @override
   initState() {
     super.initState();
@@ -37,8 +38,6 @@ class _StudentViewState extends State<StudentView> {
   }
 
   /// Start count down.
-  ///
-  /// Alert if time's up.
   startTimer() {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (time <= 0) {
@@ -64,35 +63,6 @@ class _StudentViewState extends State<StudentView> {
   dispose() {
     timer.cancel();
     super.dispose();
-  }
-
-  Widget renderAnswer(String i) {
-    return AnswerContainer(
-      ans: i,
-      isPicked: qState[questionnaire[currentIdx].allAns.indexOf(i)],
-      onTap: () {
-        setState(() {
-          refreshAns();
-          qState[questionnaire[currentIdx].allAns.indexOf(i)] = true;
-        });
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Questionnaire(
-      topBar: TopQBar(
-          color: time > 30 ? Palette.timerGreen : Palette.timerRed,
-          txt:
-              "${"${(time ~/ 60)}".padLeft(2, '0')} : ${"${time % 60}".padLeft(2, '0')}"),
-      renderAnswer: renderAnswer,
-      bottomNavBtn: CustomButton(
-        text: "Next",
-        onTap: () => updateQuestion(),
-      ),
-      currentIdx: currentIdx,
-    );
   }
 
   /// Move to next question when [CustomButton] pressed.
@@ -131,5 +101,37 @@ class _StudentViewState extends State<StudentView> {
   /// Refresh [CustomButton] pressed state.
   refreshAns() {
     qState.setAll(0, [false, false, false, false]);
+  }
+
+  /// Render answers.
+  ///
+  /// Change color when button pressed.
+  Widget renderAnswer(String i) {
+    return AnswerContainer(
+      ans: i,
+      isPicked: qState[questionnaire[currentIdx].allAns.indexOf(i)],
+      onTap: () {
+        setState(() {
+          refreshAns();
+          qState[questionnaire[currentIdx].allAns.indexOf(i)] = true;
+        });
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Questionnaire(
+      topBar: TopQBar(
+          color: time > 30 ? Palette.timerGreen : Palette.timerRed,
+          txt:
+              "${"${(time ~/ 60)}".padLeft(2, '0')} : ${"${time % 60}".padLeft(2, '0')}"),
+      renderAnswer: renderAnswer,
+      bottomNavBtn: CustomButton(
+        text: "Next",
+        onTap: () => updateQuestion(),
+      ),
+      currentIdx: currentIdx,
+    );
   }
 }

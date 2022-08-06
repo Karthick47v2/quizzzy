@@ -11,6 +11,7 @@ import 'package:quizzzy/screens/questionnaire/teacher_view.dart';
 import 'package:quizzzy/theme/font.dart';
 import 'package:quizzzy/theme/palette.dart';
 
+/// Render [CustomPopup] when questionnaire pressed.
 class QuizStartPopup extends StatelessWidget {
   final List<String> questionList =
       Get.find<QuestionListController>().questionList;

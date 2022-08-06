@@ -1,8 +1,9 @@
 import 'package:get/get.dart';
+
 import 'package:quizzzy/controllers/question_list_controller.dart';
 import 'package:quizzzy/custom_widgets/custom_snackbar.dart';
 import 'package:quizzzy/screens/question_bank/question_bank.dart';
-import 'package:quizzzy/service/fs_database.dart';
+import 'package:quizzzy/service/firestore_db.dart';
 import 'package:quizzzy/theme/palette.dart';
 
 /// Check if prevoius request got served.

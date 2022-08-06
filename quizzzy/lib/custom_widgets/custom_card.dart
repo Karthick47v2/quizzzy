@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:quizzzy/theme/font.dart';
 import 'package:quizzzy/theme/palette.dart';
 
+/// Customized card for ListView
 class CustomCard extends StatelessWidget {
   final String title;
   final VoidCallback onTap;

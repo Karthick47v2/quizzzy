@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:quizzzy/controllers/questionnaire_controller.dart';
 import 'package:quizzzy/controllers/user_type_controller.dart';
-
 import 'package:quizzzy/custom_widgets/custom_button.dart';
 import 'package:quizzzy/custom_widgets/custom_popup.dart';
 import 'package:quizzzy/screens/home/home.dart';
 import 'package:quizzzy/screens/score/score.dart';
-import 'package:quizzzy/service/fs_database.dart';
+import 'package:quizzzy/service/firestore_db.dart';
 import 'package:quizzzy/theme/font.dart';
 import 'package:quizzzy/theme/palette.dart';
 
+/// Render [CustomPopup] when time's up.
 class TimesupPopup extends StatelessWidget {
   final Mode currentMode = Get.find<UserTypeController>().mode;
   final QuestionnaireController controller =

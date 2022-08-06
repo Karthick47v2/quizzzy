@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:quizzzy/theme/palette.dart';
 
+/// Customized interactive popup.
 class CustomPopup extends StatelessWidget {
   final double size;
   final List<Widget> wids;

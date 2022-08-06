@@ -18,6 +18,7 @@ class Greetings extends StatefulWidget {
 }
 
 class _GreetingsState extends State<Greetings> {
+  /// Initialize notification services.
   @override
   initState() {
     super.initState();

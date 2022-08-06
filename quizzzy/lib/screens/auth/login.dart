@@ -6,7 +6,7 @@ import 'package:quizzzy/custom_widgets/custom_snackbar.dart';
 import 'package:quizzzy/screens/auth/signup.dart';
 import 'package:quizzzy/screens/auth/verify.dart';
 import 'package:quizzzy/screens/home/home_page.dart';
-import 'package:quizzzy/service/fbase_auth.dart';
+import 'package:quizzzy/service/firebase_auth.dart';
 import 'package:quizzzy/theme/palette.dart';
 
 /// Renders [Login] screen

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:quizzzy/custom_widgets/custom_button.dart';
 
+/// Wrapped customized button.
 class CustomButtonWrapper extends StatelessWidget {
   final String text;
   final VoidCallback? onTap;

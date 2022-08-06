@@ -23,6 +23,9 @@ class _TeacherViewState extends State<TeacherView> {
   List<QuestionSet> questionnaire =
       Get.find<QuestionnaireController>().questionnaire;
 
+  /// Render answers.
+  ///
+  /// Indicate correct answer.
   Widget renderAnswer(String i) {
     return AnswerContainer(
       ans: i,
@@ -32,25 +35,13 @@ class _TeacherViewState extends State<TeacherView> {
     );
   }
 
+  /// Render customized button.
   Widget renderNavBtn(String txt, bool isRemove) {
     return CustomButton(
       text: txt,
       onTap: () {
         updateQuestion(isRemove);
       },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Questionnaire(
-      topBar: TopQBar(color: Palette.theme, txt: "Keep / Drop"),
-      renderAnswer: renderAnswer,
-      bottomNavBtn: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [renderNavBtn("Drop", true), renderNavBtn("Keep", false)],
-      ),
-      currentIdx: currentIdx,
     );
   }
 
@@ -74,5 +65,18 @@ class _TeacherViewState extends State<TeacherView> {
         currentIdx++;
       }
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Questionnaire(
+      topBar: TopQBar(color: Palette.theme, txt: "Keep / Drop"),
+      renderAnswer: renderAnswer,
+      bottomNavBtn: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [renderNavBtn("Drop", true), renderNavBtn("Keep", false)],
+      ),
+      currentIdx: currentIdx,
+    );
   }
 }

@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:quizzzy/custom_widgets/custom_button.dart';
 import 'package:quizzzy/custom_widgets/custom_template.dart';
 import 'package:quizzzy/screens/home/home_page.dart';
-import 'package:quizzzy/service/fs_database.dart';
+import 'package:quizzzy/service/firestore_db.dart';
 import 'package:quizzzy/theme/font.dart';
 import 'package:quizzzy/theme/palette.dart';
 
@@ -23,6 +23,9 @@ class VerifyEmail extends StatefulWidget {
 class _VerifyEmailState extends State<VerifyEmail> {
   Timer? timer;
 
+  /// Initialize email verification.
+  ///
+  /// Start timers and check verification for every 3 seconds.
   @override
   initState() {
     timer = Timer.periodic(const Duration(seconds: 3), (time) {
@@ -31,10 +34,23 @@ class _VerifyEmailState extends State<VerifyEmail> {
     super.initState();
   }
 
+  // Dispose timer on navigation.
   @override
   dispose() {
     timer?.cancel();
     super.dispose();
+  }
+
+  /// Verify email
+  ///
+  /// Navigate to [HomePage], only, if email got verified
+  Future<void> checkEmailVerification() async {
+    await FirestoreService().user!.reload();
+
+    if (FirestoreService().user!.emailVerified) {
+      timer?.cancel();
+      Get.to(() => const HomePage());
+    }
   }
 
   @override
@@ -60,17 +76,5 @@ class _VerifyEmailState extends State<VerifyEmail> {
         ),
       ],
     ));
-  }
-
-  /// Verify email
-  ///
-  /// Navigate to [HomePage] only, if email got verified
-  Future<void> checkEmailVerification() async {
-    await FirestoreService().user!.reload();
-
-    if (FirestoreService().user!.emailVerified) {
-      timer?.cancel();
-      Get.to(() => const HomePage());
-    }
   }
 }

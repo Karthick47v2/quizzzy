@@ -8,6 +8,7 @@ import 'package:quizzzy/screens/auth/validation.dart';
 import 'package:quizzzy/theme/font.dart';
 import 'package:quizzzy/theme/palette.dart';
 
+/// Template widget for Authentication screens ([Login] & [SignUp]).
 class AuthWidget extends StatefulWidget {
   final String pageTitle;
   final VoidCallback? primaryBtnFunc;

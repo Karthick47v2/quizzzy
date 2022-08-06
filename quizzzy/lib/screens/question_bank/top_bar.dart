@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:quizzzy/theme/font.dart';
 import 'package:quizzzy/theme/palette.dart';
 
+/// Customized top bar for [QuestionBank] screen
 class TopBar extends StatelessWidget {
   final String txt;
   const TopBar({Key? key, required this.txt}) : super(key: key);

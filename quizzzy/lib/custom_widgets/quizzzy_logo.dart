@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Free sized logo.
 class QuizzzyLogo extends StatelessWidget {
   const QuizzzyLogo({Key? key}) : super(key: key);
 

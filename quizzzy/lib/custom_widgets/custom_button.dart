@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:quizzzy/theme/font.dart';
 import 'package:quizzzy/theme/palette.dart';
 
+/// Customized button to be used in whole app.
 class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback? onTap;

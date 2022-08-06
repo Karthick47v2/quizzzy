@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:quizzzy/theme/palette.dart';
 
+/// Custom user input
 class CustomTextInput extends StatelessWidget {
   final String text;
   final TextEditingController controller;

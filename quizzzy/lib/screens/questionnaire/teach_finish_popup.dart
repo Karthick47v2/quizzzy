@@ -9,6 +9,7 @@ import 'package:quizzzy/screens/question_bank/wipe_data.dart';
 import 'package:quizzzy/theme/font.dart';
 import 'package:quizzzy/theme/palette.dart';
 
+/// Render [CustomPopup] when teacher finishes modifying.
 class TeachFinishPopup extends StatelessWidget {
   final String name = Get.find<QuestionnaireController>().questionnaireName;
   TeachFinishPopup({Key? key}) : super(key: key);

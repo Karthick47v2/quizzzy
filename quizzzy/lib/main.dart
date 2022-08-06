@@ -4,7 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:quizzzy/theme/palette.dart';
 
 import 'package:quizzzy/custom_widgets/custom_template.dart';
 import 'package:quizzzy/screens/landing/greeting.dart';
@@ -13,9 +12,11 @@ import 'package:quizzzy/screens/auth/verify.dart';
 import 'package:quizzzy/screens/home/home_page.dart';
 import 'package:quizzzy/service/db_model/question_set.dart';
 import 'package:quizzzy/service/local_notification_service.dart';
-import 'package:quizzzy/service/fs_database.dart';
+import 'package:quizzzy/service/firestore_db.dart';
 import 'package:quizzzy/init_controllers.dart';
+import 'package:quizzzy/theme/palette.dart';
 
+/// Initialize app and dependencies
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -70,7 +71,7 @@ class _RootState extends State<Root> {
   }
 }
 
-/// Initialize and setup all database management services
+/// Initialize and setup all dbms
 initServices() async {
   Hive.registerAdapter(QuestionSetAdapter());
   fm = FirebaseMessaging.instance;

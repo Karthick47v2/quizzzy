@@ -7,7 +7,7 @@ import 'package:quizzzy/custom_widgets/custom_button.dart';
 import 'package:quizzzy/custom_widgets/custom_card.dart';
 import 'package:quizzzy/custom_widgets/custom_loading.dart';
 import 'package:quizzzy/custom_widgets/custom_template.dart';
-import 'package:quizzzy/custom_widgets/top_bar.dart';
+import 'package:quizzzy/screens/question_bank/top_bar.dart';
 import 'package:quizzzy/screens/question_bank/delete_popup.dart';
 import 'package:quizzzy/screens/question_bank/quiz_start_popup.dart';
 
@@ -24,6 +24,7 @@ class QuestionBank extends StatefulWidget {
 class _QuestionBankState extends State<QuestionBank> {
   List<String> questionList = Get.find<QuestionListController>().questionList;
 
+  /// Render popup common template.
   Widget popupTemplate(int idx, Widget popup) {
     return FutureBuilder(
         future: Get.find<QuestionnaireController>()

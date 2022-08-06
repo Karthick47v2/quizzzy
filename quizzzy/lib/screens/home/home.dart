@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:quizzzy/controllers/user_type_controller.dart';
-import 'package:quizzzy/screens/home/check_list.dart';
-import 'package:quizzzy/screens/home/custom_button_wrapper.dart';
 import 'package:quizzzy/custom_widgets/custom_loading.dart';
 import 'package:quizzzy/custom_widgets/quizzzy_logo.dart';
+import 'package:quizzzy/screens/home/check_list.dart';
+import 'package:quizzzy/screens/home/custom_button_wrapper.dart';
 import 'package:quizzzy/screens/home/exit_popup.dart';
 import 'package:quizzzy/screens/home/home_page.dart';
-import 'package:quizzzy/screens/import/import.dart';
 import 'package:quizzzy/screens/home/logout_popup.dart';
 import 'package:quizzzy/screens/home/quiz_code_popup.dart';
+import 'package:quizzzy/screens/import/import.dart';
 import 'package:quizzzy/service/db_model/question_set.dart';
-import 'package:quizzzy/service/fs_database.dart';
+import 'package:quizzzy/service/firestore_db.dart';
 import 'package:quizzzy/service/local_notification_service.dart';
 
+/// Render [Home] screen for signned up users.
 class Home extends StatefulWidget {
   const Home({
     Key? key,
@@ -25,6 +26,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  /// Send device FCM token to [Firestore] if token updated.
   Future<void> pushToken() async {
     localStorage = await setBox();
     String? token = await fm.getToken();
@@ -36,6 +38,7 @@ class _HomeState extends State<Home> {
     fm.onTokenRefresh.listen(FirestoreService().saveTokenToDatabase);
   }
 
+  /// Initialize Hive Box and update FCM Token.
   @override
   initState() {
     super.initState();

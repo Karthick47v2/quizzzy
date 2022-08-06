@@ -12,9 +12,10 @@ import 'package:quizzzy/custom_widgets/custom_loading.dart';
 import 'package:quizzzy/custom_widgets/custom_popup.dart';
 import 'package:quizzzy/custom_widgets/custom_snackbar.dart';
 import 'package:quizzzy/custom_widgets/custom_text_input.dart';
-import 'package:quizzzy/service/fs_database.dart';
+import 'package:quizzzy/service/firestore_db.dart';
 import 'package:quizzzy/theme/palette.dart';
 
+/// Render [CustomPopup] when upload button pressed.
 class FileBrowserPopup extends StatefulWidget {
   const FileBrowserPopup({Key? key}) : super(key: key);
 

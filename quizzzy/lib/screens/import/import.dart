@@ -20,6 +20,7 @@ class ImportFile extends StatefulWidget {
 class _ImportFileState extends State<ImportFile> {
   bool isLoading = false;
 
+  /// Render browser.
   Widget fileBrowser() {
     return SizedBox(
       width: double.infinity,

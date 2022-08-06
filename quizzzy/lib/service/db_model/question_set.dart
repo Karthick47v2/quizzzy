@@ -1,12 +1,12 @@
 import 'package:hive/hive.dart';
 
-import 'package:quizzzy/service/fs_database.dart';
+import 'package:quizzzy/service/firestore_db.dart';
 
 part 'question_set.g.dart';
 
 /// Generate type adapter to store custom object [QuestionSet] in [Hive].
 ///
-/// A [QuestionSet] object contains [question], [crctAns] and [allAns] which is a list of 4
+/// A [QuestionSet] object contains [id], [question], [crctAns] and [allAns] which is a list of 4
 /// answers (3 false + 1 true)
 @HiveType(typeId: 1)
 class QuestionSet extends HiveObject {
@@ -25,7 +25,7 @@ class QuestionSet extends HiveObject {
       required this.crctAns,
       required this.allAns});
 
-  /// Generates object from json
+  /// factory for generating object from json
   factory QuestionSet.fromJson(Map<String, dynamic> parsedJson, String id) {
     return QuestionSet(
         id: id,

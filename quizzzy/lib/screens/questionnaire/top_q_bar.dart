@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:quizzzy/theme/font.dart';
 import 'package:quizzzy/theme/palette.dart';
 
+/// Questionnaire top bar template for both usertypes.
 class TopQBar extends StatelessWidget {
   final Color color;
   final String txt;

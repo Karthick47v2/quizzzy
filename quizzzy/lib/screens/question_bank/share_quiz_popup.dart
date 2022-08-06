@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:quizzzy/custom_widgets/custom_popup.dart';
-import 'package:quizzzy/service/fs_database.dart';
+import 'package:quizzzy/service/firestore_db.dart';
 import 'package:quizzzy/theme/font.dart';
 import 'package:quizzzy/theme/palette.dart';
 
+/// Render [CustomPopup] when [Share] button pressed.
 class ShareQuizPopup extends StatelessWidget {
   final String quizName;
   const ShareQuizPopup({Key? key, required this.quizName}) : super(key: key);

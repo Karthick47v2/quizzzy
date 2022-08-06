@@ -8,6 +8,7 @@ import 'package:quizzzy/controllers/questionnaire_controller.dart';
 import 'package:quizzzy/theme/font.dart';
 import 'package:quizzzy/theme/palette.dart';
 
+/// Render [Score] screen.
 class Score extends StatelessWidget {
   Score({Key? key}) : super(key: key);
 

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:quizzzy/theme/font.dart';
 import 'package:quizzzy/theme/palette.dart';
 
+/// Customized button for rendering answers.
 class AnswerContainer extends StatefulWidget {
   final String ans;
   final bool isPicked;

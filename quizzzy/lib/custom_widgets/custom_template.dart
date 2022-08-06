@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:quizzzy/theme/palette.dart';
 
+/// Custom template for all screens of Quizzzy Application
 class CustomTemplate extends StatefulWidget {
   final Widget body;
 

@@ -8,6 +8,7 @@ import 'package:quizzzy/screens/question_bank/wipe_data.dart';
 import 'package:quizzzy/theme/font.dart';
 import 'package:quizzzy/theme/palette.dart';
 
+/// Render [CustomPopup] when [Delete] button pressed.
 class DeletePopup extends StatelessWidget {
   final String qName;
   const DeletePopup({Key? key, required this.qName}) : super(key: key);
