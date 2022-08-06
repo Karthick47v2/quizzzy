@@ -17,21 +17,24 @@ class QuestionSetAdapter extends TypeAdapter<QuestionSet> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return QuestionSet(
-      question: fields[0] as String,
-      crctAns: fields[1] as String,
-      allAns: (fields[2] as List).cast<String>(),
+      id: fields[0] as String,
+      question: fields[1] as String,
+      crctAns: fields[2] as String,
+      allAns: (fields[3] as List).cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, QuestionSet obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
-      ..write(obj.question)
+      ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.crctAns)
+      ..write(obj.question)
       ..writeByte(2)
+      ..write(obj.crctAns)
+      ..writeByte(3)
       ..write(obj.allAns);
   }
 
