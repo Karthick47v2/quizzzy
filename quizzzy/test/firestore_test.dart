@@ -42,8 +42,7 @@ main() {
         mockUser, mockCollectionRef, MockFirebaseFunctions());
     studentDict = {
       'userType': 'Student',
-      'isGenerated': false,
-      'isWaiting': true
+      'GeneratorWorking': false,
     };
 
     when(mockUser.uid).thenAnswer((_) => 'mock_user');
@@ -68,25 +67,8 @@ main() {
   });
 
   group("Generated info check", () {
-    test("Check question generated - 'isGenerated': True", () async {
-      studentDict['isGenerated'] = true;
-      expect(await fs.getGeneratorStatus(), 'Generated');
-    });
-
-    test("Check if still generating - 'isGenerated: False', 'isWaiting': True",
-        () async {
-      expect(await fs.getGeneratorStatus(), 'Waiting');
-    });
-
-    test("User didn't send req - 'isGenerated: False', 'isWaiting': False",
-        () async {
-      studentDict['isWaiting'] = false;
-      expect(await fs.getGeneratorStatus(), 'None');
-    });
-
-    test("Generated status exeption", () async {
-      when(mockDocumentSnapshot.exists).thenAnswer((_) => false);
-      expect(await fs.getGeneratorStatus(), 'None');
+    test("Check initial Generator status", () async {
+      expect(await fs.getGeneratorStatus(), false);
     });
   });
 }
