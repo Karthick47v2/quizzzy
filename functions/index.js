@@ -4,8 +4,10 @@ const admin = require("firebase-admin");
 admin.initializeApp();
 const db = admin.firestore();
 
-const unauthenticatedErrorMsg =
-  "This function must be called by an aunthenticated user";
+const httpsError = new functions.https.HttpsError(
+  "unauthenticated",
+  "This function must be called by an aunthenticated user"
+);
 
 // auth trigger => create user db
 exports.newUser = functions.auth.user().onCreate((user) => {
@@ -45,10 +47,7 @@ exports.notifyUser = functions.firestore
 // callable func => store info
 exports.storeUserInfo = functions.https.onCall(async (data, context) => {
   if (!context.auth) {
-    throw new functions.https.HttpsError(
-      "unauthenticated",
-      unauthenticatedErrorMsg
-    );
+    throw httpsError;
   }
 
   let res = { status: 200 };
@@ -65,15 +64,13 @@ exports.storeUserInfo = functions.https.onCall(async (data, context) => {
 exports.sendSubCollectionIDs = functions.https.onCall(
   async (_data, context) => {
     if (!context.auth) {
-      throw new functions.https.HttpsError(
-        "unauthenticated",
-        unauthenticatedErrorMsg
-      );
+      throw httpsError;
     }
 
     let res = { status: 200 };
     await db
-      .doc(`users/${context.auth.uid}`)
+      .collection("users")
+      .doc(context.auth.uid)
       .listCollections()
       .then((val) => val.map((col) => col.id))
       .then((val) => (res["ids"] = val))
@@ -82,15 +79,19 @@ exports.sendSubCollectionIDs = functions.https.onCall(
   }
 );
 
-// callable func => delete subcollection
-exports.dltSubCollection = functions.https.onCall(async (data, context) => {
+// callable func => delete questions
+exports.dltQuestions = functions.https.onCall((data, context) => {
   if (!context.auth) {
-    throw new functions.https.HttpsError(
-      "unauthenticated",
-      unauthenticatedErrorMsg
-    );
+    throw httpsError;
   }
 
-  db.recursiveDelete(db.collection(data.colPath));
+  data.qID.forEach((element) => {
+    db.collection("users")
+      .doc(context.auth.uid)
+      .collection(data.col)
+      .doc(element)
+      .delete();
+  });
+
   return { status: 200 };
 });
