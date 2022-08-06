@@ -22,7 +22,7 @@ exports.dltUser = functions.auth.user().onDelete((user) => {
   return db.collection("users").doc(user.uid).delete();
 });
 
-// firestore trigger => send notification when question get generated
+// firestore trigger => send notification when question get generated /////////////////////////////
 exports.notifyUser = functions.firestore
   .document("users/{userID}/{qCol}/0")
   .onCreate(async (_data, context) => {
@@ -30,10 +30,6 @@ exports.notifyUser = functions.firestore
       .collection("users")
       .doc(`users/${context.auth.uid}`)
       .get();
-
-    await db
-      .doc(`users/${context.auth.uid}`)
-      .set({ isWaiting: false }, { merge: true });
 
     await admin.messaging().send({
       notification: {
@@ -53,8 +49,47 @@ exports.storeUserInfo = functions.https.onCall(async (data, context) => {
   let res = { status: 200 };
 
   await db
-    .doc(`users/${context.auth.uid}`)
+    .collection("users")
+    .doc(context.auth.uid)
     .set(data, { merge: true })
+    .catch(() => (res["status"] = 401));
+
+  return res;
+});
+
+// callable func => store quiz info
+exports.addQuiz = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw httpsError;
+  }
+
+  let res = { status: 200 };
+
+  await db
+    .collection("users")
+    .doc(context.auth.uid)
+    .update({
+      [`quizID.${data.quizID}`]: null,
+    })
+    .catch(() => (res["status"] = 401));
+
+  return res;
+});
+
+// callable func => update quiz info
+exports.updateScore = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw httpsError;
+  }
+
+  let res = { status: 200 };
+
+  await db
+    .collection("users")
+    .doc(data.author)
+    .update({
+      [`quizID.${data.quizID}.${context.auth.token.name}`]: data.score,
+    })
     .catch(() => (res["status"] = 401));
 
   return res;
