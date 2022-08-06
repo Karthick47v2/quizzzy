@@ -10,7 +10,6 @@ import 'package:quizzzy/custom_widgets/custom_template.dart';
 import 'package:quizzzy/custom_widgets/top_bar.dart';
 import 'package:quizzzy/screens/question_bank/delete_popup.dart';
 import 'package:quizzzy/screens/question_bank/quiz_start_popup.dart';
-import 'package:quizzzy/service/db_model/question_set.dart';
 
 /// Renders list of questionnaire naems on [QuestionBank] screen
 ///
@@ -25,68 +24,56 @@ class QuestionBank extends StatefulWidget {
 class _QuestionBankState extends State<QuestionBank> {
   List<String> questionList = Get.find<QuestionListController>().questionList;
 
-  /// Initialize Hive box
-  @override
-  initState() {
-    super.initState();
-    setBox();
+  Widget popupTemplate(int idx, Widget popup) {
+    return FutureBuilder(
+        future: Get.find<QuestionnaireController>()
+            .overwriteList(questionList[idx]),
+        builder: (cntxt, snapshot) {
+          Widget ret = Container();
+          if (snapshot.connectionState == ConnectionState.done) {
+            ret = popup;
+          } else {
+            ret = const CustomLoading();
+          }
+          return ret;
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     return CustomTemplate(
-      body: FutureBuilder(
-          future: Get.find<QuestionListController>().filterList(),
-          builder: (context, snapshot) {
-            Widget ret = Container();
-            if (snapshot.connectionState == ConnectionState.done) {
-              ret = Column(
-                children: [
-                  const TopBar(txt: "Select Questionnaire"),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: questionList.length,
-                      itemBuilder: (context, idx) {
-                        return CustomCard(
-                            title: questionList[idx],
-                            onLongPress: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (_) {
-                                    return DeletePopup(idx: idx);
-                                  });
-                            },
-                            onTap: () async {
-                              showDialog(
-                                  context: context,
-                                  builder: (_) {
-                                    return FutureBuilder(
-                                        future:
-                                            Get.find<QuestionnaireController>()
-                                                .overwriteList(
-                                                    questionList[idx]),
-                                        builder: (cntxt, snapshot) {
-                                          Widget ret = Container();
-                                          if (snapshot.connectionState ==
-                                              ConnectionState.done) {
-                                            ret = QuizStartPopup(idx: idx);
-                                          } else {
-                                            ret = const CustomLoading();
-                                          }
-                                          return ret;
-                                        });
-                                  });
-                            });
-                      },
-                    ),
-                  )
-                ],
-              );
-            } else {
-              ret = const CustomLoading();
-            }
-            return ret;
-          }),
+      body: Column(
+        children: [
+          const TopBar(txt: "Select Questionnaire"),
+          Expanded(
+            child: ListView.builder(
+              itemCount: questionList.length,
+              itemBuilder: (context, idx) {
+                return CustomCard(
+                    title: questionList[idx],
+                    onLongPress: () {
+                      showDialog(
+                          context: context,
+                          builder: (_) {
+                            return popupTemplate(
+                                idx,
+                                DeletePopup(
+                                  qName: questionList[idx],
+                                ));
+                          });
+                    },
+                    onTap: () async {
+                      showDialog(
+                          context: context,
+                          builder: (_) {
+                            return popupTemplate(idx, QuizStartPopup(idx: idx));
+                          });
+                    });
+              },
+            ),
+          )
+        ],
+      ),
     );
   }
 }
