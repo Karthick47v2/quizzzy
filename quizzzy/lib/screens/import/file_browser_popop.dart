@@ -98,7 +98,7 @@ Future getQuestions(String cont, String qName) async {
 ///
 /// Send [docText] to server if correct file format selected or else do nothing.
 getFile(String fileName) async {
-  if (await FirestoreService().getGeneratorStatus() == "Waiting") {
+  if (await FirestoreService().getGeneratorStatus()) {
     customSnackBar("...", "Please wait for previous document to get processed.",
         Palette.warning);
     return;
