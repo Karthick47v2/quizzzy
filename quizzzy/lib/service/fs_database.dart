@@ -3,7 +3,6 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:quizzzy/service/fbase_auth.dart';
-import 'package:quizzzy/service/db_model/question_set.dart';
 
 class FirestoreService {
   late User? _user;
@@ -58,27 +57,13 @@ class FirestoreService {
   ///
   /// Returns wheter previous request is processed or not from [Firestore]. Throws error if any
   /// unexpected error occurs.
-  Future<String> getGeneratorStatus() async {
+  Future<bool> getGeneratorStatus() async {
     return await _users.doc(_user!.uid).get().then((docSnap) {
       if (docSnap.exists) {
         Map<String, dynamic> data = docSnap.data() as Map<String, dynamic>;
-        return data['isGenerated'] == true
-            ? "Generated"
-            : (data['isWaiting'] ? "Waiting" : "None");
-      } else {
-        return "None";
+        return data['GeneratorWorking'];
       }
     }).onError((error, stackTrace) => error.toString());
-  }
-
-  /// Saves Firebase Cloud Messaging (FCM) token to [Firestore].
-  ///
-  /// Returns whether operation is success or not.
-  Future<bool> saveTokenToDatabase(String token) async {
-    HttpsCallable callable = fFunc.httpsCallable('storeUserInfo');
-    return await callable.call(<String, dynamic>{
-      'token': token,
-    }).then((value) => value.data['status'] == 200);
   }
 
   /// Get user document from [Firestore].
@@ -92,22 +77,22 @@ class FirestoreService {
   }
 
   /// Get a questionnaire from [Firestore].
-  Future<List<Map<String, dynamic>>> getQuestionnaire(String colID) async {
+  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getQuestionnaire(String colID) async {
     return await _users
         .doc(_user!.uid)
         .collection(colID)
         .get()
-        .then((value) => value.docs.map((doc) => doc.data()).toList());
+        .then((value) => value.docs.map((doc) => doc).toList());
   }
 
-  Future<List<Map<String, dynamic>>> dummyGetQuestionnaire() async {
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////
-    return await _users
-        .doc('9jm4YIN90kej4Ryh4GVz8ejdxp02')
-        .collection('nlp_1')
-        .get()
-        .then((value) => value.docs.map((doc) => doc.data()).toList());
+  /// Saves Firebase Cloud Messaging (FCM) token to [Firestore].
+  ///
+  /// Returns whether operation is success or not.
+  Future<bool> saveTokenToDatabase(String token) async {
+    HttpsCallable callable = fFunc.httpsCallable('storeUserInfo');
+    return await callable.call(<String, dynamic>{
+      'token': token,
+    }).then((value) => value.data['status'] == 200);
   }
 
   /// Store user info to [Firestore].
@@ -122,26 +107,6 @@ class FirestoreService {
     return await callable
         .call(dict)
         .then((value) => value.data['status'] == 200);
-  }
-
-  /// Delete questionnaire from [Firestore].
-  ///
-  /// Returns whether operation is success or not.
-  Future<bool> deleteQuestionnaire(String colPath) async {
-    HttpsCallable callable = fFunc.httpsCallable('dltSubCollection');
-    return await callable.call(<String, dynamic>{
-      'colPath': colPath,
-    }).then((value) => value.data['status'] == 200);
-  }
-
-  /// Store modified quiz to [Firestore].
-  ///
-  /// Returns whether operation is success or not.
-  Future<bool> saveModifiedQuiz(List<QuestionSet> qSet) async {
-    HttpsCallable callable = fFunc.httpsCallable('storeQuiz');
-    return await callable.call(<String, dynamic>{
-      'qSet': qSet,
-    }).then((value) => value.data['status'] == 200);
   }
 
   /// Store user type on database
@@ -161,5 +126,13 @@ class FirestoreService {
 
     return await saveUser(true,
         name: str, type: isTeacher ? 'Teacher' : 'Student');
+  }
+
+  Future<bool> deleteQuestions(String name, List<String> qID) async {
+    HttpsCallable callable = fFunc.httpsCallable('dltQuestions');
+    return await callable.call(<String, dynamic>{
+      'col': name,
+      'qID': qID,
+    }).then((value) => value.data['status'] == 200);
   }
 }

@@ -5,6 +5,7 @@ import 'package:quizzzy/controllers/questionnaire_controller.dart';
 import 'package:quizzzy/controllers/user_type_controller.dart';
 import 'package:quizzzy/custom_widgets/custom_button.dart';
 import 'package:quizzzy/custom_widgets/custom_popup.dart';
+import 'package:quizzzy/screens/question_bank/share_quiz_popup.dart';
 import 'package:quizzzy/screens/questionnaire/student_view.dart';
 import 'package:quizzzy/screens/questionnaire/teacher_view.dart';
 import 'package:quizzzy/theme/font.dart';
@@ -31,7 +32,7 @@ class QuizStartPopup extends StatelessWidget {
       ),
       GetBuilder<QuestionnaireController>(builder: (qController) {
         return Text(
-          Get.find<UserTypeController>().userType == 'Student'
+          Get.find<UserTypeController>().userType == UserType.student
               ? "Time: ${qController.questionnaire.length} mins"
               : "Questions: ${qController.questionnaire.length}",
           style: TextStyle(
@@ -42,7 +43,7 @@ class QuizStartPopup extends StatelessWidget {
           ),
         );
       }),
-      Get.find<UserTypeController>().userType == 'Student'
+      Get.find<UserTypeController>().userType == UserType.student
           ? CustomButton(
               text: "Start",
               onTap: () {
@@ -50,12 +51,30 @@ class QuizStartPopup extends StatelessWidget {
                 Get.to(() => const StudentView());
               },
             )
-          : CustomButton(
-              text: "View",
-              onTap: () {
-                Get.back();
-                Get.to(() => const TeacherView());
-              },
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                CustomButton(
+                  text: "Modify",
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (_) {
+                          return const TeacherView();
+                        });
+                  },
+                ),
+                CustomButton(
+                  text: "Share",
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (_) {
+                          return ShareQuizPopup(quizName: questionList[idx]);
+                        });
+                  },
+                )
+              ],
             ),
     ]);
   }

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:quizzzy/controllers/question_list_controller.dart';
 import 'package:quizzzy/controllers/user_type_controller.dart';
+import 'package:quizzzy/screens/home/check_list.dart';
 import 'package:quizzzy/screens/home/custom_button_wrapper.dart';
 import 'package:quizzzy/custom_widgets/custom_loading.dart';
-import 'package:quizzzy/custom_widgets/custom_snackbar.dart';
 import 'package:quizzzy/custom_widgets/quizzzy_logo.dart';
 import 'package:quizzzy/screens/home/exit_popup.dart';
 import 'package:quizzzy/screens/home/home_page.dart';
@@ -17,7 +16,6 @@ import 'package:quizzzy/service/db_model/question_set.dart';
 import 'package:quizzzy/service/fs_database.dart';
 import 'package:quizzzy/service/local_database.dart';
 import 'package:quizzzy/service/local_notification_service.dart';
-import 'package:quizzzy/theme/palette.dart';
 
 class Home extends StatefulWidget {
   const Home({
@@ -32,7 +30,7 @@ class _HomeState extends State<Home> {
   final codeController = TextEditingController();
 
   Future<void> pushToken() async {
-    questionSetBox = await setBox();
+    localStorage = await setBox();
     String? token = await fm.getToken();
     String? oldToken = await UserSharedPreferences().getToken();
     if (oldToken != token) {
@@ -45,6 +43,7 @@ class _HomeState extends State<Home> {
   @override
   initState() {
     super.initState();
+    setBox();
     pushToken();
   }
 
@@ -67,12 +66,16 @@ class _HomeState extends State<Home> {
                       showDialog(
                           context: context,
                           barrierDismissible: false,
-                          builder: (BuildContext cntxt) {
-                            checkQuesGenerated(cntxt);
+                          builder: (_) {
+                            checkQuesGenerated(
+                                getQuestionList,
+                                const QuestionBank(),
+                                "Please wait for questions to get generated",
+                                "Please upload a document to generate questions");
                             return const CustomLoading();
                           });
                     }),
-                controller.userType == "Student"
+                controller.userType == UserType.student
                     ? CustomButtonWrapper(
                         text: "Attempt quiz",
                         onTap: () async {
@@ -87,17 +90,7 @@ class _HomeState extends State<Home> {
                                 });
                               });
                         })
-                    : CustomButtonWrapper(
-                        text: "Saved quiz",
-                        onTap: () {
-                          showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext cntxt) {
-                                checkQuesGenerated(cntxt);
-                                return const CustomLoading();
-                              });
-                        }),
+                    : Container(),
                 CustomButtonWrapper(
                     text: "Review quizzes",
                     onTap: () => Get.to(() => const HomePage())),
@@ -125,27 +118,5 @@ class _HomeState extends State<Home> {
         ),
       );
     });
-  }
-
-  /// Check if prevoius request got served.
-  ///
-  /// Returns wheter previous request state is finished or not.
-  Future<void> checkQuesGenerated(BuildContext context) async {
-    List<Object?> data = await FirestoreService().getQuestionnaireNameList();
-    Get.find<QuestionListController>().overwriteList(data);
-
-    String? str = await FirestoreService().getGeneratorStatus();
-    Navigator.pop(context);
-
-    if (str == "Generated" || data.isNotEmpty) {
-      Get.to(() => const QuestionBank());
-    } else {
-      customSnackBar(
-          "No questionnaire found",
-          str == "Waiting"
-              ? "Please wait for questions to get generated"
-              : "Please upload a document to generate questions",
-          Palette.warning);
-    }
   }
 }

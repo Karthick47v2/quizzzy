@@ -3,14 +3,11 @@ import 'package:get/get.dart';
 
 import 'package:quizzzy/controllers/questionnaire_controller.dart';
 import 'package:quizzzy/custom_widgets/custom_button.dart';
-import 'package:quizzzy/custom_widgets/custom_snackbar.dart';
 import 'package:quizzzy/custom_widgets/answer_container.dart';
 import 'package:quizzzy/screens/questionnaire/questionnaire.dart';
 import 'package:quizzzy/screens/questionnaire/teach_finish_popup.dart';
 import 'package:quizzzy/screens/questionnaire/top_q_bar.dart';
 import 'package:quizzzy/service/db_model/question_set.dart';
-import 'package:quizzzy/service/fs_database.dart';
-import 'package:quizzzy/service/local_database.dart';
 import 'package:quizzzy/theme/palette.dart';
 
 /// Renders [TeacherView] screen which consists of all questions.
@@ -36,6 +33,15 @@ class _TeacherViewState extends State<TeacherView> {
     );
   }
 
+  Widget renderNavBtn(String txt, bool isRemove) {
+    return CustomButton(
+      text: txt,
+      onTap: () {
+        updateQuestion(isRemove: isRemove);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Questionnaire(
@@ -43,18 +49,7 @@ class _TeacherViewState extends State<TeacherView> {
       renderAnswer: renderAnswer,
       bottomNavBtn: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          CustomButton(
-            text: "Drop",
-            onTap: () {
-              updateQuestion(isRemove: true);
-            },
-          ),
-          CustomButton(
-            text: "Keep",
-            onTap: () => updateQuestion(),
-          )
-        ],
+        children: [renderNavBtn("Drop", true), renderNavBtn("Keep", false)],
       ),
       currentIdx: currentIdx,
     );
@@ -65,40 +60,20 @@ class _TeacherViewState extends State<TeacherView> {
   /// Teacher they can keep/drop current question.
   updateQuestion({bool isRemove = false}) {
     setState(() {
+      if (isRemove) {
+        Get.find<QuestionnaireController>()
+            .addToRemovalList(questionnaire[currentIdx].id);
+      }
       if (currentIdx == questionnaire.length - 1) {
         showDialog(
             context: context,
             barrierDismissible: false,
             builder: (_) {
-              return const TeachFinishPopup();
+              return TeachFinishPopup();
             });
       } else {
-        if (isRemove) {
-          questionnaire.removeAt(currentIdx);
-        } else {
-          currentIdx++;
-        }
+        currentIdx++;
       }
     });
-  }
-
-  /// If userType teacher have modified initial questionnaire, then store it to local database.
-  modifyQuestionSet(String name, List<QuestionSet> q, bool removeLast) {
-    FirestoreService().saveModifiedQuiz(
-        q); /////////////////////////////////////////////////////////////////////
-  }
-
-  /// Remove [name] from both local and online database once it got modified.
-  removeQuestionnaire() async {
-    questionSetBox.delete(name);
-    if (!await FirestoreService()
-        .deleteQuestionnaire('users/${FirestoreService().user!.uid}/$name')) {
-      customSnackBar("Error", "Please try again", Palette.error);
-    } else {
-      var popList = await UserSharedPreferences().getPoppedItems();
-      popList ??= [];
-      popList.add(name);
-      UserSharedPreferences().setPoppedItems(popList);
-    }
   }
 }
