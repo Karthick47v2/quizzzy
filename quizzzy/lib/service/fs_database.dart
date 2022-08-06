@@ -77,9 +77,10 @@ class FirestoreService {
   }
 
   /// Get a questionnaire from [Firestore].
-  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getQuestionnaire(String colID) async {
+  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getQuestionnaire(
+      String colID, String userID) async {
     return await _users
-        .doc(_user!.uid)
+        .doc(userID == "" ? _user!.uid : userID)
         .collection(colID)
         .get()
         .then((value) => value.docs.map((doc) => doc).toList());
@@ -107,6 +108,21 @@ class FirestoreService {
     return await callable
         .call(dict)
         .then((value) => value.data['status'] == 200);
+  }
+
+  Future<bool> generateQuiz(String quizID) async {
+    HttpsCallable callable = fFunc.httpsCallable('addQuiz');
+    return await callable.call(<String, dynamic>{'quizID': quizID}).then(
+        (value) => value.data['status'] == 200);
+  }
+
+  Future<bool> sendScore(String quizID, double score, String author) async {
+    HttpsCallable callable = fFunc.httpsCallable('updateScore');
+    return await callable.call(<String, dynamic>{
+      'quizID': quizID,
+      'score': score,
+      'author': author
+    }).then((value) => value.data['status'] == 200);
   }
 
   /// Store user type on database

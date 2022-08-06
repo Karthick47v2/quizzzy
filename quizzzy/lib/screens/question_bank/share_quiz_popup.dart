@@ -13,7 +13,9 @@ class ShareQuizPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var code = '${FirestoreService().user!.uid}-$quizName';
+    FirestoreService().generateQuiz(quizName);
     Share.share(code);
+
     return CustomPopup(size: 150.0, wids: [
       Text(
         "Share quiz",

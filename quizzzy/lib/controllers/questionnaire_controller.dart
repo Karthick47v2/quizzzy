@@ -5,23 +5,26 @@ import 'package:quizzzy/service/fs_database.dart';
 
 class QuestionnaireController extends GetxController {
   String _questionnaireName = "";
+  String _authorCode = "";
   List<String> _removalList = [];
   List<QuestionSet> _questionnaire = [];
   int _score = 0;
 
   List<QuestionSet> get questionnaire => _questionnaire;
   List<String> get removalList => _removalList;
+  String get author => _authorCode;
   String get questionnaireName => _questionnaireName;
   int get score => _score;
   double get avg => _score / questionnaire.length;
 
-  Future<bool> overwriteList(String qName) async {
+  Future<bool> overwriteList(String qName, {String userID = ""}) async {
     _questionnaireName = qName;
     var dummy = localStorage.get(qName);
     if (dummy == null) {
-      _questionnaire = (await FirestoreService().getQuestionnaire(qName))
-          .map((e) => (QuestionSet.fromJson(e.data(), e.id)))
-          .toList();
+      _questionnaire =
+          (await FirestoreService().getQuestionnaire(qName, userID))
+              .map((e) => (QuestionSet.fromJson(e.data(), e.id)))
+              .toList();
       sendToLocal();
     } else {
       _questionnaire = dummy.cast<QuestionSet>();
@@ -57,5 +60,9 @@ class QuestionnaireController extends GetxController {
   scoreInc() {
     _score++;
     update();
+  }
+
+  setAuthor(String code) {
+    _authorCode = code;
   }
 }
