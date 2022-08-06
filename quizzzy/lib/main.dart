@@ -13,7 +13,6 @@ import 'package:quizzzy/screens/auth/signup.dart';
 import 'package:quizzzy/screens/auth/verify.dart';
 import 'package:quizzzy/screens/home/home_page.dart';
 import 'package:quizzzy/service/db_model/question_set.dart';
-import 'package:quizzzy/service/local_database.dart';
 import 'package:quizzzy/service/local_notification_service.dart';
 import 'package:quizzzy/service/fs_database.dart';
 import 'package:quizzzy/init_controllers.dart';
@@ -75,7 +74,6 @@ class _RootState extends State<Root> {
 /// Initialize and setup all database management services
 initServices() async {
   Hive.registerAdapter(QuestionSetAdapter());
-  UserSharedPreferences(prefs: await SharedPreferences.getInstance());
   fm = FirebaseMessaging.instance;
   // FirebaseMessaging.onBackgroundMessage(bgNotificationHandler);
 }

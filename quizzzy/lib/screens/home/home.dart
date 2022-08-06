@@ -13,7 +13,6 @@ import 'package:quizzzy/screens/home/logout_popup.dart';
 import 'package:quizzzy/screens/home/quiz_code_popup.dart';
 import 'package:quizzzy/service/db_model/question_set.dart';
 import 'package:quizzzy/service/fs_database.dart';
-import 'package:quizzzy/service/local_database.dart';
 import 'package:quizzzy/service/local_notification_service.dart';
 
 class Home extends StatefulWidget {
@@ -26,14 +25,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final codeController = TextEditingController();
-
   Future<void> pushToken() async {
     localStorage = await setBox();
     String? token = await fm.getToken();
-    String? oldToken = await UserSharedPreferences().getToken();
+    String? oldToken = localStorage.get('token');
     if (oldToken != token) {
-      await UserSharedPreferences().setToken(token!);
+      localStorage.put('token', token!);
       await FirestoreService().saveTokenToDatabase(token);
     }
     fm.onTokenRefresh.listen(FirestoreService().saveTokenToDatabase);
@@ -66,6 +63,7 @@ class _HomeState extends State<Home> {
                           context: context,
                           barrierDismissible: false,
                           builder: (_) {
+                            Get.find<UserTypeController>().setMode(Mode.self);
                             checkQuesGenerated();
                             return const CustomLoading();
                           });
@@ -80,15 +78,19 @@ class _HomeState extends State<Home> {
                               builder: (BuildContext cntxt) {
                                 return StatefulBuilder(
                                     builder: (cntxt, setState) {
-                                  return QuizCodePopup(
-                                      codeController: codeController);
+                                  Get.find<UserTypeController>()
+                                      .setMode(Mode.quiz);
+                                  return const QuizCodePopup();
                                 });
                               });
                         })
                     : Container(),
                 CustomButtonWrapper(
                     text: "Review quizzes",
-                    onTap: () => Get.to(() => const HomePage())),
+                    onTap: () {
+                      Get.find<UserTypeController>().setMode(Mode.review);
+                      Get.to(() => const HomePage());
+                    }),
                 CustomButtonWrapper(
                     text: "Log out",
                     onTap: () {
