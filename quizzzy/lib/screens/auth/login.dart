@@ -34,7 +34,7 @@ class _LoginState extends State<Login> {
         String res = await Auth()
             .userLogin(emailController.text, passwordController.text);
         if (res == "Verified") {
-          Get.to(() => const HomePage());
+          Get.offAll(() => const HomePage());
         } else if (res == "Not Verified") {
           Get.to(() => const VerifyEmail());
         } else {

@@ -6,7 +6,7 @@ import 'package:quizzzy/controllers/user_type_controller.dart';
 import 'package:quizzzy/custom_widgets/custom_button.dart';
 import 'package:quizzzy/custom_widgets/custom_popup.dart';
 import 'package:quizzzy/custom_widgets/render_img.dart';
-import 'package:quizzzy/screens/home/home.dart';
+import 'package:quizzzy/screens/home/home_page.dart';
 import 'package:quizzzy/screens/score/score.dart';
 import 'package:quizzzy/service/firestore_db.dart';
 import 'package:quizzzy/theme/font.dart';
@@ -47,7 +47,7 @@ class TimesupPopup extends StatelessWidget {
           } else {
             FirestoreService().sendScore(controller.questionnaireName,
                 controller.avg, controller.author);
-            Get.to(() => const Home());
+            Get.offAll(() => const HomePage());
           }
         },
       )

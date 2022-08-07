@@ -27,7 +27,7 @@ class _GreetingsState extends State<Greetings> {
     /// Notification handler - App on background state / terminated state.
     fm.getInitialMessage().then((msg) {
       if (msg != null) {
-        Get.to(() => const HomePage());
+        Get.offAll(() => const HomePage());
       }
     });
 

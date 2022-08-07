@@ -54,7 +54,7 @@ class Score extends StatelessWidget {
           ),
           CustomButton(
             text: "Continue",
-            onTap: () => Get.to(() => const HomePage()),
+            onTap: () => Get.offAll(() => const HomePage()),
           ),
         ],
       ),

@@ -45,7 +45,7 @@ class _LogoutPopupState extends State<LogoutPopup> {
               String res = await Auth().userSignout();
               if (res == "Success") {
                 Get.back();
-                Get.to(() => const Login());
+                Get.offAll(() => const Login());
               } else {
                 customSnackBar("Error", res, Palette.error);
               }

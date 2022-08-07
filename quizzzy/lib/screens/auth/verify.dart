@@ -49,7 +49,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
     if (FirestoreService().user!.emailVerified) {
       timer?.cancel();
-      Get.to(() => const HomePage());
+      Get.offAll(() => const HomePage());
     }
   }
 

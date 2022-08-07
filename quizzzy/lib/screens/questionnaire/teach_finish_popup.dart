@@ -37,13 +37,13 @@ class TeachFinishPopup extends StatelessWidget {
         children: [
           CustomButton(
             text: "Cancel",
-            onTap: () => Get.to(() => const HomePage()),
+            onTap: () => Get.offAll(() => const HomePage()),
           ),
           CustomButton(
             text: "Continue",
             onTap: () async {
               wipeQuestions(name);
-              Get.to(() => const HomePage());
+              Get.offAll(() => const HomePage());
             },
           )
         ],
