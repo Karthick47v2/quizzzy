@@ -7,7 +7,6 @@ import 'package:quizzzy/custom_widgets/render_img.dart';
 import 'package:quizzzy/screens/home/check_list.dart';
 import 'package:quizzzy/screens/home/custom_button_wrapper.dart';
 import 'package:quizzzy/screens/home/exit_popup.dart';
-import 'package:quizzzy/screens/home/home_page.dart';
 import 'package:quizzzy/screens/home/logout_popup.dart';
 import 'package:quizzzy/screens/home/quiz_code_popup.dart';
 import 'package:quizzzy/screens/import/import.dart';
@@ -70,14 +69,14 @@ class _HomeState extends State<Home> {
                           barrierDismissible: false,
                           builder: (_) {
                             Get.find<UserTypeController>().setMode(Mode.self);
-                            checkQuesGenerated();
+                            checkQuestionBank();
                             return const CustomLoading();
                           });
                     }),
                 controller.userType == UserType.student
                     ? CustomButtonWrapper(
                         text: "Attempt quiz",
-                        onTap: () async {
+                        onTap: () {
                           showDialog(
                               context: context,
                               barrierDismissible: false,
@@ -95,7 +94,7 @@ class _HomeState extends State<Home> {
                     text: "Review quizzes",
                     onTap: () {
                       Get.find<UserTypeController>().setMode(Mode.review);
-                      Get.to(() => const HomePage());
+                      checkQuestionBank();
                     }),
                 CustomButtonWrapper(
                     text: "Log out",
