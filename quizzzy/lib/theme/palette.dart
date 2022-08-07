@@ -3,40 +3,35 @@ import 'package:flutter/material.dart';
 /// Controls all colors in app
 class Palette {
   /// App theme
-  static Color theme = const Color.fromARGB(255, 93, 0, 155);
-  static Color bg = const Color.fromARGB(255, 19, 19, 19);
+  static Color theme = const Color(0xff4f5b62);
+  static Color bg = const Color(0xff000a12);
 
   /// Snackbar
-  static Color error = Colors.red.shade800;
-  static Color warning = Colors.amber.shade400;
-  static Color sucess = Colors.green.shade700;
+  static Color error = const Color(0xff870000);
+  static Color warning = const Color(0xffc17900);
+  static Color success = const Color(0xff005005);
 
   /// Background
   static Color loadingBg = Colors.grey;
-  static Color popupBg = const Color.fromARGB(255, 13, 13, 15);
-  static Color txtFieldBg = const Color.fromARGB(94, 153, 0, 255);
-  static Color questionBg = const Color.fromARGB(94, 155, 155, 155);
+  static Color containerBg = const Color(0xff263238);
 
   /// Timer
-  static Color timerGreen = const Color.fromARGB(94, 0, 255, 34);
-  static Color timerRed = const Color.fromARGB(94, 255, 0, 0);
+  static Color timerGreen = const Color(0xff005005);
+  static Color timerRed = const Color(0xff870000);
 
   /// Font
-  static Color font = Colors.white;
-  static Color cursor = const Color.fromARGB(255, 168, 168, 168);
-  static Color txtInput = const Color.fromARGB(255, 212, 212, 212);
-  static Color authTitle = const Color.fromARGB(204, 79, 0, 170);
+  static Color font = const Color(0xffbcbcbc);
+  static Color cursor = const Color(0xff8d8d8d);
+  static Color txtInput = const Color(0xffaeaeae);
 
   /// TextBox
-  static Color txtInputBorder = const Color.fromARGB(255, 122, 122, 122);
+  static Color txtInputBorder = const Color(0xff484848);
 
   /// Button
-  static Color ansBtnNoClick = const Color.fromARGB(94, 104, 104, 104);
-  static Color ansBtnClicked = const Color.fromARGB(255, 93, 0, 155);
-  static Color hyperBtn = const Color.fromARGB(255, 114, 0, 190);
-  static Color btnOutline = const Color.fromARGB(255, 85, 46, 110);
+  static Color ansBtnNoClick = const Color(0xff102027);
+  static Color ansBtnClicked = const Color(0xff455a64);
+  static Color hyperBtn = const Color(0xff62727b);
 
   /// Misc
   static Color transparent = Colors.transparent;
-  static Color icon = const Color.fromARGB(115, 155, 155, 155);
 }
