@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:quizzzy/controllers/questionnaire_controller.dart';
 import 'package:quizzzy/custom_widgets/custom_button.dart';
 import 'package:quizzzy/custom_widgets/custom_popup.dart';
+import 'package:quizzzy/custom_widgets/render_img.dart';
 import 'package:quizzzy/screens/home/home_page.dart';
 import 'package:quizzzy/screens/question_bank/wipe_data.dart';
 import 'package:quizzzy/theme/font.dart';
@@ -16,7 +17,12 @@ class TeachFinishPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomPopup(size: 150.0, wids: [
+    return CustomPopup(size: 400.0, wids: [
+      const RenderImage(
+        path: 'assets/images/select.svg',
+        expaned: false,
+        svgHeight: 200,
+      ),
       Text(
         "Press continue to modify changes, cancel to revert",
         style: TextStyle(

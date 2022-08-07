@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quizzzy/custom_widgets/render_img.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:quizzzy/custom_widgets/custom_popup.dart';
@@ -17,16 +18,11 @@ class ShareQuizPopup extends StatelessWidget {
     FirestoreService().generateQuiz(quizName);
     Share.share(code);
 
-    return CustomPopup(size: 150.0, wids: [
-      Text(
-        "Share quiz",
-        style: TextStyle(
-          fontFamily: fontFamily,
-          fontSize: 19,
-          fontWeight: Font.regular,
-          color: Palette.font,
-        ),
-        textAlign: TextAlign.center,
+    return CustomPopup(size: 400.0, wids: [
+      const RenderImage(
+        path: 'assets/images/share.svg',
+        expaned: false,
+        svgHeight: 200,
       ),
       Text(
         "Code: $code",

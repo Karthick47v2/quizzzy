@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import 'package:quizzzy/custom_widgets/custom_button.dart';
 import 'package:quizzzy/custom_widgets/custom_popup.dart';
+import 'package:quizzzy/custom_widgets/render_img.dart';
 import 'package:quizzzy/theme/font.dart';
 import 'package:quizzzy/theme/palette.dart';
 
@@ -13,7 +14,12 @@ class ExitPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomPopup(size: 150.0, wids: [
+    return CustomPopup(size: 400.0, wids: [
+      const RenderImage(
+        path: 'assets/images/select.svg',
+        expaned: false,
+        svgHeight: 200,
+      ),
       Text(
         "Are you sure ?",
         style: TextStyle(

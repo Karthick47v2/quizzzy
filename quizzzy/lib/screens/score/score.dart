@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import 'package:quizzzy/custom_widgets/custom_button.dart';
 import 'package:quizzzy/custom_widgets/custom_template.dart';
+import 'package:quizzzy/custom_widgets/render_img.dart';
 import 'package:quizzzy/screens/home/home_page.dart';
 import 'package:quizzzy/controllers/questionnaire_controller.dart';
 import 'package:quizzzy/theme/font.dart';
@@ -22,12 +23,17 @@ class Score extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          RenderImage(
+            path: 'assets/images/${avg >= 0.75 ? 'win' : 'fail'}.svg',
+            expaned: false,
+            svgHeight: 500,
+          ),
           Text(
-            "$avg",
+            "${avg * 100}",
             style: TextStyle(
                 fontFamily: fontFamily,
-                fontSize: 17,
-                fontWeight: Font.regular,
+                fontSize: 34,
+                fontWeight: Font.extraBold,
                 color: Palette.font),
             textAlign: TextAlign.center,
           ),
@@ -41,7 +47,7 @@ class Score extends StatelessWidget {
                         : "Try again later, you can do it.")),
             style: TextStyle(
                 fontFamily: fontFamily,
-                fontSize: 17,
+                fontSize: 26,
                 fontWeight: Font.regular,
                 color: Palette.font),
             textAlign: TextAlign.center,

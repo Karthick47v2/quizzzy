@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:quizzzy/custom_widgets/custom_button.dart';
 import 'package:quizzzy/custom_widgets/custom_popup.dart';
 import 'package:quizzzy/custom_widgets/custom_snackbar.dart';
+import 'package:quizzzy/custom_widgets/render_img.dart';
 import 'package:quizzzy/screens/auth/login.dart';
 import 'package:quizzzy/service/firebase_auth.dart';
 import 'package:quizzzy/theme/font.dart';
@@ -20,7 +21,12 @@ class LogoutPopup extends StatefulWidget {
 class _LogoutPopupState extends State<LogoutPopup> {
   @override
   Widget build(BuildContext context) {
-    return CustomPopup(size: 150.0, wids: [
+    return CustomPopup(size: 400.0, wids: [
+      const RenderImage(
+        path: 'assets/images/select.svg',
+        expaned: false,
+        svgHeight: 200,
+      ),
       Text(
         "Are you sure ?",
         style: TextStyle(

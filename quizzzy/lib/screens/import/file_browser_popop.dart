@@ -12,6 +12,7 @@ import 'package:quizzzy/custom_widgets/custom_loading.dart';
 import 'package:quizzzy/custom_widgets/custom_popup.dart';
 import 'package:quizzzy/custom_widgets/custom_snackbar.dart';
 import 'package:quizzzy/custom_widgets/custom_text_input.dart';
+import 'package:quizzzy/custom_widgets/render_img.dart';
 import 'package:quizzzy/service/firestore_db.dart';
 import 'package:quizzzy/theme/palette.dart';
 
@@ -28,11 +29,16 @@ class _FileBrowserPopupState extends State<FileBrowserPopup> {
   bool isLoading = false;
   @override
   Widget build(_) {
-    return CustomPopup(size: 200.0, wids: [
+    return CustomPopup(size: 400.0, wids: [
       isLoading
           ? const CustomLoading()
           : Column(
               children: [
+                const RenderImage(
+                  path: 'assets/images/wait.svg',
+                  expaned: false,
+                  svgHeight: 200,
+                ),
                 CustomTextInput(
                   text: "Questionnaire name",
                   controller: fileNameController,
@@ -86,7 +92,7 @@ Future getQuestions(String cont, String qName) async {
     customSnackBar(
         "Success",
         "Generating question may take a while. It will be available under 'Question Bank' once process is finished.",
-        Palette.sucess);
+        Palette.success);
     if (!await FirestoreService().saveUser(false, state: true)) {
       customSnackBar("Error", "Connection error", Palette.error);
     }

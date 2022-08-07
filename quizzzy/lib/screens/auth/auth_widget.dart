@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:quizzzy/custom_widgets/custom_button.dart';
 import 'package:quizzzy/custom_widgets/custom_template.dart';
 import 'package:quizzzy/custom_widgets/custom_text_input.dart';
-import 'package:quizzzy/custom_widgets/quizzzy_logo.dart';
+import 'package:quizzzy/custom_widgets/render_img.dart';
 import 'package:quizzzy/screens/auth/validation.dart';
 import 'package:quizzzy/theme/font.dart';
 import 'package:quizzzy/theme/palette.dart';
@@ -42,7 +42,14 @@ class _AuthWidgetState extends State<AuthWidget> {
         key: widget.gkey,
         child: Column(
           children: [
-            const QuizzzyLogo(),
+            const SizedBox(
+              height: 40,
+            ),
+            RenderImage(
+              path: 'assets/images/logo.png',
+              color: Palette.theme,
+              expaned: true,
+            ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -60,7 +67,7 @@ class _AuthWidgetState extends State<AuthWidget> {
                             fontFamily: fontFamily,
                             fontSize: 48,
                             fontWeight: Font.extraBold,
-                            color: Palette.authTitle),
+                            color: Palette.theme),
                       ),
                     ),
                   ],

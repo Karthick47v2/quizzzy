@@ -7,14 +7,14 @@ import 'package:quizzzy/custom_widgets/custom_loading.dart';
 import 'package:quizzzy/custom_widgets/custom_snackbar.dart';
 import 'package:quizzzy/custom_widgets/custom_template.dart';
 import 'package:quizzzy/custom_widgets/custom_text_input.dart';
-import 'package:quizzzy/custom_widgets/quizzzy_logo.dart';
+import 'package:quizzzy/custom_widgets/render_img.dart';
 import 'package:quizzzy/screens/home/custom_button_wrapper.dart';
 import 'package:quizzzy/screens/home/home.dart';
 import 'package:quizzzy/service/firestore_db.dart';
 import 'package:quizzzy/theme/palette.dart';
 
 /// Renders [HomePage] screen
-/// 
+///
 /// If first time render user details form, or else show menu. Navigates to appropiate screens
 /// repective to [CustomButton] click.
 class HomePage extends StatefulWidget {
@@ -62,7 +62,10 @@ class _HomePageState extends State<HomePage> {
             ret = Builder(
                 builder: (_) => Column(
                       children: [
-                        const QuizzzyLogo(),
+                        RenderImage(
+                            path: 'assets/images/choice.svg',
+                            expaned: true,
+                            svgWidth: MediaQuery.of(context).size.width - 100),
                         CustomTextInput(
                             text: "Name", controller: nameController),
                         Container(

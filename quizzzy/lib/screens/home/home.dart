@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import 'package:quizzzy/controllers/user_type_controller.dart';
 import 'package:quizzzy/custom_widgets/custom_loading.dart';
-import 'package:quizzzy/custom_widgets/quizzzy_logo.dart';
+import 'package:quizzzy/custom_widgets/render_img.dart';
 import 'package:quizzzy/screens/home/check_list.dart';
 import 'package:quizzzy/screens/home/custom_button_wrapper.dart';
 import 'package:quizzzy/screens/home/exit_popup.dart';
@@ -52,7 +52,10 @@ class _HomeState extends State<Home> {
       return Builder(
         builder: (context) => Column(
           children: [
-            const QuizzzyLogo(),
+            const RenderImage(
+              path: 'assets/images/home.svg',
+              expaned: true,
+            ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 0),
               child: Column(children: [

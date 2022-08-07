@@ -3,7 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 
 import 'package:quizzzy/custom_widgets/custom_template.dart';
-import 'package:quizzzy/custom_widgets/quizzzy_logo.dart';
+import 'package:quizzzy/custom_widgets/render_img.dart';
 import 'package:quizzzy/screens/home/home_page.dart';
 import 'package:quizzzy/service/local_notification_service.dart';
 import 'package:quizzzy/theme/font.dart';
@@ -50,34 +50,30 @@ class _GreetingsState extends State<Greetings> {
         body: Builder(
       builder: (_) => Column(
         children: [
-          const QuizzzyLogo(),
+          RenderImage(
+            path: 'assets/images/logo.png',
+            expaned: true,
+            color: Palette.theme,
+            pngHeight: 100,
+          ),
+          RenderImage(
+            path: 'assets/images/welcome.svg',
+            expaned: true,
+            svgWidth: MediaQuery.of(context).size.width - 50,
+          ),
           Container(
             width: double.maxFinite - 20,
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 0),
             alignment: Alignment.bottomCenter,
-            child: Column(children: [
-              Text(
-                "WELCOME",
-                style: TextStyle(
-                    fontFamily: fontFamily,
-                    fontSize: 47,
-                    fontWeight: Font.extraBold,
-                    color: Palette.theme),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Text(
-                "Scroll up to continue",
-                style: TextStyle(
-                    fontFamily: fontFamily,
-                    fontSize: 17,
-                    fontWeight: Font.regular,
-                    color: Palette.txtInput),
-                textAlign: TextAlign.center,
-              ),
-            ]),
+            child: Text(
+              "Scroll up to continue",
+              style: TextStyle(
+                  fontFamily: fontFamily,
+                  fontSize: 17,
+                  fontWeight: Font.regular,
+                  color: Palette.txtInput),
+              textAlign: TextAlign.center,
+            ),
           ),
         ],
       ),

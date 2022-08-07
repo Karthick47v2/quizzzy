@@ -5,6 +5,7 @@ import 'package:quizzzy/controllers/questionnaire_controller.dart';
 import 'package:quizzzy/controllers/user_type_controller.dart';
 import 'package:quizzzy/custom_widgets/custom_button.dart';
 import 'package:quizzzy/custom_widgets/custom_popup.dart';
+import 'package:quizzzy/custom_widgets/render_img.dart';
 import 'package:quizzzy/screens/home/home.dart';
 import 'package:quizzzy/screens/score/score.dart';
 import 'package:quizzzy/service/firestore_db.dart';
@@ -20,7 +21,12 @@ class TimesupPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomPopup(size: 100.0, wids: [
+    return CustomPopup(size: 350.0, wids: [
+      const RenderImage(
+        path: "assets/images/timeup.svg",
+        expaned: false,
+        svgHeight: 200,
+      ),
       Text(
         "Time's up",
         style: TextStyle(
