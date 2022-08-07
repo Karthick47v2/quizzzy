@@ -14,6 +14,7 @@ class Palette {
   /// Background
   static Color loadingBg = Colors.grey;
   static Color containerBg = const Color(0xff263238);
+  static Color popupBg = const Color(0xff102027);
 
   /// Timer
   static Color timerGreen = const Color(0xff005005);

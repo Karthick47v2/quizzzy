@@ -12,7 +12,7 @@ class CustomButtonWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.maxFinite - 20,
+      width: MediaQuery.of(context).size.width - 100,
       child: CustomButton(text: text, onTap: onTap),
     );
   }

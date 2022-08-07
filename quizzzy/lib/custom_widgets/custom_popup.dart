@@ -12,8 +12,11 @@ class CustomPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      child: Container(
-        color: Palette.bg,
+      backgroundColor: Palette.popupBg,
+      shape: RoundedRectangleBorder(
+          side: BorderSide(color: Palette.bg),
+          borderRadius: const BorderRadius.all(Radius.circular(50))),
+      child: SizedBox(
         height: size,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -13,14 +13,14 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton(
+    return ElevatedButton(
         onPressed: onTap,
-        style: OutlinedButton.styleFrom(
-          side: BorderSide(
-            color: Palette.containerBg,
-            width: 2.0,
-            style: BorderStyle.solid,
-          ),
+        style: ElevatedButton.styleFrom(
+          onPrimary: Palette.bg,
+          primary: Palette.containerBg,
+          shape: RoundedRectangleBorder(
+              side: BorderSide(color: Palette.bg),
+              borderRadius: const BorderRadius.all(Radius.circular(25))),
         ),
         child: Text(
           text,

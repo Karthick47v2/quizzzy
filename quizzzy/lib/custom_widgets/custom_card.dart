@@ -18,8 +18,13 @@ class CustomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Palette.theme,
+      color: Palette.containerBg,
+      shape: RoundedRectangleBorder(
+          side: BorderSide(color: Palette.bg),
+          borderRadius: const BorderRadius.all(Radius.circular(25))),
       child: InkWell(
+        splashColor: Palette.bg,
+        highlightColor: Palette.bg,
         onTap: onTap,
         onLongPress: onLongPress,
         child: Padding(

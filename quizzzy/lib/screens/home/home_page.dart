@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                         CustomTextInput(
                             text: "Name", controller: nameController),
                         Container(
-                          width: double.maxFinite - 20,
+                          width: MediaQuery.of(context).size.width - 100,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 30, vertical: 0),
                           alignment: Alignment.bottomCenter,
