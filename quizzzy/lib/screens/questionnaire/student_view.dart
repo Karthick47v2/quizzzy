@@ -33,7 +33,7 @@ class _StudentViewState extends State<StudentView> {
   initState() {
     super.initState();
     questionnaire.shuffle();
-    time = questionnaire.length * 60;
+    time = (questionnaire.length / 2 * 60).toInt();
     startTimer();
   }
 

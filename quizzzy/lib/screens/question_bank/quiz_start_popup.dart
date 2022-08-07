@@ -42,8 +42,8 @@ class QuizStartPopup extends StatelessWidget {
       ),
       GetBuilder<QuestionnaireController>(builder: (qController) {
         return Text(
-          Get.find<UserTypeController>().userType == UserType.student
-              ? "Time: ${qController.questionnaire.length} mins"
+          userType == UserType.student
+              ? "Time: ${qController.questionnaire.length / 2} mins"
               : "Questions: ${qController.questionnaire.length}",
           style: TextStyle(
             fontFamily: fontFamily,
@@ -53,7 +53,7 @@ class QuizStartPopup extends StatelessWidget {
           ),
         );
       }),
-      Get.find<UserTypeController>().userType == UserType.student
+      userType == UserType.student
           ? CustomButton(
               text: "Start",
               onTap: () {
