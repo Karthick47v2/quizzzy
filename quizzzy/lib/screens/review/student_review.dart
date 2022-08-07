@@ -6,17 +6,19 @@ import 'package:quizzzy/custom_widgets/custom_button.dart';
 import 'package:quizzzy/custom_widgets/answer_container.dart';
 import 'package:quizzzy/screens/questionnaire/questionnaire.dart';
 import 'package:quizzzy/screens/questionnaire/stud_finish_popup.dart';
+import 'package:quizzzy/screens/questionnaire/top_q_bar.dart';
 import 'package:quizzzy/service/db_model/question_set.dart';
+import 'package:quizzzy/theme/palette.dart';
 
-/// Renders [StudentView] screen which consists of all questions and answers.
-class StudentView extends StatefulWidget {
-  const StudentView({Key? key}) : super(key: key);
+/// Renders [StudentReview] screen which consists of all questions and answers.
+class StudentReview extends StatefulWidget {
+  const StudentReview({Key? key}) : super(key: key);
 
   @override
-  State<StudentView> createState() => _StudentViewState();
+  State<StudentReview> createState() => _StudentReviewState();
 }
 
-class _StudentViewState extends State<StudentView> {
+class _StudentReviewState extends State<StudentReview> {
   int currentIdx = 0;
   List<QuestionSet> questionnaire =
       Get.find<QuestionnaireController>().questionnaire;
@@ -39,19 +41,6 @@ class _StudentViewState extends State<StudentView> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Questionnaire(
-      topBar: Container(),
-      renderAnswer: renderAnswer,
-      bottomNavBtn: CustomButton(
-        text: "Next",
-        onTap: () => updateQuestion(),
-      ),
-      currentIdx: currentIdx,
-    );
-  }
-
   /// Move to next question when [CustomButton] pressed.
   ///
   /// Teacher they can keep/drop current question.
@@ -68,5 +57,18 @@ class _StudentViewState extends State<StudentView> {
         currentIdx++;
       }
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Questionnaire(
+      topBar: TopQBar(color: Palette.theme, txt: "Review"),
+      renderAnswer: renderAnswer,
+      bottomNavBtn: CustomButton(
+        text: "Next",
+        onTap: () => updateQuestion(),
+      ),
+      currentIdx: currentIdx,
+    );
   }
 }

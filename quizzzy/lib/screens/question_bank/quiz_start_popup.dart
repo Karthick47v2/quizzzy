@@ -10,6 +10,7 @@ import 'package:quizzzy/custom_widgets/render_img.dart';
 import 'package:quizzzy/screens/question_bank/share_quiz_popup.dart';
 import 'package:quizzzy/screens/questionnaire/student_view.dart';
 import 'package:quizzzy/screens/questionnaire/teacher_view.dart';
+import 'package:quizzzy/screens/review/student_review.dart';
 import 'package:quizzzy/theme/font.dart';
 import 'package:quizzzy/theme/palette.dart';
 
@@ -18,7 +19,9 @@ class QuizStartPopup extends StatelessWidget {
   final List<String> questionList =
       Get.find<QuestionListController>().questionList;
   final int idx;
-  final UserType userType = Get.find<UserTypeController>().userType;
+  final bool isStudent =
+      Get.find<UserTypeController>().userType == UserType.student;
+  final bool isReview = Get.find<UserTypeController>().mode == Mode.review;
   QuizStartPopup({Key? key, required this.idx}) : super(key: key);
 
   @override
@@ -26,7 +29,7 @@ class QuizStartPopup extends StatelessWidget {
     return CustomPopup(size: 400.0, wids: [
       RenderImage(
         path:
-            'assets/images/${userType == UserType.student ? 'quiz' : 'review'}.svg',
+            'assets/images/${(isStudent && !isReview) ? 'quiz' : 'review'}.svg',
         expaned: false,
         svgHeight: 200,
       ),
@@ -42,7 +45,7 @@ class QuizStartPopup extends StatelessWidget {
       ),
       GetBuilder<QuestionnaireController>(builder: (qController) {
         return Text(
-          userType == UserType.student
+          (isStudent && !isReview)
               ? "Time: ${qController.questionnaire.length / 2} mins"
               : "Questions: ${qController.questionnaire.length}",
           style: TextStyle(
@@ -53,12 +56,13 @@ class QuizStartPopup extends StatelessWidget {
           ),
         );
       }),
-      userType == UserType.student
+      isStudent
           ? CustomButton(
               text: "Start",
               onTap: () {
                 Get.back();
-                Get.to(() => const StudentView());
+                Get.to(() =>
+                    isReview ? const StudentReview() : const StudentView());
               },
             )
           : Row(

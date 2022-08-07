@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quizzzy/controllers/question_list_controller.dart';
 
 import 'package:quizzzy/custom_widgets/custom_button.dart';
 import 'package:quizzzy/custom_widgets/custom_template.dart';
@@ -11,12 +12,12 @@ import 'package:quizzzy/theme/palette.dart';
 
 /// Render [Score] screen.
 class Score extends StatelessWidget {
-  Score({Key? key}) : super(key: key);
-
   final double avg = Get.find<QuestionnaireController>().avg;
+  Score({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Get.find<QuestionListController>().updateCompletedList();
     return CustomTemplate(
         body: Center(
       child: Column(
@@ -41,9 +42,9 @@ class Score extends StatelessWidget {
             avg == 1
                 ? "Great"
                 : (avg >= 0.75
-                    ? "You have done well"
+                    ? "You have done well."
                     : (avg >= 0.5
-                        ? "Not bad. You can still try again"
+                        ? "Not bad, you can still try again."
                         : "Try again later, you can do it.")),
             style: TextStyle(
                 fontFamily: fontFamily,

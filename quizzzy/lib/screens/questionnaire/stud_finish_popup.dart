@@ -6,7 +6,7 @@ import 'package:quizzzy/controllers/user_type_controller.dart';
 import 'package:quizzzy/custom_widgets/custom_button.dart';
 import 'package:quizzzy/custom_widgets/custom_popup.dart';
 import 'package:quizzzy/custom_widgets/render_img.dart';
-import 'package:quizzzy/screens/home/home.dart';
+import 'package:quizzzy/screens/home/home_page.dart';
 import 'package:quizzzy/screens/score/score.dart';
 import 'package:quizzzy/service/firestore_db.dart';
 import 'package:quizzzy/theme/font.dart';
@@ -38,9 +38,8 @@ class StudFinishPopup extends StatelessWidget {
             color: Palette.font),
         textAlign: TextAlign.center,
       ),
-      currentMode == Mode.quiz
-          ? Container()
-          : Text(
+      currentMode == Mode.self
+          ? Text(
               "You can always review quizzes from main menu",
               style: TextStyle(
                   fontFamily: fontFamily,
@@ -48,7 +47,8 @@ class StudFinishPopup extends StatelessWidget {
                   fontWeight: Font.regular,
                   color: Palette.font),
               textAlign: TextAlign.center,
-            ),
+            )
+          : Container(),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -59,9 +59,11 @@ class StudFinishPopup extends StatelessWidget {
               if (currentMode == Mode.self) {
                 Get.to(() => Score());
               } else {
-                FirestoreService().sendScore(controller.questionnaireName,
-                    controller.avg, controller.author);
-                Get.to(() => const Home());
+                if (currentMode == Mode.quiz) {
+                  FirestoreService().sendScore(controller.questionnaireName,
+                      controller.avg, controller.author);
+                }
+                Get.offAll(() => const HomePage());
               }
             },
           )
