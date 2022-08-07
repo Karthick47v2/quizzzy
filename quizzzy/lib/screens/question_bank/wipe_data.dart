@@ -18,6 +18,6 @@ wipeQuestions(String qName) async {
   } else {
     Get.find<QuestionnaireController>().resetRemovalList();
     customSnackBar("Deleting questions...",
-        "Questions will be deleted in few minutes...", Palette.sucess);
+        "Questions will be deleted in few minutes...", Palette.success);
   }
 }

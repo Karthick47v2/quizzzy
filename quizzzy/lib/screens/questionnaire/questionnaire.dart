@@ -47,7 +47,7 @@ class _QuestionnaireState extends State<Questionnaire> {
                 child: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Palette.questionBg,
+                    color: Palette.containerBg,
                     borderRadius: const BorderRadius.all(Radius.circular(24)),
                   ),
                   child: Center(

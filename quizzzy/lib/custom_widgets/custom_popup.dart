@@ -13,7 +13,7 @@ class CustomPopup extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       child: Container(
-        color: Palette.popupBg,
+        color: Palette.bg,
         height: size,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

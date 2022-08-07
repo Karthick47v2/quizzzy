@@ -17,7 +17,7 @@ class CustomButton extends StatelessWidget {
         onPressed: onTap,
         style: OutlinedButton.styleFrom(
           side: BorderSide(
-            color: Palette.btnOutline,
+            color: Palette.containerBg,
             width: 2.0,
             style: BorderStyle.solid,
           ),
