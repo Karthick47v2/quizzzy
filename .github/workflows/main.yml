@@ -41,10 +41,11 @@ jobs:
         run: flutter test --coverage
 
       - name: Codecov
-        uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV }}
-          file: ./coverage/lcov.info
+        run: |
+          curl -Os https://uploader.codecov.io/latest/linux/codecov
+          chmod +x codecov
+          ./codecov -t 
+
 
   build_apk:
     needs: flutter_test
