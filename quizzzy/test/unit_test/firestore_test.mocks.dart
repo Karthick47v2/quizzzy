@@ -3,8 +3,8 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i7;
-import 'dart:typed_data' as _i8;
+import 'dart:async' as _i8;
+import 'dart:typed_data' as _i9;
 
 import 'package:cloud_firestore/cloud_firestore.dart' as _i4;
 import 'package:cloud_firestore_platform_interface/cloud_firestore_platform_interface.dart'
@@ -13,6 +13,9 @@ import 'package:cloud_functions/cloud_functions.dart' as _i6;
 import 'package:cloud_functions_platform_interface/cloud_functions_platform_interface.dart'
     as _i5;
 import 'package:firebase_core/firebase_core.dart' as _i2;
+import 'package:hive/hive.dart' as _i7;
+import 'package:hive/src/box/default_compaction_strategy.dart' as _i11;
+import 'package:hive/src/box/default_key_comparator.dart' as _i10;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -100,6 +103,28 @@ class _FakeDocumentSnapshot_12<T extends Object?> extends _i1.SmartFake
       : super(parent, parentInvocation);
 }
 
+class _FakeHttpsCallablePlatform_13 extends _i1.SmartFake
+    implements _i5.HttpsCallablePlatform {
+  _FakeHttpsCallablePlatform_13(Object parent, Invocation parentInvocation)
+      : super(parent, parentInvocation);
+}
+
+class _FakeHttpsCallableResult_14<T> extends _i1.SmartFake
+    implements _i6.HttpsCallableResult<T> {
+  _FakeHttpsCallableResult_14(Object parent, Invocation parentInvocation)
+      : super(parent, parentInvocation);
+}
+
+class _FakeBox_15<E> extends _i1.SmartFake implements _i7.Box<E> {
+  _FakeBox_15(Object parent, Invocation parentInvocation)
+      : super(parent, parentInvocation);
+}
+
+class _FakeLazyBox_16<E> extends _i1.SmartFake implements _i7.LazyBox<E> {
+  _FakeLazyBox_16(Object parent, Invocation parentInvocation)
+      : super(parent, parentInvocation);
+}
+
 /// A class which mocks [FirebaseFirestore].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -140,20 +165,20 @@ class MockFirebaseFirestore extends _i1.Mock implements _i4.FirebaseFirestore {
           returnValue: _FakeWriteBatch_3(this, Invocation.method(#batch, [])))
       as _i4.WriteBatch);
   @override
-  _i7.Future<void> clearPersistence() => (super.noSuchMethod(
+  _i8.Future<void> clearPersistence() => (super.noSuchMethod(
       Invocation.method(#clearPersistence, []),
-      returnValue: _i7.Future<void>.value(),
-      returnValueForMissingStub: _i7.Future<void>.value()) as _i7.Future<void>);
+      returnValue: _i8.Future<void>.value(),
+      returnValueForMissingStub: _i8.Future<void>.value()) as _i8.Future<void>);
   @override
-  _i7.Future<void> enablePersistence(
+  _i8.Future<void> enablePersistence(
           [_i3.PersistenceSettings? persistenceSettings]) =>
       (super.noSuchMethod(
               Invocation.method(#enablePersistence, [persistenceSettings]),
-              returnValue: _i7.Future<void>.value(),
-              returnValueForMissingStub: _i7.Future<void>.value())
-          as _i7.Future<void>);
+              returnValue: _i8.Future<void>.value(),
+              returnValueForMissingStub: _i8.Future<void>.value())
+          as _i8.Future<void>);
   @override
-  _i4.LoadBundleTask loadBundle(_i8.Uint8List? bundle) =>
+  _i4.LoadBundleTask loadBundle(_i9.Uint8List? bundle) =>
       (super.noSuchMethod(Invocation.method(#loadBundle, [bundle]),
               returnValue: _FakeLoadBundleTask_4(
                   this, Invocation.method(#loadBundle, [bundle])))
@@ -166,14 +191,14 @@ class MockFirebaseFirestore extends _i1.Mock implements _i4.FirebaseFirestore {
               #useFirestoreEmulator, [host, port], {#sslEnabled: sslEnabled}),
           returnValueForMissingStub: null);
   @override
-  _i7.Future<_i4.QuerySnapshot<Map<String, dynamic>>> namedQueryGet(
+  _i8.Future<_i4.QuerySnapshot<Map<String, dynamic>>> namedQueryGet(
           String? name,
           {_i3.GetOptions? options = const _i3.GetOptions()}) =>
       (super.noSuchMethod(
           Invocation.method(#namedQueryGet, [name], {#options: options}),
-          returnValue: _i7.Future<_i4.QuerySnapshot<Map<String, dynamic>>>.value(
+          returnValue: _i8.Future<_i4.QuerySnapshot<Map<String, dynamic>>>.value(
               _FakeQuerySnapshot_5<Map<String, dynamic>>(this,
-                  Invocation.method(#namedQueryGet, [name], {#options: options})))) as _i7
+                  Invocation.method(#namedQueryGet, [name], {#options: options})))) as _i8
           .Future<_i4.QuerySnapshot<Map<String, dynamic>>>);
   @override
   _i4.Query<Map<String, dynamic>> collectionGroup(String? collectionPath) =>
@@ -182,10 +207,10 @@ class MockFirebaseFirestore extends _i1.Mock implements _i4.FirebaseFirestore {
                   this, Invocation.method(#collectionGroup, [collectionPath])))
           as _i4.Query<Map<String, dynamic>>);
   @override
-  _i7.Future<void> disableNetwork() => (super.noSuchMethod(
+  _i8.Future<void> disableNetwork() => (super.noSuchMethod(
       Invocation.method(#disableNetwork, []),
-      returnValue: _i7.Future<void>.value(),
-      returnValueForMissingStub: _i7.Future<void>.value()) as _i7.Future<void>);
+      returnValue: _i8.Future<void>.value(),
+      returnValueForMissingStub: _i8.Future<void>.value()) as _i8.Future<void>);
   @override
   _i4.DocumentReference<Map<String, dynamic>> doc(String? documentPath) =>
       (super.noSuchMethod(Invocation.method(#doc, [documentPath]),
@@ -193,32 +218,32 @@ class MockFirebaseFirestore extends _i1.Mock implements _i4.FirebaseFirestore {
                   this, Invocation.method(#doc, [documentPath])))
           as _i4.DocumentReference<Map<String, dynamic>>);
   @override
-  _i7.Future<void> enableNetwork() => (super.noSuchMethod(
+  _i8.Future<void> enableNetwork() => (super.noSuchMethod(
       Invocation.method(#enableNetwork, []),
-      returnValue: _i7.Future<void>.value(),
-      returnValueForMissingStub: _i7.Future<void>.value()) as _i7.Future<void>);
+      returnValue: _i8.Future<void>.value(),
+      returnValueForMissingStub: _i8.Future<void>.value()) as _i8.Future<void>);
   @override
-  _i7.Stream<void> snapshotsInSync() =>
+  _i8.Stream<void> snapshotsInSync() =>
       (super.noSuchMethod(Invocation.method(#snapshotsInSync, []),
-          returnValue: _i7.Stream<void>.empty()) as _i7.Stream<void>);
+          returnValue: _i8.Stream<void>.empty()) as _i8.Stream<void>);
   @override
-  _i7.Future<T> runTransaction<T>(_i4.TransactionHandler<T>? transactionHandler,
+  _i8.Future<T> runTransaction<T>(_i4.TransactionHandler<T>? transactionHandler,
           {Duration? timeout = const Duration(seconds: 30),
           int? maxAttempts = 5}) =>
       (super.noSuchMethod(
           Invocation.method(#runTransaction, [transactionHandler],
               {#timeout: timeout, #maxAttempts: maxAttempts}),
-          returnValue: _i7.Future<T>.value(null)) as _i7.Future<T>);
+          returnValue: _i8.Future<T>.value(null)) as _i8.Future<T>);
   @override
-  _i7.Future<void> terminate() => (super.noSuchMethod(
+  _i8.Future<void> terminate() => (super.noSuchMethod(
       Invocation.method(#terminate, []),
-      returnValue: _i7.Future<void>.value(),
-      returnValueForMissingStub: _i7.Future<void>.value()) as _i7.Future<void>);
+      returnValue: _i8.Future<void>.value(),
+      returnValueForMissingStub: _i8.Future<void>.value()) as _i8.Future<void>);
   @override
-  _i7.Future<void> waitForPendingWrites() => (super.noSuchMethod(
+  _i8.Future<void> waitForPendingWrites() => (super.noSuchMethod(
       Invocation.method(#waitForPendingWrites, []),
-      returnValue: _i7.Future<void>.value(),
-      returnValueForMissingStub: _i7.Future<void>.value()) as _i7.Future<void>);
+      returnValue: _i8.Future<void>.value(),
+      returnValueForMissingStub: _i8.Future<void>.value()) as _i8.Future<void>);
 }
 
 /// A class which mocks [FirebaseFunctions].
@@ -286,12 +311,12 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#parameters),
           returnValue: <String, dynamic>{}) as Map<String, dynamic>);
   @override
-  _i7.Future<_i4.DocumentReference<T>> add(T? data) =>
+  _i8.Future<_i4.DocumentReference<T>> add(T? data) =>
       (super.noSuchMethod(Invocation.method(#add, [data]),
-              returnValue: _i7.Future<_i4.DocumentReference<T>>.value(
+              returnValue: _i8.Future<_i4.DocumentReference<T>>.value(
                   _FakeDocumentReference_7<T>(
                       this, Invocation.method(#add, [data]))))
-          as _i7.Future<_i4.DocumentReference<T>>);
+          as _i8.Future<_i4.DocumentReference<T>>);
   @override
   _i4.DocumentReference<T> doc([String? path]) => (super.noSuchMethod(
       Invocation.method(#doc, [path]),
@@ -336,12 +361,12 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
               _FakeQuery_6<T>(this, Invocation.method(#endBefore, [values])))
       as _i4.Query<T>);
   @override
-  _i7.Future<_i4.QuerySnapshot<T>> get([_i3.GetOptions? options]) =>
+  _i8.Future<_i4.QuerySnapshot<T>> get([_i3.GetOptions? options]) =>
       (super.noSuchMethod(Invocation.method(#get, [options]),
-              returnValue: _i7.Future<_i4.QuerySnapshot<T>>.value(
+              returnValue: _i8.Future<_i4.QuerySnapshot<T>>.value(
                   _FakeQuerySnapshot_5<T>(
                       this, Invocation.method(#get, [options]))))
-          as _i7.Future<_i4.QuerySnapshot<T>>);
+          as _i8.Future<_i4.QuerySnapshot<T>>);
   @override
   _i4.Query<T> limit(int? limit) =>
       (super.noSuchMethod(Invocation.method(#limit, [limit]),
@@ -355,13 +380,13 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
               _FakeQuery_6<T>(this, Invocation.method(#limitToLast, [limit])))
       as _i4.Query<T>);
   @override
-  _i7.Stream<_i4.QuerySnapshot<T>> snapshots(
+  _i8.Stream<_i4.QuerySnapshot<T>> snapshots(
           {bool? includeMetadataChanges = false}) =>
       (super.noSuchMethod(
               Invocation.method(#snapshots, [],
                   {#includeMetadataChanges: includeMetadataChanges}),
-              returnValue: _i7.Stream<_i4.QuerySnapshot<T>>.empty())
-          as _i7.Stream<_i4.QuerySnapshot<T>>);
+              returnValue: _i8.Stream<_i4.QuerySnapshot<T>>.empty())
+          as _i8.Stream<_i4.QuerySnapshot<T>>);
   @override
   _i4.Query<T> orderBy(Object? field, {bool? descending = false}) =>
       (super.noSuchMethod(
@@ -512,36 +537,36 @@ class MockDocumentReference<T extends Object?> extends _i1.Mock
                   this, Invocation.method(#collection, [collectionPath])))
           as _i4.CollectionReference<Map<String, dynamic>>);
   @override
-  _i7.Future<void> delete() => (super.noSuchMethod(
+  _i8.Future<void> delete() => (super.noSuchMethod(
       Invocation.method(#delete, []),
-      returnValue: _i7.Future<void>.value(),
-      returnValueForMissingStub: _i7.Future<void>.value()) as _i7.Future<void>);
+      returnValue: _i8.Future<void>.value(),
+      returnValueForMissingStub: _i8.Future<void>.value()) as _i8.Future<void>);
   @override
-  _i7.Future<void> update(Map<String, Object?>? data) => (super.noSuchMethod(
+  _i8.Future<void> update(Map<String, Object?>? data) => (super.noSuchMethod(
       Invocation.method(#update, [data]),
-      returnValue: _i7.Future<void>.value(),
-      returnValueForMissingStub: _i7.Future<void>.value()) as _i7.Future<void>);
+      returnValue: _i8.Future<void>.value(),
+      returnValueForMissingStub: _i8.Future<void>.value()) as _i8.Future<void>);
   @override
-  _i7.Future<_i4.DocumentSnapshot<T>> get([_i3.GetOptions? options]) =>
+  _i8.Future<_i4.DocumentSnapshot<T>> get([_i3.GetOptions? options]) =>
       (super.noSuchMethod(Invocation.method(#get, [options]),
-              returnValue: _i7.Future<_i4.DocumentSnapshot<T>>.value(
+              returnValue: _i8.Future<_i4.DocumentSnapshot<T>>.value(
                   _FakeDocumentSnapshot_12<T>(
                       this, Invocation.method(#get, [options]))))
-          as _i7.Future<_i4.DocumentSnapshot<T>>);
+          as _i8.Future<_i4.DocumentSnapshot<T>>);
   @override
-  _i7.Stream<_i4.DocumentSnapshot<T>> snapshots(
+  _i8.Stream<_i4.DocumentSnapshot<T>> snapshots(
           {bool? includeMetadataChanges = false}) =>
       (super.noSuchMethod(
               Invocation.method(#snapshots, [],
                   {#includeMetadataChanges: includeMetadataChanges}),
-              returnValue: _i7.Stream<_i4.DocumentSnapshot<T>>.empty())
-          as _i7.Stream<_i4.DocumentSnapshot<T>>);
+              returnValue: _i8.Stream<_i4.DocumentSnapshot<T>>.empty())
+          as _i8.Stream<_i4.DocumentSnapshot<T>>);
   @override
-  _i7.Future<void> set(T? data, [_i3.SetOptions? options]) =>
+  _i8.Future<void> set(T? data, [_i3.SetOptions? options]) =>
       (super.noSuchMethod(Invocation.method(#set, [data, options]),
-              returnValue: _i7.Future<void>.value(),
-              returnValueForMissingStub: _i7.Future<void>.value())
-          as _i7.Future<void>);
+              returnValue: _i8.Future<void>.value(),
+              returnValueForMissingStub: _i8.Future<void>.value())
+          as _i8.Future<void>);
   @override
   _i4.DocumentReference<R> withConverter<R>(
           {_i4.FromFirestore<R>? fromFirestore,
@@ -590,4 +615,300 @@ class MockDocumentSnapshot<T extends Object?> extends _i1.Mock
   @override
   dynamic operator [](Object? field) =>
       super.noSuchMethod(Invocation.method(#[], [field]));
+}
+
+/// A class which mocks [HttpsCallable].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockHttpsCallable extends _i1.Mock implements _i6.HttpsCallable {
+  MockHttpsCallable() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.HttpsCallablePlatform get delegate => (super.noSuchMethod(
+          Invocation.getter(#delegate),
+          returnValue:
+              _FakeHttpsCallablePlatform_13(this, Invocation.getter(#delegate)))
+      as _i5.HttpsCallablePlatform);
+  @override
+  _i8.Future<_i6.HttpsCallableResult<T>> call<T>([dynamic parameters]) =>
+      (super.noSuchMethod(Invocation.method(#call, [parameters]),
+              returnValue: _i8.Future<_i6.HttpsCallableResult<T>>.value(
+                  _FakeHttpsCallableResult_14<T>(
+                      this, Invocation.method(#call, [parameters]))))
+          as _i8.Future<_i6.HttpsCallableResult<T>>);
+}
+
+/// A class which mocks [HiveInterface].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockHiveInterface extends _i1.Mock implements _i7.HiveInterface {
+  MockHiveInterface() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  void init(String? path,
+          {_i7.HiveStorageBackendPreference? backendPreference =
+              _i7.HiveStorageBackendPreference.native}) =>
+      super.noSuchMethod(
+          Invocation.method(
+              #init, [path], {#backendPreference: backendPreference}),
+          returnValueForMissingStub: null);
+  @override
+  _i8.Future<_i7.Box<E>> openBox<E>(String? name,
+          {_i7.HiveCipher? encryptionCipher,
+          _i7.KeyComparator? keyComparator = _i10.defaultKeyComparator,
+          _i7.CompactionStrategy? compactionStrategy =
+              _i11.defaultCompactionStrategy,
+          bool? crashRecovery = true,
+          String? path,
+          _i9.Uint8List? bytes,
+          String? collection,
+          List<int>? encryptionKey}) =>
+      (super.noSuchMethod(
+          Invocation.method(#openBox, [
+            name
+          ], {
+            #encryptionCipher: encryptionCipher,
+            #keyComparator: keyComparator,
+            #compactionStrategy: compactionStrategy,
+            #crashRecovery: crashRecovery,
+            #path: path,
+            #bytes: bytes,
+            #collection: collection,
+            #encryptionKey: encryptionKey
+          }),
+          returnValue: _i8.Future<_i7.Box<E>>.value(_FakeBox_15<E>(
+              this,
+              Invocation.method(#openBox, [
+                name
+              ], {
+                #encryptionCipher: encryptionCipher,
+                #keyComparator: keyComparator,
+                #compactionStrategy: compactionStrategy,
+                #crashRecovery: crashRecovery,
+                #path: path,
+                #bytes: bytes,
+                #collection: collection,
+                #encryptionKey: encryptionKey
+              })))) as _i8.Future<_i7.Box<E>>);
+  @override
+  _i8.Future<_i7.LazyBox<E>> openLazyBox<E>(String? name,
+          {_i7.HiveCipher? encryptionCipher,
+          _i7.KeyComparator? keyComparator = _i10.defaultKeyComparator,
+          _i7.CompactionStrategy? compactionStrategy =
+              _i11.defaultCompactionStrategy,
+          bool? crashRecovery = true,
+          String? path,
+          String? collection,
+          List<int>? encryptionKey}) =>
+      (super.noSuchMethod(
+          Invocation.method(#openLazyBox, [
+            name
+          ], {
+            #encryptionCipher: encryptionCipher,
+            #keyComparator: keyComparator,
+            #compactionStrategy: compactionStrategy,
+            #crashRecovery: crashRecovery,
+            #path: path,
+            #collection: collection,
+            #encryptionKey: encryptionKey
+          }),
+          returnValue: _i8.Future<_i7.LazyBox<E>>.value(_FakeLazyBox_16<E>(
+              this,
+              Invocation.method(#openLazyBox, [
+                name
+              ], {
+                #encryptionCipher: encryptionCipher,
+                #keyComparator: keyComparator,
+                #compactionStrategy: compactionStrategy,
+                #crashRecovery: crashRecovery,
+                #path: path,
+                #collection: collection,
+                #encryptionKey: encryptionKey
+              })))) as _i8.Future<_i7.LazyBox<E>>);
+  @override
+  _i7.Box<E> box<E>(String? name) => (super.noSuchMethod(
+          Invocation.method(#box, [name]),
+          returnValue: _FakeBox_15<E>(this, Invocation.method(#box, [name])))
+      as _i7.Box<E>);
+  @override
+  _i7.LazyBox<E> lazyBox<E>(String? name) =>
+      (super.noSuchMethod(Invocation.method(#lazyBox, [name]),
+              returnValue:
+                  _FakeLazyBox_16<E>(this, Invocation.method(#lazyBox, [name])))
+          as _i7.LazyBox<E>);
+  @override
+  bool isBoxOpen(String? name) =>
+      (super.noSuchMethod(Invocation.method(#isBoxOpen, [name]),
+          returnValue: false) as bool);
+  @override
+  _i8.Future<void> close() => (super.noSuchMethod(Invocation.method(#close, []),
+      returnValue: _i8.Future<void>.value(),
+      returnValueForMissingStub: _i8.Future<void>.value()) as _i8.Future<void>);
+  @override
+  _i8.Future<void> deleteBoxFromDisk(String? name, {String? path}) =>
+      (super.noSuchMethod(
+              Invocation.method(#deleteBoxFromDisk, [name], {#path: path}),
+              returnValue: _i8.Future<void>.value(),
+              returnValueForMissingStub: _i8.Future<void>.value())
+          as _i8.Future<void>);
+  @override
+  _i8.Future<void> deleteFromDisk() => (super.noSuchMethod(
+      Invocation.method(#deleteFromDisk, []),
+      returnValue: _i8.Future<void>.value(),
+      returnValueForMissingStub: _i8.Future<void>.value()) as _i8.Future<void>);
+  @override
+  List<int> generateSecureKey() =>
+      (super.noSuchMethod(Invocation.method(#generateSecureKey, []),
+          returnValue: <int>[]) as List<int>);
+  @override
+  _i8.Future<bool> boxExists(String? name, {String? path}) =>
+      (super.noSuchMethod(Invocation.method(#boxExists, [name], {#path: path}),
+          returnValue: _i8.Future<bool>.value(false)) as _i8.Future<bool>);
+  @override
+  void resetAdapters() =>
+      super.noSuchMethod(Invocation.method(#resetAdapters, []),
+          returnValueForMissingStub: null);
+  @override
+  void registerAdapter<T>(_i7.TypeAdapter<T>? adapter,
+          {bool? internal = false, bool? override = false}) =>
+      super.noSuchMethod(
+          Invocation.method(#registerAdapter, [adapter],
+              {#internal: internal, #override: override}),
+          returnValueForMissingStub: null);
+  @override
+  bool isAdapterRegistered(int? typeId) =>
+      (super.noSuchMethod(Invocation.method(#isAdapterRegistered, [typeId]),
+          returnValue: false) as bool);
+  @override
+  void ignoreTypeId<T>(int? typeId) =>
+      super.noSuchMethod(Invocation.method(#ignoreTypeId, [typeId]),
+          returnValueForMissingStub: null);
+}
+
+/// A class which mocks [Box].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockBox<E> extends _i1.Mock implements _i7.Box<E> {
+  MockBox() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  Iterable<E> get values =>
+      (super.noSuchMethod(Invocation.getter(#values), returnValue: <E>[])
+          as Iterable<E>);
+  @override
+  String get name =>
+      (super.noSuchMethod(Invocation.getter(#name), returnValue: '') as String);
+  @override
+  bool get isOpen =>
+      (super.noSuchMethod(Invocation.getter(#isOpen), returnValue: false)
+          as bool);
+  @override
+  bool get lazy =>
+      (super.noSuchMethod(Invocation.getter(#lazy), returnValue: false)
+          as bool);
+  @override
+  Iterable<dynamic> get keys =>
+      (super.noSuchMethod(Invocation.getter(#keys), returnValue: <dynamic>[])
+          as Iterable<dynamic>);
+  @override
+  int get length =>
+      (super.noSuchMethod(Invocation.getter(#length), returnValue: 0) as int);
+  @override
+  bool get isEmpty =>
+      (super.noSuchMethod(Invocation.getter(#isEmpty), returnValue: false)
+          as bool);
+  @override
+  bool get isNotEmpty =>
+      (super.noSuchMethod(Invocation.getter(#isNotEmpty), returnValue: false)
+          as bool);
+  @override
+  Iterable<E> valuesBetween({dynamic startKey, dynamic endKey}) =>
+      (super.noSuchMethod(
+          Invocation.method(
+              #valuesBetween, [], {#startKey: startKey, #endKey: endKey}),
+          returnValue: <E>[]) as Iterable<E>);
+  @override
+  E? getAt(int? index) =>
+      (super.noSuchMethod(Invocation.method(#getAt, [index])) as E?);
+  @override
+  Map<dynamic, E> toMap() => (super.noSuchMethod(Invocation.method(#toMap, []),
+      returnValue: <dynamic, E>{}) as Map<dynamic, E>);
+  @override
+  dynamic keyAt(int? index) =>
+      super.noSuchMethod(Invocation.method(#keyAt, [index]));
+  @override
+  _i8.Stream<_i7.BoxEvent> watch({dynamic key}) =>
+      (super.noSuchMethod(Invocation.method(#watch, [], {#key: key}),
+              returnValue: _i8.Stream<_i7.BoxEvent>.empty())
+          as _i8.Stream<_i7.BoxEvent>);
+  @override
+  bool containsKey(dynamic key) =>
+      (super.noSuchMethod(Invocation.method(#containsKey, [key]),
+          returnValue: false) as bool);
+  @override
+  _i8.Future<void> put(dynamic key, E? value) => (super.noSuchMethod(
+      Invocation.method(#put, [key, value]),
+      returnValue: _i8.Future<void>.value(),
+      returnValueForMissingStub: _i8.Future<void>.value()) as _i8.Future<void>);
+  @override
+  _i8.Future<void> putAt(int? index, E? value) => (super.noSuchMethod(
+      Invocation.method(#putAt, [index, value]),
+      returnValue: _i8.Future<void>.value(),
+      returnValueForMissingStub: _i8.Future<void>.value()) as _i8.Future<void>);
+  @override
+  _i8.Future<void> putAll(Map<dynamic, E>? entries) => (super.noSuchMethod(
+      Invocation.method(#putAll, [entries]),
+      returnValue: _i8.Future<void>.value(),
+      returnValueForMissingStub: _i8.Future<void>.value()) as _i8.Future<void>);
+  @override
+  _i8.Future<int> add(E? value) =>
+      (super.noSuchMethod(Invocation.method(#add, [value]),
+          returnValue: _i8.Future<int>.value(0)) as _i8.Future<int>);
+  @override
+  _i8.Future<Iterable<int>> addAll(Iterable<E>? values) =>
+      (super.noSuchMethod(Invocation.method(#addAll, [values]),
+              returnValue: _i8.Future<Iterable<int>>.value(<int>[]))
+          as _i8.Future<Iterable<int>>);
+  @override
+  _i8.Future<void> delete(dynamic key) => (super.noSuchMethod(
+      Invocation.method(#delete, [key]),
+      returnValue: _i8.Future<void>.value(),
+      returnValueForMissingStub: _i8.Future<void>.value()) as _i8.Future<void>);
+  @override
+  _i8.Future<void> deleteAt(int? index) => (super.noSuchMethod(
+      Invocation.method(#deleteAt, [index]),
+      returnValue: _i8.Future<void>.value(),
+      returnValueForMissingStub: _i8.Future<void>.value()) as _i8.Future<void>);
+  @override
+  _i8.Future<void> deleteAll(Iterable<dynamic>? keys) => (super.noSuchMethod(
+      Invocation.method(#deleteAll, [keys]),
+      returnValue: _i8.Future<void>.value(),
+      returnValueForMissingStub: _i8.Future<void>.value()) as _i8.Future<void>);
+  @override
+  _i8.Future<void> compact() => (super.noSuchMethod(
+      Invocation.method(#compact, []),
+      returnValue: _i8.Future<void>.value(),
+      returnValueForMissingStub: _i8.Future<void>.value()) as _i8.Future<void>);
+  @override
+  _i8.Future<int> clear() => (super.noSuchMethod(Invocation.method(#clear, []),
+      returnValue: _i8.Future<int>.value(0)) as _i8.Future<int>);
+  @override
+  _i8.Future<void> close() => (super.noSuchMethod(Invocation.method(#close, []),
+      returnValue: _i8.Future<void>.value(),
+      returnValueForMissingStub: _i8.Future<void>.value()) as _i8.Future<void>);
+  @override
+  _i8.Future<void> deleteFromDisk() => (super.noSuchMethod(
+      Invocation.method(#deleteFromDisk, []),
+      returnValue: _i8.Future<void>.value(),
+      returnValueForMissingStub: _i8.Future<void>.value()) as _i8.Future<void>);
+  @override
+  _i8.Future<void> flush() => (super.noSuchMethod(Invocation.method(#flush, []),
+      returnValue: _i8.Future<void>.value(),
+      returnValueForMissingStub: _i8.Future<void>.value()) as _i8.Future<void>);
 }
