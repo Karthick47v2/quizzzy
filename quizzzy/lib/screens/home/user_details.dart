@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:quizzzy/custom_widgets/custom_snackbar.dart';
 import 'package:quizzzy/custom_widgets/custom_text_input.dart';
 import 'package:quizzzy/custom_widgets/render_img.dart';
 import 'package:quizzzy/screens/home/custom_button_wrapper.dart';
-import 'package:quizzzy/screens/home/home_page.dart';
 import 'package:quizzzy/service/firestore_db.dart';
 import 'package:quizzzy/theme/palette.dart';
 
@@ -28,9 +26,9 @@ class _UserDetailsState extends State<UserDetails> {
               .sendUserType(nameController.text, isTeacher)) {
             customSnackBar("Error", "Internal server error", Palette.error);
           }
-          setState(() {
-            Get.offAll(() => const HomePage());
-          });
+          // setState(() {
+          //   Get.offAll(() => const HomePage());
+          // });
         });
   }
 

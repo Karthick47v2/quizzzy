@@ -26,10 +26,7 @@ exports.dltUser = functions.auth.user().onDelete((user) => {
 exports.notifyUser = functions.firestore
   .document("users/{userID}/{qCol}/0")
   .onCreate(async (_data, context) => {
-    const user = await db
-      .collection("users")
-      .doc(`users/${context.auth.uid}`)
-      .get();
+    const user = await db.collection("users").doc(context.params.userID).get();
 
     await admin.messaging().send({
       notification: {
@@ -38,6 +35,7 @@ exports.notifyUser = functions.firestore
       },
       token: user.data()["token"],
     });
+    console.log("Message sent");
   });
 
 // callable func => store info

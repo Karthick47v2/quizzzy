@@ -31,9 +31,6 @@ Future main() async {
   runApp(const Root());
 }
 
-/// Handle notification while app is on background
-Future bgNotificationHandler(RemoteMessage msg) async {}
-
 /// Renders [Root] widget.
 ///
 /// Returns [HomePage] or [SignUp] page according to user auth status. If user signed up and not
@@ -75,5 +72,4 @@ class _RootState extends State<Root> {
 initServices() async {
   Hive.registerAdapter(QuestionSetAdapter());
   fm = FirebaseMessaging.instance;
-  // FirebaseMessaging.onBackgroundMessage(bgNotificationHandler);
 }
