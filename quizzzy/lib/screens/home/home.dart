@@ -61,9 +61,11 @@ class _HomeState extends State<Home> {
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 0),
               child: Column(children: [
                 CustomButtonWrapper(
+                    key: const Key('button-import'),
                     text: "Import PDF",
                     onTap: () => Get.to(() => const ImportFile())),
                 CustomButtonWrapper(
+                    key: const Key('button-q-bank'),
                     text: "Question Bank",
                     onTap: () {
                       showDialog(
@@ -77,6 +79,7 @@ class _HomeState extends State<Home> {
                     }),
                 controller.userType == UserType.student
                     ? CustomButtonWrapper(
+                        key: const Key('button-attempt-quiz'),
                         text: "Attempt quiz",
                         onTap: () {
                           showDialog(
@@ -93,6 +96,7 @@ class _HomeState extends State<Home> {
                         })
                     : Container(),
                 CustomButtonWrapper(
+                    key: const Key('button-review'),
                     text: "Review quizzes",
                     onTap: () async {
                       if (controller.userType == UserType.student) {
@@ -105,6 +109,7 @@ class _HomeState extends State<Home> {
                       }
                     }),
                 CustomButtonWrapper(
+                    key: const Key('button-log-out'),
                     text: "Log out",
                     onTap: () {
                       showDialog(
@@ -114,6 +119,7 @@ class _HomeState extends State<Home> {
                           });
                     }),
                 CustomButtonWrapper(
+                    key: const Key('button-quiz'),
                     text: "Quit",
                     onTap: () {
                       showDialog(
