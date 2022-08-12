@@ -24,7 +24,7 @@ class _GreetingsState extends State<Greetings> {
     super.initState();
     localNotificationService = LocalNotificationService(context);
 
-    /// Notification handler - App on background state / terminated state.
+    // /// Notification handler - App on background state / terminated state.
     fm.getInitialMessage().then((msg) {
       if (msg != null) {
         Get.offAll(() => const HomePage());

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quizzzy/controllers/quiz_controller.dart';
 
 import 'package:quizzzy/controllers/user_type_controller.dart';
 import 'package:quizzzy/custom_widgets/custom_loading.dart';
@@ -10,6 +11,7 @@ import 'package:quizzzy/screens/home/exit_popup.dart';
 import 'package:quizzzy/screens/home/logout_popup.dart';
 import 'package:quizzzy/screens/home/quiz_code_popup.dart';
 import 'package:quizzzy/screens/import/import.dart';
+import 'package:quizzzy/screens/review/teacher_review.dart';
 import 'package:quizzzy/service/db_model/question_set.dart';
 import 'package:quizzzy/service/firestore_db.dart';
 import 'package:quizzzy/service/local_notification_service.dart';
@@ -92,9 +94,15 @@ class _HomeState extends State<Home> {
                     : Container(),
                 CustomButtonWrapper(
                     text: "Review quizzes",
-                    onTap: () {
-                      Get.find<UserTypeController>().setMode(Mode.review);
-                      checkQuestionBank();
+                    onTap: () async {
+                      if (controller.userType == UserType.student) {
+                        Get.find<UserTypeController>().setMode(Mode.review);
+                        checkQuestionBank();
+                      } else {
+                        Get.find<QuizController>().setupQuizInfo(
+                            await FirestoreService().getQuizInfo());
+                        Get.to(() => TeacherReview());
+                      }
                     }),
                 CustomButtonWrapper(
                     text: "Log out",
