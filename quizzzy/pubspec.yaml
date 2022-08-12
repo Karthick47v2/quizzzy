@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   path_provider: ^2.0.9
   get: ^4.6.5
+  pie_chart: ^5.3.2
   pdf_text: ^0.5.0
   file_picker: ^5.0.1
   cloud_firestore: ^3.1.10
