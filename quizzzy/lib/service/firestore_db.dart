@@ -21,6 +21,7 @@ class FirestoreService {
 
   FirestoreService.test(
       User user, CollectionReference users, FirebaseFunctions func) {
+    _instance = this;
     _user = user;
     _users = users;
     fFunc = func;
@@ -85,6 +86,16 @@ class FirestoreService {
         .collection(colID)
         .get()
         .then((value) => value.docs.map((doc) => doc).toList());
+  }
+
+  /// Get all info about quizzes issued by teacher from [Firestore].
+  Future<Map<String, dynamic>> getQuizInfo() async {
+    return await _users.doc(_user!.uid).get().then((docSnap) {
+      if (docSnap.exists) {
+        Map<String, dynamic> data = docSnap.data() as Map<String, dynamic>;
+        return data['quizID'];
+      }
+    }).onError((error, stackTrace) => error.toString());
   }
 
   /// Saves Firebase Cloud Messaging (FCM) token to [Firestore].

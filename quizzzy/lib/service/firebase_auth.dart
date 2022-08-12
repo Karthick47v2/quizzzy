@@ -13,6 +13,7 @@ class Auth {
   }
 
   Auth.test(FirebaseAuth testAuth) {
+    _instance = this;
     _auth = testAuth;
   }
 
