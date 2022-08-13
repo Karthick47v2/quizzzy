@@ -4,7 +4,7 @@ import 'package:quizzzy/custom_widgets/custom_button.dart';
 import 'package:quizzzy/custom_widgets/custom_popup.dart';
 import 'package:quizzzy/custom_widgets/custom_template.dart';
 import 'package:quizzzy/custom_widgets/render_img.dart';
-import 'package:quizzzy/screens/import/file_browser_popop.dart';
+import 'package:quizzzy/screens/import/file_browser_popup.dart';
 import 'package:quizzzy/theme/font.dart';
 import 'package:quizzzy/theme/palette.dart';
 
@@ -26,6 +26,7 @@ class _ImportFileState extends State<ImportFile> {
     return SizedBox(
       width: double.infinity,
       child: InkWell(
+        key: const Key('btn-upload'),
         splashColor: Palette.transparent,
         highlightColor: Palette.transparent,
         onTap: () {
