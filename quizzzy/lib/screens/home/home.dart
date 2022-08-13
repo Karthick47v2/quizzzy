@@ -29,7 +29,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   /// Send device FCM token to [Firestore] if token updated.
   Future<void> pushToken() async {
-    localStorage = await setBox();
     String? token = await fm.getToken();
     String? oldToken = localStorage.get('token');
     if (oldToken != token) {
@@ -61,11 +60,11 @@ class _HomeState extends State<Home> {
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 0),
               child: Column(children: [
                 CustomButtonWrapper(
-                    key: const Key('button-import'),
+                    key: const Key('btn-import'),
                     text: "Import PDF",
                     onTap: () => Get.to(() => const ImportFile())),
                 CustomButtonWrapper(
-                    key: const Key('button-q-bank'),
+                    key: const Key('btn-q-bank'),
                     text: "Question Bank",
                     onTap: () {
                       showDialog(
@@ -79,7 +78,7 @@ class _HomeState extends State<Home> {
                     }),
                 controller.userType == UserType.student
                     ? CustomButtonWrapper(
-                        key: const Key('button-attempt-quiz'),
+                        key: const Key('btn-attempt-quiz'),
                         text: "Attempt quiz",
                         onTap: () {
                           showDialog(
@@ -96,7 +95,7 @@ class _HomeState extends State<Home> {
                         })
                     : Container(),
                 CustomButtonWrapper(
-                    key: const Key('button-review'),
+                    key: const Key('btn-review'),
                     text: "Review quizzes",
                     onTap: () async {
                       if (controller.userType == UserType.student) {
@@ -109,7 +108,7 @@ class _HomeState extends State<Home> {
                       }
                     }),
                 CustomButtonWrapper(
-                    key: const Key('button-log-out'),
+                    key: const Key('btn-log-out'),
                     text: "Log out",
                     onTap: () {
                       showDialog(
@@ -119,7 +118,7 @@ class _HomeState extends State<Home> {
                           });
                     }),
                 CustomButtonWrapper(
-                    key: const Key('button-quiz'),
+                    key: const Key('btn-quit'),
                     text: "Quit",
                     onTap: () {
                       showDialog(

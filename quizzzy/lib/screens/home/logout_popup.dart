@@ -40,6 +40,7 @@ class _LogoutPopupState extends State<LogoutPopup> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           CustomButton(
+            key: const Key('btn-logout-conf'),
             text: "Yes",
             onTap: () async {
               String res = await Auth().userSignout();
@@ -52,6 +53,7 @@ class _LogoutPopupState extends State<LogoutPopup> {
             },
           ),
           CustomButton(
+            key: const Key('btn-logout-decl'),
             text: "No",
             onTap: () => Get.back(),
           )

@@ -51,8 +51,8 @@ class _UserDetailsState extends State<UserDetails> {
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 0),
             alignment: Alignment.bottomCenter,
             child: Column(children: [
-              _userTypeButton('button-teacher', "I'm a Teacher", true),
-              _userTypeButton('button-student', "I'm a Student", false)
+              _userTypeButton('btn-teacher', "I'm a Teacher", true),
+              _userTypeButton('btn-student', "I'm a Student", false)
             ]),
           )
         ],

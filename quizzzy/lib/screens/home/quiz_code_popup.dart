@@ -54,10 +54,12 @@ class _QuizCodePopupState extends State<QuizCodePopup> {
             svgHeight: 200,
           ),
           CustomTextInput(
+            key: const Key('input-code'),
             text: "Enter code",
             controller: codeController,
           ),
           CustomButton(
+            key: const Key('btn-quiz-code-confirm'),
             text: "Confirm",
             onTap: () async {
               if (!(await fetchQuestionnaire())) {

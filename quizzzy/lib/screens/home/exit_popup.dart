@@ -33,11 +33,13 @@ class ExitPopup extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           CustomButton(
+            key: const Key('btn-quit-conf'),
             text: "Yes",
             onTap: () =>
                 SystemNavigator.pop(), // it will only suspend app for iOS,
           ), // need to manually close in iOS as of iOS policy ...
           CustomButton(
+            key: const Key('btn-quit-decl'),
             text: "No",
             onTap: () => Get.back(),
           )
