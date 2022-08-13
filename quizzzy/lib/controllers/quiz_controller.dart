@@ -21,7 +21,7 @@ class QuizController extends GetxController {
     return _processedList[n];
   }
 
-  setupQuizInfo(Map<String, dynamic> info) {
+  bool setupQuizInfo(Map<String, dynamic> info) {
     info.forEach((key, value) {
       HashMap<String, double> temp = HashMap<String, double>();
       List<Result> tempList = [];
@@ -37,5 +37,6 @@ class QuizController extends GetxController {
       results[key] = tempList;
       _processedList.add(temp);
     });
+    return _processedList.isNotEmpty;
   }
 }
