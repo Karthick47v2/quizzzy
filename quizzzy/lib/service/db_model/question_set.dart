@@ -36,5 +36,6 @@ class QuestionSet extends HiveObject {
 }
 
 late Box localStorage;
-Future setBox() async =>
-    await Hive.openBox((FirestoreService().user!.displayName)!);
+Future setBox() async {
+  localStorage = await Hive.openBox((FirestoreService().user!.displayName)!);
+}
