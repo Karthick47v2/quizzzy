@@ -3,12 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:mockito/mockito.dart';
 import 'package:quizzzy/screens/home/user_details.dart';
-import 'package:quizzzy/service/firebase_auth.dart';
-import 'package:quizzzy/service/firestore_db.dart';
-
 import '../custom_mock/custom_mock.dart';
-import '../unit_test/auth_test.mocks.dart';
-import '../unit_test/firestore_test.mocks.dart';
+import '../unit_test/firebase_stub.dart';
 
 main() {
   late Finder txtField;
@@ -16,10 +12,11 @@ main() {
   late Finder btnStudent;
   setUp(() async {
     Get.testMode = true;
+    initStubs();
 
     txtField = find.byKey(const Key('text-input-name'));
-    btnTeacher = find.byKey(const Key('button-teacher'));
-    btnStudent = find.byKey(const Key('button-student'));
+    btnTeacher = find.byKey(const Key('btn-teacher'));
+    btnStudent = find.byKey(const Key('btn-student'));
   });
 
   group('User experience', () {
@@ -46,17 +43,6 @@ main() {
   });
 
   group('Button interactivity', () {
-    MockFirebaseAuth mockFirebaseAuth = MockFirebaseAuth();
-    Auth.test(mockFirebaseAuth);
-
-    MockCollectionReference mockCollectionRef = MockCollectionReference();
-    MockFirebaseFunctions mockFirebaseFunctions = MockFirebaseFunctions();
-    MockUser mockUser = MockUser();
-
-    MockHttpsCallable mockHttpsCallable = MockHttpsCallable();
-    FirestoreService.test(mockUser, mockCollectionRef, mockFirebaseFunctions);
-
-    when(mockFirebaseAuth.currentUser).thenAnswer((_) => mockUser);
     when(mockFirebaseFunctions.httpsCallable(any))
         .thenAnswer((_) => mockHttpsCallable);
     testWidgets('Button interactivity - request failure',

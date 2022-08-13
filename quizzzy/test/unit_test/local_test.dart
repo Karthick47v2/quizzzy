@@ -1,6 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mockito/annotations.dart';
 import 'package:quizzzy/service/db_model/question_set.dart';
 
+@GenerateMocks([
+  HiveInterface,
+  Box,
+])
 main() {
   late Map<String, dynamic> apiRes;
   late QuestionSet obj;

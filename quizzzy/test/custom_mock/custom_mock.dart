@@ -13,7 +13,14 @@ class HttpsCallableResultMock<T> extends Mock
 // ignore: subtype_of_sealed_class
 class QueryDocumentSnapshotMock<T> extends Mock
     implements QueryDocumentSnapshot<T> {
-  QueryDocumentSnapshotMock.test(this.docs);
+  QueryDocumentSnapshotMock.test(this.docs, this.id);
 
   final T docs;
+  @override
+  final String id;
+
+  @override
+  T data() {
+    return docs;
+  }
 }

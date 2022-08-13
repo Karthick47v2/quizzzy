@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:quizzzy/screens/landing/greeting.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:quizzzy/service/local_notification_service.dart';
 
-import 'landing_page_test.mocks.dart';
+import '../unit_test/firebase_stub.mocks.dart';
 
-@GenerateMocks([FirebaseMessaging])
+
 main() {
   setUp(() {
     Get.testMode = true;

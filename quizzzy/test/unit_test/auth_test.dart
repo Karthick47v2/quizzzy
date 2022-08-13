@@ -1,21 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:quizzzy/service/firebase_auth.dart';
 
-import 'auth_test.mocks.dart';
+import 'firebase_stub.dart';
+import 'firebase_stub.mocks.dart';
 
-@GenerateMocks([User, UserCredential, FirebaseAuth])
 main() {
-  late MockFirebaseAuth mockFirebaseAuth;
-  late MockUser mockUser;
-  late Auth auth;
   setUp(() {
-    mockUser = MockUser();
-    mockFirebaseAuth = MockFirebaseAuth();
-    auth = Auth.test(mockFirebaseAuth);
-    when(mockFirebaseAuth.currentUser).thenAnswer((_) => mockUser);
+    initStubs();
   });
 
   group("User login", () {
@@ -26,7 +19,7 @@ main() {
       ).thenAnswer(((_) =>
           throw FirebaseAuthException(code: "400", message: "Login failed")));
       expect(
-          await auth.userLogin("user@mail.com", "Abc@12345"), "Login failed");
+          await Auth().userLogin("user@mail.com", "Abc@12345"), "Login failed");
     });
 
     test("Non-verified user login", () async {
@@ -36,7 +29,7 @@ main() {
             email: "user@mail.com", password: "Abc@12345"),
       ).thenAnswer((_) async => MockUserCredential());
       expect(
-          await auth.userLogin("user@mail.com", "Abc@12345"), "Not Verified");
+          await Auth().userLogin("user@mail.com", "Abc@12345"), "Not Verified");
     });
   });
 
@@ -46,7 +39,7 @@ main() {
         mockFirebaseAuth.createUserWithEmailAndPassword(
             email: "user@mail.com", password: "Abc@12345"),
       ).thenAnswer((_) async => MockUserCredential());
-      expect(await auth.userSignup("user@mail.com", "Abc@12345"), "Success");
+      expect(await Auth().userSignup("user@mail.com", "Abc@12345"), "Success");
     });
 
     test("Unsuccessful signup", () async {
@@ -55,21 +48,21 @@ main() {
             email: "user@mail.com", password: "Abc@12345"),
       ).thenAnswer(((_) =>
           throw FirebaseAuthException(code: "400", message: "Signup failed")));
-      expect(
-          await auth.userSignup("user@mail.com", "Abc@12345"), "Signup failed");
+      expect(await Auth().userSignup("user@mail.com", "Abc@12345"),
+          "Signup failed");
     });
   });
 
   group("User signout", () {
     test("Successful signout", () async {
       when(mockFirebaseAuth.signOut()).thenAnswer((_) async {});
-      expect(await auth.userSignout(), "Success");
+      expect(await Auth().userSignout(), "Success");
     });
 
     test("Unsuccessful signout", () async {
       when(mockFirebaseAuth.signOut()).thenAnswer(((_) =>
           throw FirebaseAuthException(code: "400", message: "Signup failed")));
-      expect(await auth.userSignout(), "Signup failed");
+      expect(await Auth().userSignout(), "Signup failed");
     });
   });
 }
