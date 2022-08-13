@@ -35,7 +35,7 @@ main() {
     //simulate verification
     when(mockUser.emailVerified).thenAnswer((_) => true);
 
-    await tester.pumpAndSettle(Duration(seconds: 4));
+    await tester.pumpAndSettle(const Duration(seconds: 4));
 
     expect(find.byType(HomePage), findsOneWidget);
   });
