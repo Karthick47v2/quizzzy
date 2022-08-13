@@ -71,6 +71,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
           textAlign: TextAlign.center,
         ),
         CustomButton(
+          key: const Key('btn-resend-email'),
           text: "Resend Email",
           onTap: () => FirestoreService().user!.sendEmailVerification(),
         ),

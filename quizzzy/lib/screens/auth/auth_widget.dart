@@ -73,10 +73,12 @@ class _AuthWidgetState extends State<AuthWidget> {
                   ],
                 ),
                 CustomTextInput(
+                    key: const Key('input-email'),
                     text: "Email",
                     controller: widget.emailController,
                     validator: validateEmail),
                 CustomTextInput(
+                    key: const Key('input-pass'),
                     text: "Password",
                     controller: widget.passwordController,
                     validator: validatePassword,
@@ -88,6 +90,7 @@ class _AuthWidgetState extends State<AuthWidget> {
               width: double.maxFinite - 20,
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 0),
               child: CustomButton(
+                key: const Key('btn-auth'),
                 text: widget.pageTitle,
                 onTap: widget.primaryBtnFunc,
               ),
