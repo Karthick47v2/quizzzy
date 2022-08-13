@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -40,25 +39,22 @@ class _FileBrowserPopupState extends State<FileBrowserPopup> {
                   svgHeight: 200,
                 ),
                 CustomTextInput(
+                  key: const Key('input-q-name'),
                   text: "Questionnaire name",
                   controller: fileNameController,
                 ),
                 CustomButton(
+                  key: const Key('btn-q-name-conf'),
                   text: "Confirm",
                   onTap: () async {
-                    if (await Connectivity().checkConnectivity() !=
-                        ConnectivityResult.none) {
-                      getFile((fileNameController.text == "")
-                          ? "noname"
-                          : fileNameController.text);
-                      setState(() {
-                        fileNameController.text = "";
-                        isLoading = true;
-                      });
-                    } else {
-                      customSnackBar(
-                          "Error", "No network access", Palette.error);
-                    }
+                    getFile((fileNameController.text == "")
+                        ? "noname"
+                        : fileNameController.text);
+                    setState(() {
+                      fileNameController.text = "";
+                      isLoading = true;
+                    });
+
                     Get.back();
                   },
                 )
