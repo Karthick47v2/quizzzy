@@ -36,6 +36,8 @@ final Map<String, dynamic> questionnaireSub = {
   'question': 'q'
 };
 
+const String mockUID = 'mock_uid';
+
 final Map<String, dynamic> studentDict = {
   'userType': 'Student',
   'GeneratorWorking': false,
@@ -68,7 +70,7 @@ MockHttpsCallable mockHttpsCallable = MockHttpsCallable();
 void initStubs() {
   when(mockFirebaseAuth.currentUser).thenAnswer((_) => mockUser);
 
-  when(mockUser.uid).thenAnswer((_) => 'mock_uid');
+  when(mockUser.uid).thenAnswer((_) => mockUID);
 
   when(mockUser.displayName).thenAnswer((_) => 'mock_user');
 

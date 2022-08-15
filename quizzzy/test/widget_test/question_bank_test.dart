@@ -5,10 +5,27 @@ import 'package:mockito/mockito.dart';
 import 'package:quizzzy/screens/home/home.dart';
 import 'package:quizzzy/screens/question_bank/delete_popup.dart';
 import 'package:quizzzy/screens/question_bank/question_bank.dart';
+import 'package:quizzzy/screens/question_bank/share_quiz_popup.dart';
 
 import '../custom_mock/custom_mock.dart';
 import '../unit_test/firebase_stub.dart';
 import 'home_page_test.dart';
+
+initQuestionBank(WidgetTester tester) async {
+  when(mockHttpsCallable.call(any))
+      .thenAnswer((_) => Future.value(HttpsCallableResultMock.test({
+            'ids': [questionnaireName1, questionnaireName2]
+          })));
+
+  await tester.pumpWidget(const GetMaterialApp(home: Home()));
+
+  await tapOnScreen(tester, const Key('btn-q-bank'));
+  await tester.pump();
+
+  expect(find.byType(QuestionBank), findsOneWidget);
+
+  await tester.pumpAndSettle();
+}
 
 main() {
   setUp(() async {
@@ -17,22 +34,6 @@ main() {
     initHomeStubs();
     await initApp();
   });
-
-  initQuestionBank(WidgetTester tester) async {
-    when(mockHttpsCallable.call(any))
-        .thenAnswer((_) => Future.value(HttpsCallableResultMock.test({
-              'ids': [questionnaireName1, questionnaireName2]
-            })));
-
-    await tester.pumpWidget(const GetMaterialApp(home: Home()));
-
-    await tapOnScreen(tester, const Key('btn-q-bank'));
-    await tester.pump();
-
-    expect(find.byType(QuestionBank), findsOneWidget);
-
-    await tester.pumpAndSettle();
-  }
 
   testWidgets('Display list of questionnaires', (WidgetTester tester) async {
     await initQuestionBank(tester);
@@ -104,47 +105,21 @@ main() {
     });
   });
 
-  group('Quiz start popup', () {
-    tapOnWidget(WidgetTester tester) async {
-      await initQuestionBank(tester);
+  group('Student view of popup', () {
+    group('Quiz start popup', () {
+      tapOnWidget(WidgetTester tester) async {
+        await initQuestionBank(tester);
 
-      await tester.tap(find.text(questionnaireName1));
-      await tester.pumpAndSettle();
-    }
+        await tester.tap(find.text(questionnaireName1));
+        await tester.pumpAndSettle();
+      }
 
-    testWidgets('Show questionniare details', (WidgetTester tester) async {
-      await tapOnWidget(tester);
+      testWidgets('Show questionniare details', (WidgetTester tester) async {
+        await tapOnWidget(tester);
 
-      expect(find.text(questionnaireName1), findsOneWidget);
-      expect(find.textContaining('.5'), findsOneWidget);
+        expect(find.text(questionnaireName1), findsOneWidget);
+        expect(find.textContaining('.5'), findsOneWidget);
+      });
     });
   });
 }
-
-// import 'package:flutter/material.dart';
-// import 'package:flutter_test/flutter_test.dart';
-// import 'package:get/get.dart';
-
-// import '../unit_test/firebase_stub.dart';
-// import 'home_page_test.dart';
-
-// main() {
-//   setUp(() async {
-//     Get.testMode = true;
-//     initStubs();
-//     initHomeStubs();
-//     await initApp();
-//   });
-
-//   testWidgets('Display quiz page elements', (WidgetTester tester) async {
-//     await tapOnWidget(tester);
-
-//     await tester.tap(find.byKey(const Key('btn-quiz-start')));
-//     await tester.pumpAndSettle();
-
-//     expect(find.byType(StudentView), findsOneWidget);
-
-//     expect(find.text(questionnaireSub['question']), findsOneWidget);
-//   });
-
-// }
