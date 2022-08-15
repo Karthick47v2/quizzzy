@@ -125,18 +125,6 @@ main() {
 
         expect(find.byType(TeacherReview), findsOneWidget);
       });
-
-      // testWidgets('No questionnaire in storage', (WidgetTester tester) async {
-      //   userResult = {};
-      //   await tapOnScreen(tester, const Key('btn-review'));
-      //   await tester.pump();
-
-      //    expect(find.byType(TeacherReview), findsOneWidget);
-
-      //   // expect(find.text("No questionnaire found"), findsOneWidget);
-
-      //   // await tester.pumpAndSettle(const Duration(seconds: 3));
-      // });
     });
   });
 
@@ -170,6 +158,18 @@ main() {
       await tapOnScreen(tester, const Key('btn-log-out'));
       await openAndClose(tester, LogoutPopup, const Key('btn-logout-conf'));
       expect(find.byType(Login), findsOneWidget);
+    });
+
+    group('Tap review', () {
+      testWidgets('Without questionnaire in storage',
+          (WidgetTester tester) async {
+        await tapOnScreen(tester, const Key('btn-review'));
+        await tester.pump();
+
+        expect(find.text("No questionnaire found"), findsOneWidget);
+
+        await tester.pumpAndSettle(const Duration(seconds: 3));
+      });
     });
   });
 
