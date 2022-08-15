@@ -23,7 +23,8 @@ import 'firebase_stub.mocks.dart';
   DocumentSnapshot,
   HttpsCallable
 ])
-const String questionnaireName = 'test_doc';
+const String questionnaireName1 = 'test_doc';
+const String questionnaireName2 = 'test_doc2';
 
 Map<String, dynamic> userResult = {'test_user': 0.5};
 
@@ -38,7 +39,8 @@ final Map<String, dynamic> questionnaireSub = {
 final Map<String, dynamic> studentDict = {
   'userType': 'Student',
   'GeneratorWorking': false,
-  questionnaireName: questionnaireSub,
+  questionnaireName1: questionnaireSub,
+  questionnaireName2: questionnaireSub,
   'quizID': quizInfo,
 };
 

@@ -28,7 +28,7 @@ main() {
       });
 
       test("Check doc exists", () async {
-        expect((await FirestoreService().getUserDoc(questionnaireName))!.exists,
+        expect((await FirestoreService().getUserDoc(questionnaireName1))!.exists,
             true);
       });
     });
@@ -40,7 +40,7 @@ main() {
 
   group('Firebase query structure', () {
     test('Get questionnaire from current user account', () async {
-      expect(await FirestoreService().getQuestionnaire(questionnaireName, ""),
+      expect(await FirestoreService().getQuestionnaire(questionnaireName1, ""),
           [queryDocumentSnapshotMock]);
     });
   });
