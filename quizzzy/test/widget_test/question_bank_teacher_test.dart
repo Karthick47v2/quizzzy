@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
-import 'package:mockito/mockito.dart';
-import 'package:quizzzy/screens/home/home.dart';
-import 'package:quizzzy/screens/question_bank/question_bank.dart';
 import 'package:quizzzy/screens/question_bank/share_quiz_popup.dart';
 import 'package:quizzzy/screens/questionnaire/teacher_view.dart';
 
-import '../custom_mock/custom_mock.dart';
 import '../unit_test/firebase_stub.dart';
 import 'home_page_test.dart';
 import 'question_bank_test.dart';
