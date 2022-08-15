@@ -50,7 +50,7 @@ Screenshots:
 
 ## Prerequisites
 
-- Flutter (<3.0.5)
+- Flutter (<=3.0.5)
 - Firebase
 
 ## Install
