@@ -37,6 +37,7 @@ class TimesupPopup extends StatelessWidget {
         textAlign: TextAlign.center,
       ),
       CustomButton(
+        key: const Key('btn-timeup-conf'),
         text: "Finish",
         onTap: () async {
           Get.back();

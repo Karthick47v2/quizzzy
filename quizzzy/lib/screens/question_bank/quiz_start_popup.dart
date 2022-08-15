@@ -70,6 +70,7 @@ class QuizStartPopup extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 CustomButton(
+                  key: const Key('btn-quiz-modify'),
                   text: "Modify",
                   onTap: () {
                     showDialog(
@@ -80,6 +81,7 @@ class QuizStartPopup extends StatelessWidget {
                   },
                 ),
                 CustomButton(
+                  key: const Key('btn-quiz-share'),
                   text: "Share",
                   onTap: () {
                     showDialog(
