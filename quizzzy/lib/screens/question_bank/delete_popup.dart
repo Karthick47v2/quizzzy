@@ -36,6 +36,7 @@ class DeletePopup extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           CustomButton(
+            key: const Key('button-q-dlt-conf'),
             text: "Yes",
             onTap: () async {
               Get.find<QuestionnaireController>().overwriteRemovalList();
@@ -43,6 +44,7 @@ class DeletePopup extends StatelessWidget {
             },
           ),
           CustomButton(
+            key: const Key('button-q-dlt-decl'),
             text: "No",
             onTap: () => Get.back(),
           ),

@@ -58,6 +58,7 @@ class QuizStartPopup extends StatelessWidget {
       }),
       isStudent
           ? CustomButton(
+              key: const Key('btn-quiz-start'),
               text: "Start",
               onTap: () {
                 Get.back();
