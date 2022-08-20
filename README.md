@@ -9,7 +9,7 @@
  </a>
 </p>
 
-Quizzzy, an AI assisted educational mobile application is project for high school students and officials to
+Quizzzy, an AI assisted educational mobile application developed for high school students and officials to
 automatically generate MCQ questions from existing textbooks with the help of AI. System takes all the tedious
 work and makes the manual work quick and effective. The application is very useful for high schoolers to self-
 evaluate and high school officials to be used as assessment tool. This application will use the PDF version of
