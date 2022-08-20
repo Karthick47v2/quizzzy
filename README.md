@@ -24,7 +24,7 @@ Supporting repositories
 - Back-end -> [quizzzy-backend](https://github.com/Karthick47v2/quizzzy-backend)
 - Model training -> [question-generator](https://github.com/Karthick47v2/question-generator)
 
-Below shown high-level diagram represents the whole work flow,
+Below shown high-level diagram represents the whole workflow,
 
 <img src="img/hld.jpg" alt="HLD" style="width: 900px"/>
 
